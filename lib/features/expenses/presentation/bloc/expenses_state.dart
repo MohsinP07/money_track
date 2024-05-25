@@ -19,3 +19,15 @@ class ExpensesDisplaySuccess extends ExpensesState {
 
   ExpensesDisplaySuccess(this.expenses);
 }
+
+class DeleteExpensesSuccess extends ExpensesState {
+  final Expense deletedExpense;
+
+  DeleteExpensesSuccess(this.deletedExpense);
+}
+
+class EditExpensesSuccess extends ExpensesState {
+  final Expense editedExpense;
+
+  EditExpensesSuccess(this.editedExpense);
+}

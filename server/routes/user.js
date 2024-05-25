@@ -43,4 +43,34 @@ userRouter.get('/user/get-expenses', auth, async (req, res) => {
 
 });
 
+userRouter.post('/user/delete-expense', auth, async (req, res) => {
+
+  try {
+      const { id } = req.body;
+
+      let expense = await Expense.findByIdAndDelete(id);
+
+      res.json(expense);
+
+  }
+  catch (e) {
+      res.status(500).json({ error: e.message });
+  }
+
+});
+
+userRouter.put('/user/edit-expense', auth, async (req, res) => {
+  try {
+      const expenseId = req.body.id; // Assuming you sent the expenseId in the request body
+      const { name, description, amount, date, category } = req.body; // Get the updated information
+
+      // Update the Expense's information in the database
+      await Expense.findByIdAndUpdate(expenseId, { name, description, amount, date, category });
+
+      res.json({ msg: "Expense information updated successfully" });
+  } catch (e) {
+      res.status(500).json({ error: e.message });
+  }
+});
+
 module.exports = userRouter;

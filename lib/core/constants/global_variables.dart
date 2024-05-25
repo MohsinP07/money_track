@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-String uri = 'http://192.168.209.54:3000';
+String uri = 'http://192.168.1.204:3000';
 
 Size deviceSize(BuildContext context) {
   return MediaQuery.of(context).size;

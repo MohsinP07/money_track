@@ -42,6 +42,91 @@ class DashboardPageState extends State<DashboardPage> {
     }).toList();
   }
 
+  void _showDeleteDialog(BuildContext context, String expenseId) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Expense'),
+        content: const Text('Are you sure you want to delete this expense?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              context.read<ExpensesBloc>().add(ExpenseDelete(id: expenseId));
+            },
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showEditDialog(BuildContext context, Expense expense) {
+    TextEditingController nameController =
+        TextEditingController(text: expense.name);
+    TextEditingController amountController =
+        TextEditingController(text: expense.amount);
+    TextEditingController descriptionController =
+        TextEditingController(text: expense.description);
+    TextEditingController categoryController =
+        TextEditingController(text: expense.category);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Expense'),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: 'Name'),
+              ),
+              TextFormField(
+                controller: amountController,
+                decoration: const InputDecoration(labelText: 'Amount'),
+              ),
+              TextFormField(
+                controller: descriptionController,
+                decoration: const InputDecoration(labelText: 'Description'),
+              ),
+              TextFormField(
+                controller: categoryController,
+                decoration: const InputDecoration(labelText: 'Category'),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              // Dispatch an event to edit the expense
+              context.read<ExpensesBloc>().add(ExpenseEdit(
+                    id: expense.id!,
+                    name: nameController.text,
+                    amount: amountController.text,
+                    description: descriptionController.text,
+                    category: categoryController.text,
+                    date: expense.date,
+                  ));
+              Navigator.of(context).pop();
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +134,14 @@ class DashboardPageState extends State<DashboardPage> {
         listener: (context, state) {
           if (state is ExpensesFailure) {
             showSnackBar(context, state.error);
+          }
+          if (state is DeleteExpensesSuccess) {
+            showSnackBar(context, 'Deleted expense successfully!!');
+            context.read<ExpensesBloc>().add(ExpenseGetAllExpenses());
+          }
+          if (state is EditExpensesSuccess) {
+            showSnackBar(context, 'Edited expense successfully!!');
+            context.read<ExpensesBloc>().add(ExpenseGetAllExpenses());
           }
         },
         builder: (context, state) {
@@ -161,12 +254,17 @@ class DashboardPageState extends State<DashboardPage> {
                           itemCount: todayExpenses.length,
                           itemBuilder: (context, index) {
                             final expense = todayExpenses[index];
-                            return ExpenseTile(
-                              icon: 'assets/images/mor_dash.png',
-                              title: expense.name,
-                              subtitle: expense.category,
-                              amount: expense.amount,
-                              date: formatDatedMMMYYYY(expense.date),
+                            return GestureDetector(
+                              onTap: () => _showEditDialog(context, expense),
+                              child: ExpenseTile(
+                                icon: 'assets/images/mor_dash.png',
+                                title: expense.name,
+                                subtitle: expense.category,
+                                amount: expense.amount,
+                                date: formatDatedMMMYYYY(expense.date),
+                                onLongPress: () =>
+                                    _showDeleteDialog(context, expense.id!),
+                              ),
                             );
                           }),
                     )

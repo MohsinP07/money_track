@@ -50,4 +50,32 @@ class ExpenseRepositoryImplement implements ExpenseRepository {
       return left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, Expense>> deleteExpense({required String id}) async {
+    try {
+      final deletedExpense = await expenseRemoteDataSource.deleteExpense(id);
+      return right(deletedExpense);
+    } on ServerException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Expense>> editExpense(
+      {required String id,
+      required String name,
+      required String amount,
+      required String description,
+      required DateTime date,
+      required String category}) async {
+    try {
+      // Call the remote data source to edit the expense
+      final editedExpense = await expenseRemoteDataSource.editExpense(
+          id, name, amount, description, date, category);
+      return right(editedExpense); // Return an Either with Expense
+    } on ServerException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 }

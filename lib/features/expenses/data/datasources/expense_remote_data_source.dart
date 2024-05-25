@@ -9,6 +9,9 @@ import 'package:http/http.dart' as http;
 abstract class ExpenseRemoteDataSource {
   Future<ExpenseModel> addExpense(ExpenseModel expense);
   Future<List<ExpenseModel>> getAllExpenses();
+  Future<ExpenseModel> deleteExpense(String id);
+  Future<ExpenseModel> editExpense(String id, String name, String amount,
+      String description, DateTime date, String category);
 }
 
 class ExpenseRemoteDataSourceImplement implements ExpenseRemoteDataSource {
@@ -74,6 +77,80 @@ class ExpenseRemoteDataSourceImplement implements ExpenseRemoteDataSource {
           .map((expense) =>
               ExpenseModel.fromMap(expense as Map<String, dynamic>))
           .toList();
+    } catch (e) {
+      print(e);
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<ExpenseModel> deleteExpense(String id) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("x-auth-token");
+
+      if (token == null || token.isEmpty) {
+        throw ServerException("User is not authenticated");
+      }
+
+      final response = await http.post(
+        Uri.parse('$uri/user/delete-expense'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: json.encode({'id': id}),
+      );
+
+      if (response.statusCode != 200) {
+        throw ServerException(
+            'Failed to delete expense. Status code: ${response.statusCode}');
+      }
+
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+
+      return ExpenseModel.fromMap(responseBody);
+    } catch (e) {
+      print(e);
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<ExpenseModel> editExpense(String id, String name, String amount,
+      String description, DateTime date, String category) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("x-auth-token");
+
+      if (token == null || token.isEmpty) {
+        throw ServerException("User is not authenticated");
+      }
+
+      final response = await http.put(
+        Uri.parse('$uri/user/edit-expense'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: json.encode({
+          'id': id,
+          'name': name,
+          'amount': amount,
+          'description': description,
+          'date': date.toIso8601String(),
+          'category': category,
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        throw ServerException(
+            'Failed to edit expense. Status code: ${response.statusCode}');
+      }
+
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+
+      return ExpenseModel.fromMap(responseBody);
     } catch (e) {
       print(e);
       throw ServerException(e.toString());

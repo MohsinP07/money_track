@@ -11,6 +11,8 @@ import 'package:money_track/features/expenses/data/datasources/expense_remote_da
 import 'package:money_track/features/expenses/data/repositories/expense_repository_implement.dart';
 import 'package:money_track/features/expenses/domain/repository/expense_repository.dart';
 import 'package:money_track/features/expenses/domain/usecases/add_expense.dart';
+import 'package:money_track/features/expenses/domain/usecases/delete_expense.dart';
+import 'package:money_track/features/expenses/domain/usecases/edit_expense.dart';
 import 'package:money_track/features/expenses/domain/usecases/get_all_expenses.dart';
 import 'package:money_track/features/expenses/presentation/bloc/expenses_bloc.dart';
 
@@ -78,10 +80,18 @@ _initExpense() {
     ..registerFactory(() => GetAllExpenses(
           serviceLocator(),
         ))
+    ..registerFactory(() => DeleteExpense(
+          serviceLocator(),
+        ))
+    ..registerFactory(() => EditExpense(
+          serviceLocator(),
+        ))
 
     //Bloc
     ..registerLazySingleton<ExpensesBloc>(() => ExpensesBloc(
           addExpense: serviceLocator(),
           getAllExpenses: serviceLocator(),
+          deleteExpense: serviceLocator(),
+          editExpense: serviceLocator(),
         ));
 }
