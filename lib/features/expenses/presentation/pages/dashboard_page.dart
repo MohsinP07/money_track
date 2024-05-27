@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/common/widgets/loader.dart';
+import 'package:money_track/core/constants/constants.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/core/utils/format_date.dart';
@@ -11,7 +13,11 @@ import 'package:money_track/features/expenses/data/models/expense_model.dart';
 import 'package:money_track/features/expenses/domain/entity/expense.dart';
 import 'package:money_track/features/expenses/presentation/bloc/expenses_bloc.dart';
 import 'package:money_track/features/expenses/presentation/widgets/bottom_bar.dart';
+import 'package:money_track/features/expenses/presentation/widgets/calculation_functions.dart';
+import 'package:money_track/features/expenses/presentation/widgets/edit_bottom_sheet.dart';
+import 'package:money_track/features/expenses/presentation/widgets/expense_summary.dart';
 import 'package:money_track/features/expenses/presentation/widgets/expense_tile.dart';
+import 'package:money_track/features/expenses/presentation/widgets/sheet_textfield.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -21,6 +27,8 @@ class DashboardPage extends StatefulWidget {
 }
 
 class DashboardPageState extends State<DashboardPage> {
+  final sheetKey = GlobalKey<FormState>();
+
   void _goToAddExpensePage() {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => const BottomBar(initialPage: 1)));
@@ -42,93 +50,59 @@ class DashboardPageState extends State<DashboardPage> {
     }).toList();
   }
 
-  void _showDeleteDialog(BuildContext context, String expenseId) {
+  void _showDeleteDialog(
+      BuildContext context, String expenseId, String expenseName) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Expense'),
-        content: const Text('Are you sure you want to delete this expense?'),
+        content: Text('Are you sure you want to delete $expenseName expense?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              context.read<ExpensesBloc>().add(ExpenseGetAllExpenses());
+            },
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: AppPallete.boxColor),
+            ),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
               context.read<ExpensesBloc>().add(ExpenseDelete(id: expenseId));
             },
-            child: const Text('Delete'),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: AppPallete.errorColor),
+            ),
           ),
         ],
       ),
     );
   }
 
-  void _showEditDialog(BuildContext context, Expense expense) {
-    TextEditingController nameController =
-        TextEditingController(text: expense.name);
-    TextEditingController amountController =
-        TextEditingController(text: expense.amount);
-    TextEditingController descriptionController =
-        TextEditingController(text: expense.description);
-    TextEditingController categoryController =
-        TextEditingController(text: expense.category);
-
-    showDialog(
+  void _showEditBottomSheet(BuildContext context, Expense expense) {
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Edit Expense'),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                controller: nameController,
-                decoration: const InputDecoration(labelText: 'Name'),
-              ),
-              TextFormField(
-                controller: amountController,
-                decoration: const InputDecoration(labelText: 'Amount'),
-              ),
-              TextFormField(
-                controller: descriptionController,
-                decoration: const InputDecoration(labelText: 'Description'),
-              ),
-              TextFormField(
-                controller: categoryController,
-                decoration: const InputDecoration(labelText: 'Category'),
-              ),
-            ],
-          ),
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              // Dispatch an event to edit the expense
-              context.read<ExpensesBloc>().add(ExpenseEdit(
-                    id: expense.id!,
-                    name: nameController.text,
-                    amount: amountController.text,
-                    description: descriptionController.text,
-                    category: categoryController.text,
-                    date: expense.date,
-                  ));
-              Navigator.of(context).pop();
-            },
-            child: const Text('Save'),
-          ),
-        ],
       ),
+      backgroundColor: Colors.white,
+      builder: (context) => EditExpenseBottomSheet(expense: expense),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final userId =
+        (context.read<AppUserCubit>().state as AppUserLoggedIn).user.id;
+    final userName =
+        (context.read<AppUserCubit>().state as AppUserLoggedIn).user.name;
     return Scaffold(
       body: BlocConsumer<ExpensesBloc, ExpensesState>(
         listener: (context, state) {
@@ -150,6 +124,13 @@ class DashboardPageState extends State<DashboardPage> {
           }
           if (state is ExpensesDisplaySuccess) {
             final todayExpenses = _filterTodayExpenses(state.expenses);
+            double todaysExpense =
+                CalculationFunctions.calculateTodaysExpense(todayExpenses);
+            double weeklyExpense =
+                CalculationFunctions.calculateWeeklyExpense(state.expenses);
+            double monthlyExpense =
+                CalculationFunctions.calculateMonthlyExpense(state.expenses);
+
             return SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(10.0).copyWith(top: 20),
@@ -161,9 +142,9 @@ class DashboardPageState extends State<DashboardPage> {
                       children: [
                         RichText(
                           maxLines: 2,
-                          text: const TextSpan(
+                          text: TextSpan(
                             children: [
-                              TextSpan(
+                              const TextSpan(
                                 text: "Hello\n",
                                 style: TextStyle(
                                   color: AppPallete.blackColor,
@@ -172,10 +153,10 @@ class DashboardPageState extends State<DashboardPage> {
                                 ),
                               ),
                               TextSpan(
-                                text: "User",
-                                style: TextStyle(
+                                text: userName,
+                                style: const TextStyle(
                                   color: AppPallete.blackColor,
-                                  fontSize: 34,
+                                  fontSize: 32,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Poppins',
                                 ),
@@ -186,9 +167,13 @@ class DashboardPageState extends State<DashboardPage> {
                         CircleAvatar(
                           backgroundColor: AppPallete.boxColor,
                           radius: deviceSize(context).width * 0.08,
-                          child: const Text(
-                            'U',
-                            style: TextStyle(color: AppPallete.whiteColor),
+                          child: Text(
+                            userName.toString().substring(0, 1),
+                            style: const TextStyle(
+                              color: AppPallete.whiteColor,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
@@ -196,41 +181,12 @@ class DashboardPageState extends State<DashboardPage> {
                     SizedBox(
                       height: deviceSize(context).width * 0.08,
                     ),
-                    Container(
-                      height: deviceSize(context).height * 0.2,
+                    ExpenseSummaryContainer(
+                      height: deviceSize(context).height * 0.26,
                       width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: AppPallete.boxColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: RichText(
-                          maxLines: 2,
-                          text: const TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "Expenses\n",
-                                style: TextStyle(
-                                  color: AppPallete.whiteColor,
-                                  fontSize: 16,
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                              TextSpan(
-                                text: "₹20000",
-                                style: TextStyle(
-                                  color: AppPallete.whiteColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      todaysExpense: todaysExpense,
+                      weeklyExpense: weeklyExpense,
+                      monthlyExpense: monthlyExpense,
                     ),
                     SizedBox(
                       height: deviceSize(context).height * 0.01,
@@ -245,28 +201,58 @@ class DashboardPageState extends State<DashboardPage> {
                     SizedBox(
                       height: deviceSize(context).height * 0.02,
                     ),
-                    const Text('Today'),
+                    if (todayExpenses.isEmpty)
+                      const Text(
+                        'No expenses today!',
+                      ),
+                    if (todayExpenses.isNotEmpty)
+                      const Text(
+                        'Today',
+                      ),
                     SizedBox(
                       height: deviceSize(context).height * 0.01,
                     ),
                     Expanded(
-                      child: ListView.builder(
-                          itemCount: todayExpenses.length,
-                          itemBuilder: (context, index) {
-                            final expense = todayExpenses[index];
-                            return GestureDetector(
-                              onTap: () => _showEditDialog(context, expense),
+                      child: ListView.separated(
+                        itemCount: todayExpenses.length,
+                        itemBuilder: (context, index) {
+                          final expense = todayExpenses[index];
+                          return Dismissible(
+                            key: Key(expense.id!),
+                            direction: DismissDirection.endToStart,
+                            background: Container(
+                              color: Colors.red,
+                              alignment: Alignment.centerRight,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child:
+                                  const Icon(Icons.delete, color: Colors.white),
+                            ),
+                            onDismissed: (direction) {
+                              _showDeleteDialog(
+                                context,
+                                expense.id!,
+                                expense.name,
+                              );
+                            },
+                            child: GestureDetector(
+                              onTap: () =>
+                                  _showEditBottomSheet(context, expense),
                               child: ExpenseTile(
-                                icon: 'assets/images/mor_dash.png',
+                                icon: CalculationFunctions.decideIcon(
+                                    expense.category),
                                 title: expense.name,
                                 subtitle: expense.category,
                                 amount: expense.amount,
                                 date: formatDatedMMMYYYY(expense.date),
-                                onLongPress: () =>
-                                    _showDeleteDialog(context, expense.id!),
                               ),
-                            );
-                          }),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const Divider();
+                        },
+                      ),
                     )
                   ],
                 ),

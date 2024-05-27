@@ -29,8 +29,19 @@ class ExpenseTile extends StatelessWidget {
         trailing: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(amount),
-            Text(date),
+            Text(
+              '$amount ₹',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            Text(
+              date,
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
           ],
         ),
       ),
