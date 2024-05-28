@@ -7,7 +7,7 @@ const {Expense} = require('../models/expense');
 //Add Expense
 userRouter.post("/user/add-expense", auth, async (req, res) => {
     try {
-      const { name, description, amount, date, category, expenserId, expenserName } = req.body;
+      const { name, description, amount, date, category, expenserId, expenserName, isEdited } = req.body;
   
       const utcDate = new Date(date); // Ensures date is in UTC
   
@@ -19,6 +19,7 @@ userRouter.post("/user/add-expense", auth, async (req, res) => {
         category,
         expenserId,
         expenserName,
+        isEdited
       });
   
       expense = await expense.save();
@@ -34,7 +35,7 @@ userRouter.post("/user/add-expense", auth, async (req, res) => {
 userRouter.get('/user/get-expenses', auth, async (req, res) => {
 
     try {
-        const expenses = await Expense.find({}); //getting all the expenses whatever are available
+        const expenses = await Expense.find({expenserId: req.user }); //getting all the expenses whatever are available
         res.json(expenses);
     }
     catch (e) {
@@ -62,10 +63,10 @@ userRouter.post('/user/delete-expense', auth, async (req, res) => {
 userRouter.put('/user/edit-expense', auth, async (req, res) => {
   try {
       const expenseId = req.body.id; // Assuming you sent the expenseId in the request body
-      const { name, description, amount, date, category } = req.body; // Get the updated information
+      const { name, description, amount, date, category, isEdited } = req.body; // Get the updated information
 
       // Update the Expense's information in the database
-      await Expense.findByIdAndUpdate(expenseId, { name, description, amount, date, category });
+      await Expense.findByIdAndUpdate(expenseId, { name, description, amount, date, category , isEdited});
 
       res.json({ msg: "Expense information updated successfully" });
   } catch (e) {

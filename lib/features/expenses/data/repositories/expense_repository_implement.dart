@@ -20,6 +20,7 @@ class ExpenseRepositoryImplement implements ExpenseRepository {
     required String category,
     required String expenserName,
     required String expenserId, // Corrected parameter name
+    required bool isEdited,
   }) async {
     try {
       ExpenseModel expenseModel = ExpenseModel(
@@ -30,6 +31,7 @@ class ExpenseRepositoryImplement implements ExpenseRepository {
         category: category,
         expenserName: expenserName,
         expenserId: expenserId, // Corrected parameter name
+        isEdited: isEdited,
       );
 
       final addedExpense =
@@ -62,17 +64,26 @@ class ExpenseRepositoryImplement implements ExpenseRepository {
   }
 
   @override
-  Future<Either<Failure, Expense>> editExpense(
-      {required String id,
-      required String name,
-      required String amount,
-      required String description,
-      required DateTime date,
-      required String category}) async {
+  Future<Either<Failure, Expense>> editExpense({
+    required String id,
+    required String name,
+    required String amount,
+    required String description,
+    required DateTime date,
+    required String category,
+    required bool isEdited,
+  }) async {
     try {
       // Call the remote data source to edit the expense
       final editedExpense = await expenseRemoteDataSource.editExpense(
-          id, name, amount, description, date, category);
+        id,
+        name,
+        amount,
+        description,
+        date,
+        category,
+        isEdited,
+      );
       return right(editedExpense); // Return an Either with Expense
     } on ServerException catch (e) {
       return left(Failure(e.toString()));

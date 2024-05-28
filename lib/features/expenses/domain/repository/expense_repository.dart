@@ -11,6 +11,7 @@ abstract class ExpenseRepository {
     required String category,
     required String expenserName,
     required String expenserId,
+    required bool isEdited,
   });
 
   Future<Either<Failure, List<Expense>>> getAllExpenses();
@@ -22,6 +23,7 @@ abstract class ExpenseRepository {
     required String description,
     required DateTime date,
     required String category,
+    required bool isEdited,
   });
 
   Future<Either<Failure, Expense>> deleteExpense({

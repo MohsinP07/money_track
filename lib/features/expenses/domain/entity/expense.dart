@@ -10,6 +10,7 @@ class Expense {
   final String amount;
   final DateTime date;
   final String category;
+  final bool isEdited;
 
   Expense({
     this.id,
@@ -20,5 +21,6 @@ class Expense {
     required this.amount,
     required this.date,
     required this.category,
+    required this.isEdited,
   });
 }

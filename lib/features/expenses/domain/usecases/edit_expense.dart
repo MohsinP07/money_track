@@ -17,6 +17,7 @@ class EditExpense {
       description: params.description,
       date: params.date,
       category: params.category,
+      isEdited: params.isEdited,
     );
   }
 }
@@ -28,6 +29,7 @@ class EditExpenseParams {
   final String description;
   final DateTime date;
   final String category;
+  final bool isEdited;
 
   EditExpenseParams({
     required this.id,
@@ -36,5 +38,6 @@ class EditExpenseParams {
     required this.description,
     required this.date,
     required this.category,
+    required this.isEdited,
   });
 }

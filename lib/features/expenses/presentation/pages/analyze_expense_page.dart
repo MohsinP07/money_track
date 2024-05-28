@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:money_track/core/constants/constants.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
@@ -17,6 +19,10 @@ class _AnalyzeExpensePageState extends State<AnalyzeExpensePage> {
 
   @override
   Widget build(BuildContext context) {
+    final userId =
+        (context.read<AppUserCubit>().state as AppUserLoggedIn).user.id;
+    final userName =
+        (context.read<AppUserCubit>().state as AppUserLoggedIn).user.name;
     return Scaffold(
       body: SafeArea(
           child: Padding(
@@ -52,14 +58,14 @@ class _AnalyzeExpensePageState extends State<AnalyzeExpensePage> {
               leading: CircleAvatar(
                 radius: deviceSize(context).width * 0.044,
                 backgroundColor: AppPallete.boxColor,
-                child: const Text(
-                  'U',
-                  style: TextStyle(color: AppPallete.whiteColor),
+                child: Text(
+                  userName.substring(0, 1),
+                  style: const TextStyle(color: AppPallete.whiteColor),
                 ),
               ),
-              title: const Text(
-                "Good day, User",
-                style: TextStyle(fontSize: 12),
+              title: Text(
+                "Good day, $userName",
+                style: const TextStyle(fontSize: 12),
               ),
               subtitle: const Text(
                 'Track your expenses, spend your day right',

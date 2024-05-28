@@ -43,9 +43,10 @@ class LoginPageState extends State<LoginPage> {
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const BottomBar(initialPage: 0)),
+                          builder: (context) =>
+                              const BottomBar(initialPage: 0)),
                       (route) => false);
-                  showSnackBar(context, "Logged In!!");
+                  // showSnackBar(context, "Logged In!!");
                 }
               },
               builder: (context, state) {

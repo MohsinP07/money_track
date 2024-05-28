@@ -11,7 +11,7 @@ abstract class ExpenseRemoteDataSource {
   Future<List<ExpenseModel>> getAllExpenses();
   Future<ExpenseModel> deleteExpense(String id);
   Future<ExpenseModel> editExpense(String id, String name, String amount,
-      String description, DateTime date, String category);
+      String description, DateTime date, String category, bool isEdited);
 }
 
 class ExpenseRemoteDataSourceImplement implements ExpenseRemoteDataSource {
@@ -117,8 +117,15 @@ class ExpenseRemoteDataSourceImplement implements ExpenseRemoteDataSource {
   }
 
   @override
-  Future<ExpenseModel> editExpense(String id, String name, String amount,
-      String description, DateTime date, String category) async {
+  Future<ExpenseModel> editExpense(
+    String id,
+    String name,
+    String amount,
+    String description,
+    DateTime date,
+    String category,
+    bool isEdited,
+  ) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString("x-auth-token");
@@ -140,6 +147,7 @@ class ExpenseRemoteDataSourceImplement implements ExpenseRemoteDataSource {
           'description': description,
           'date': date.toIso8601String(),
           'category': category,
+          'isEdited': isEdited,
         }),
       );
 

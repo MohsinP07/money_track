@@ -41,6 +41,7 @@ class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
       amount: event.amount,
       date: event.date,
       category: event.category,
+      isEdited: event.isEdited,
     ));
 
     res.fold(
@@ -81,6 +82,7 @@ class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
       amount: event.amount,
       date: event.date,
       category: event.category,
+      isEdited: event.isEdited,
     ));
     result.fold(
       (failure) => emit(ExpensesFailure(failure.message)),

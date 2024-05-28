@@ -71,7 +71,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
             date: _selectedDate.toUtc(), // Convert to UTC before sending
             category: selectedCategory,
             expenserId: expenserId,
-            expenserName: expenserName,
+            expenserName: expenserName, isEdited: false,
           ));
       print(_selectedDate.toUtc()); // Ensure it prints UTC date
     }

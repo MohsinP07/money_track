@@ -24,6 +24,7 @@ class _EditExpenseBottomSheetState extends State<EditExpenseBottomSheet> {
   late TextEditingController _amountController;
   late TextEditingController _descriptionController;
   late String _selectedCategory;
+  bool _isSaveButtonVisible = false;
 
   @override
   void initState() {
@@ -33,14 +34,32 @@ class _EditExpenseBottomSheetState extends State<EditExpenseBottomSheet> {
     _descriptionController =
         TextEditingController(text: widget.expense.description);
     _selectedCategory = widget.expense.category;
+
+    _nameController.addListener(_checkForChanges);
+    _amountController.addListener(_checkForChanges);
+    _descriptionController.addListener(_checkForChanges);
   }
 
   @override
   void dispose() {
+    _nameController.removeListener(_checkForChanges);
+    _amountController.removeListener(_checkForChanges);
+    _descriptionController.removeListener(_checkForChanges);
+
     _nameController.dispose();
     _amountController.dispose();
     _descriptionController.dispose();
     super.dispose();
+  }
+
+  void _checkForChanges() {
+    setState(() {
+      _isSaveButtonVisible = _nameController.text.trim() !=
+              widget.expense.name ||
+          _amountController.text.trim() != widget.expense.amount ||
+          _descriptionController.text.trim() != widget.expense.description ||
+          _selectedCategory != widget.expense.category;
+    });
   }
 
   @override
@@ -70,10 +89,26 @@ class _EditExpenseBottomSheetState extends State<EditExpenseBottomSheet> {
                           fontSize: 20,
                         ),
                       ),
-                      Image.asset(
-                        CalculationFunctions.decideIcon(_selectedCategory),
-                        height: 24,
-                        width: 24,
+                      Row(
+                        children: [
+                          Image.asset(
+                            CalculationFunctions.decideIcon(_selectedCategory),
+                            height: 24,
+                            width: 24,
+                          ),
+                          if (widget.expense.isEdited)
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                "Edited",
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ],
                   ),
@@ -98,6 +133,7 @@ class _EditExpenseBottomSheetState extends State<EditExpenseBottomSheet> {
                                   setState(() {
                                     _selectedCategory = e;
                                   });
+                                  _checkForChanges(); // Call to check changes when category is updated
                                   print(_selectedCategory);
                                 },
                                 child: Chip(
@@ -138,24 +174,28 @@ class _EditExpenseBottomSheetState extends State<EditExpenseBottomSheet> {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      SizedBox(
-                        width: 80,
-                        child: CustomButton(
-                          onTap: () {
-                            if (_sheetKey.currentState!.validate()) {
-                              context.read<ExpensesBloc>().add(ExpenseEdit(
-                                    id: widget.expense.id!,
-                                    name: _nameController.text,
-                                    amount: _amountController.text,
-                                    description: _descriptionController.text,
-                                    category: _selectedCategory,
-                                    date: widget.expense.date,
-                                  ));
-                              Navigator.of(context).pop();
-                            }
-                          },
-                          text: 'Save',
-                        ),
+                      Visibility(
+                        visible: _isSaveButtonVisible,
+                        child: SizedBox(
+                            width: 80,
+                            child: CustomButton(
+                              onTap: () {
+                                if (_sheetKey.currentState!.validate()) {
+                                  context.read<ExpensesBloc>().add(ExpenseEdit(
+                                        id: widget.expense.id!,
+                                        name: _nameController.text,
+                                        amount: _amountController.text,
+                                        description:
+                                            _descriptionController.text,
+                                        category: _selectedCategory,
+                                        date: widget.expense.date,
+                                        isEdited: true,
+                                      ));
+                                  Navigator.of(context).pop();
+                                }
+                              },
+                              text: 'Save',
+                            )),
                       ),
                     ],
                   ),

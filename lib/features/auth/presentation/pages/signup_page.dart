@@ -46,7 +46,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       MaterialPageRoute(
                           builder: (context) => const LoginPage()),
                       (route) => false);
-                  showSnackBar(context, 'Account Created!');
+                  // showSnackBar(context, 'Account Created!');
                 }
               },
               builder: (context, state) {

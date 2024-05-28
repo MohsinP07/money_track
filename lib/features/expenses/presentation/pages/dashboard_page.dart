@@ -217,37 +217,54 @@ class DashboardPageState extends State<DashboardPage> {
                         itemCount: todayExpenses.length,
                         itemBuilder: (context, index) {
                           final expense = todayExpenses[index];
-                          return Dismissible(
-                            key: Key(expense.id!),
-                            direction: DismissDirection.endToStart,
-                            background: Container(
-                              color: Colors.red,
-                              alignment: Alignment.centerRight,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child:
-                                  const Icon(Icons.delete, color: Colors.white),
-                            ),
-                            onDismissed: (direction) {
-                              _showDeleteDialog(
-                                context,
-                                expense.id!,
-                                expense.name,
-                              );
-                            },
-                            child: GestureDetector(
-                              onTap: () =>
-                                  _showEditBottomSheet(context, expense),
-                              child: ExpenseTile(
-                                icon: CalculationFunctions.decideIcon(
-                                    expense.category),
-                                title: expense.name,
-                                subtitle: expense.category,
-                                amount: expense.amount,
-                                date: formatDatedMMMYYYY(expense.date),
+                          return Stack(children: [
+                            if (expense.isEdited)
+                              const Align(
+                                alignment: Alignment.topRight,
+                                child: CircleAvatar(
+                                  backgroundColor: AppPallete.errorColor,
+                                  radius: 10,
+                                  child: Text(
+                                    'E',
+                                    style: TextStyle(
+                                      fontSize: 8,
+                                      color: AppPallete.whiteColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            Dismissible(
+                              key: Key(expense.id!),
+                              direction: DismissDirection.endToStart,
+                              background: Container(
+                                color: Colors.red,
+                                alignment: Alignment.centerRight,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: const Icon(Icons.delete,
+                                    color: Colors.white),
+                              ),
+                              onDismissed: (direction) {
+                                _showDeleteDialog(
+                                  context,
+                                  expense.id!,
+                                  expense.name,
+                                );
+                              },
+                              child: GestureDetector(
+                                onTap: () =>
+                                    _showEditBottomSheet(context, expense),
+                                child: ExpenseTile(
+                                  icon: CalculationFunctions.decideIcon(
+                                      expense.category),
+                                  title: expense.name,
+                                  subtitle: expense.category,
+                                  amount: expense.amount,
+                                  date: formatDatedMMMYYYY(expense.date),
+                                ),
                               ),
                             ),
-                          );
+                          ]);
                         },
                         separatorBuilder: (BuildContext context, int index) {
                           return const Divider();

@@ -10,6 +10,7 @@ class ExpenseAdd extends ExpensesEvent {
   final String amount;
   final DateTime date;
   final String category;
+  final bool isEdited;
 
   ExpenseAdd({
     required this.expenserId,
@@ -19,6 +20,7 @@ class ExpenseAdd extends ExpensesEvent {
     required this.amount,
     required this.date,
     required this.category,
+    required this.isEdited,
   });
 }
 
@@ -37,6 +39,7 @@ class ExpenseEdit extends ExpensesEvent {
   final String amount;
   final DateTime date;
   final String category;
+  final bool isEdited;
 
   ExpenseEdit({
     required this.id,
@@ -45,5 +48,6 @@ class ExpenseEdit extends ExpensesEvent {
     required this.amount,
     required this.date,
     required this.category,
+    required this.isEdited,
   });
 }

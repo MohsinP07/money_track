@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
+import 'package:money_track/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:money_track/features/auth/presentation/pages/login_page.dart';
 
 import '../../../../core/common/cubits/app_user/app_user_cubit.dart';
 
@@ -16,6 +18,10 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    final userId =
+        (context.read<AppUserCubit>().state as AppUserLoggedIn).user.id;
+    final userName =
+        (context.read<AppUserCubit>().state as AppUserLoggedIn).user.name;
     return Scaffold(
       body: SafeArea(
           child: Padding(
@@ -28,19 +34,19 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 RichText(
                   maxLines: 2,
-                  text: const TextSpan(
+                  text: TextSpan(
                     children: [
                       TextSpan(
-                        text: "User ",
-                        style: TextStyle(
+                        text: "${userName.split(' ').first} ",
+                        style: const TextStyle(
                           color: AppPallete.blackColor,
                           fontSize: 30,
                           fontFamily: 'Poppins',
                         ),
                       ),
                       TextSpan(
-                        text: "Name",
-                        style: TextStyle(
+                        text: userName.split(' ').sublist(1).join(' '),
+                        style: const TextStyle(
                           color: AppPallete.blackColor,
                           fontSize: 34,
                           fontWeight: FontWeight.w600,
@@ -52,7 +58,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 IconButton(
                     onPressed: () {
-                      context.read<AppUserCubit>().clearUser();
+                      context
+                          .read<AuthBloc>()
+                          .add(AuthLogout(context: context));
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          (route) => false);
+
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => LoginPage()),
+                      // );
                     },
                     icon: const Icon(
                       Icons.logout,
@@ -68,9 +85,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   CircleAvatar(
                     backgroundColor: AppPallete.boxColor,
                     radius: deviceSize(context).width * 0.16,
-                    child: const Text(
-                      'U',
-                      style: TextStyle(
+                    child: Text(
+                      userName.substring(0, 1),
+                      style: const TextStyle(
                         fontSize: 32,
                         color: AppPallete.whiteColor,
                       ),

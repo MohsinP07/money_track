@@ -12,16 +12,17 @@ class ExpenseModel extends Expense {
     required String amount,
     required DateTime date,
     required String category,
+    required bool isEdited,
   }) : super(
-          id: id,
-          expenserId: expenserId,
-          expenserName: expenserName,
-          name: name,
-          description: description,
-          amount: amount,
-          date: date,
-          category: category,
-        );
+            id: id,
+            expenserId: expenserId,
+            expenserName: expenserName,
+            name: name,
+            description: description,
+            amount: amount,
+            date: date,
+            category: category,
+            isEdited: isEdited);
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -33,6 +34,7 @@ class ExpenseModel extends Expense {
       'amount': amount,
       'date': date.toUtc().toIso8601String(), // Ensure UTC is used
       'category': category,
+      'isEdited': isEdited,
     };
   }
 
@@ -55,6 +57,7 @@ class ExpenseModel extends Expense {
           ? DateTime.now()
           : DateTime.parse(map['date']).toLocal(), // Ensure local conversion
       category: map['category'] as String? ?? '',
+      isEdited: map['isEdited'] as bool? ?? false,
     );
   }
 
@@ -72,16 +75,17 @@ class ExpenseModel extends Expense {
     String? amount,
     DateTime? date,
     String? category,
+    bool? isEdited,
   }) {
     return Expense(
-      id: id ?? this.id,
-      expenserId: expenserId ?? this.expenserId,
-      expenserName: expenserName ?? this.expenserName,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      amount: amount ?? this.amount,
-      date: date ?? this.date,
-      category: category ?? this.category,
-    );
+        id: id ?? this.id,
+        expenserId: expenserId ?? this.expenserId,
+        expenserName: expenserName ?? this.expenserName,
+        name: name ?? this.name,
+        description: description ?? this.description,
+        amount: amount ?? this.amount,
+        date: date ?? this.date,
+        category: category ?? this.category,
+        isEdited: isEdited ?? this.isEdited);
   }
 }

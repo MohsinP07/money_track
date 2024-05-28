@@ -10,14 +10,14 @@ class AddExpense {
 
   Future<Either<Failure, Expense>> call(AddExpenseParams params) {
     return repository.addExpense(
-      expenserId: params.expenserId,
-      expenserName: params.expenserName,
-      name: params.name,
-      description: params.description,
-      amount: params.amount,
-      date: params.date,
-      category: params.category,
-    );
+        expenserId: params.expenserId,
+        expenserName: params.expenserName,
+        name: params.name,
+        description: params.description,
+        amount: params.amount,
+        date: params.date,
+        category: params.category,
+        isEdited: params.isEdited);
   }
 }
 
@@ -29,6 +29,7 @@ class AddExpenseParams {
   final String amount;
   final DateTime date;
   final String category;
+  final bool isEdited;
 
   AddExpenseParams({
     required this.expenserId,
@@ -38,5 +39,6 @@ class AddExpenseParams {
     required this.amount,
     required this.date,
     required this.category,
+    required this.isEdited,
   });
 }

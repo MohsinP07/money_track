@@ -37,7 +37,11 @@ const expenseSchema = mongoose.Schema({
         type: String,
     },
 
-    
+    isEdited: {
+        type: Boolean,
+        require: true,
+        default: false
+    }
 
 });
 
