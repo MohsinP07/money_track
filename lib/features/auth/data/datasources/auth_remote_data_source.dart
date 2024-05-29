@@ -41,8 +41,10 @@ class AuthRemoteDataSourceImplement implements AuthRemoteDataSource {
       );
 
       if (res.statusCode != 200) {
-        throw ServerException(
-            'Failed to sign in. Status code: ${res.statusCode}');
+        final Map<String, dynamic> errorResponse = json.decode(res.body);
+        final String errorMessage = errorResponse['msg'] ??
+            'Failed to log in. Status code: ${res.statusCode}';
+        throw ServerException(errorMessage);
       }
 
       Map<String, dynamic> resBody = json.decode(res.body);
@@ -53,17 +55,20 @@ class AuthRemoteDataSourceImplement implements AuthRemoteDataSource {
 
       return UserModel.fromJson(resBody);
     } catch (e) {
-      print(e);
-
-      throw ServerException(e.toString());
+      if (e is ServerException) {
+        throw e; // Re-throw the same exception
+      } else {
+        throw ServerException(e.toString());
+      }
     }
   }
 
   @override
-  Future<UserModel> signUpEithEmailAndPassword(
-      {required String name,
-      required String email,
-      required String password}) async {
+  Future<UserModel> signUpEithEmailAndPassword({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
     try {
       print("Creating user model...");
       UserModel user = UserModel(
@@ -87,14 +92,20 @@ class AuthRemoteDataSourceImplement implements AuthRemoteDataSource {
       print("Response body: ${res.body}");
 
       if (res.statusCode != 200) {
-        throw ServerException(
-            'Failed to sign up. Status code: ${res.statusCode}');
+        final Map<String, dynamic> errorResponse = json.decode(res.body);
+        final String errorMessage = errorResponse['msg'] ??
+            'Failed to sign up. Status code: ${res.statusCode}';
+        throw ServerException(errorMessage);
       }
 
       Map<String, dynamic> resBody = json.decode(res.body);
       return UserModel.fromJson(resBody);
     } catch (e) {
-      throw ServerException(e.toString());
+      if (e is ServerException) {
+        throw e; // Re-throw the same exception
+      } else {
+        throw ServerException(e.toString());
+      }
     }
   }
 

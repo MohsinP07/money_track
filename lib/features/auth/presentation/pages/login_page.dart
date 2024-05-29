@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:money_track/core/common/widgets/loader.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/core/utils/utils.dart';
@@ -12,7 +11,8 @@ import 'package:money_track/features/expenses/presentation/widgets/bottom_bar.da
 
 class LoginPage extends StatefulWidget {
   static const String routename = '/login-page';
-  const LoginPage({super.key});
+  final String? email;
+  const LoginPage({super.key, this.email});
 
   @override
   State<LoginPage> createState() => LoginPageState();
@@ -22,6 +22,14 @@ class LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.email != null) {
+      emailController.text = widget.email!;
+    }
+  }
 
   @override
   void dispose() {

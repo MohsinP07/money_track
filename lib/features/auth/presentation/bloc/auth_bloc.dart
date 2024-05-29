@@ -59,13 +59,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       email: event.email,
       password: event.password,
     ));
-    print(res);
-    print("Here");
     res.fold(
-        (failure) => emit(AuthFailure(
-              failure.message,
-            )),
-        (user) => _emitAuthSuccess(user, emit));
+      (failure) {
+        print('Failure: ${failure.message}');
+        emit(AuthFailure(failure.message));
+      },
+      (user) {
+        print('User: ${user.name}');
+        emit(AuthSuccess(user));
+      },
+    );
   }
 
   void _onAuthLogin(AuthLogin event, Emitter<AuthState> emit) async {
