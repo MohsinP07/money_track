@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
+import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/common/widgets/loader.dart';
 import 'package:money_track/core/constants/constants.dart';
 import 'package:money_track/core/constants/global_variables.dart';
@@ -10,6 +11,7 @@ import 'package:money_track/core/utils/utils.dart';
 import 'package:money_track/features/expenses/domain/entity/expense.dart';
 import 'package:money_track/features/expenses/presentation/bloc/expenses_bloc.dart';
 import 'package:money_track/features/expenses/presentation/widgets/calculation_functions.dart';
+import 'package:money_track/features/expenses/presentation/widgets/custom_analysis_display.dart';
 import 'package:money_track/features/expenses/presentation/widgets/expense_analysis_displays.dart';
 import 'package:money_track/features/expenses/presentation/widgets/edit_bottom_sheet.dart';
 
@@ -22,7 +24,8 @@ class AnalyzeExpensePage extends StatefulWidget {
 
 class _AnalyzeExpensePageState extends State<AnalyzeExpensePage> {
   String _selectedAnalysis = 'Today';
-  String _selectedCategory = '';
+  String _selectedCategory = 'All';
+  bool _showCustomExpenses = false;
 
   List<Expense> _filterTodayExpenses(List<Expense> expenses) {
     final today = DateTime.now();
@@ -67,6 +70,22 @@ class _AnalyzeExpensePageState extends State<AnalyzeExpensePage> {
       final expenseDate = expense.date;
       return expenseDate.isAfter(startOfMonth.subtract(Duration(days: 1))) &&
           expenseDate.isBefore(endOfMonth.add(Duration(days: 1)));
+    }).toList();
+
+    // Sort the expenses by date in descending order
+    filteredExpenses.sort((a, b) => b.date.compareTo(a.date));
+
+    return filteredExpenses;
+  }
+
+  List<Expense> _filterExpensesByCategory(
+      List<Expense> expenses, String category) {
+    if (category == 'All') {
+      return expenses;
+    }
+
+    final filteredExpenses = expenses.where((expense) {
+      return expense.category == category;
     }).toList();
 
     // Sort the expenses by date in descending order
@@ -151,6 +170,8 @@ class _AnalyzeExpensePageState extends State<AnalyzeExpensePage> {
             final todayExpenses = _filterTodayExpenses(state.expenses);
             final weeklyExpenses = _filterWeeklyExpenses(state.expenses);
             final monhlyExpenses = _filterOneMonthExpenses(state.expenses);
+            final categoryWiseExpenses =
+                _filterExpensesByCategory(state.expenses, _selectedCategory);
 
             return SafeArea(
                 child: Padding(
@@ -203,7 +224,40 @@ class _AnalyzeExpensePageState extends State<AnalyzeExpensePage> {
                   SizedBox(
                     height: deviceSize(context).height * 0.01,
                   ),
-                  const Text("Time wise"),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppPallete.boxColor),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: TextButton(
+                              onPressed: () {},
+                              child: const Text(
+                                "Time wise",
+                                style: TextStyle(
+                                  color: AppPallete.boxColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ))),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppPallete.boxColor),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: TextButton(
+                            onPressed: () {},
+                            child: const Text(
+                              'Custom',
+                              style: TextStyle(
+                                color: AppPallete.boxColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )),
+                      )
+                    ],
+                  ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -254,7 +308,7 @@ class _AnalyzeExpensePageState extends State<AnalyzeExpensePage> {
                         showEditBottomSheet: _showEditBottomSheet,
                       ),
                   if (_selectedAnalysis == 'This week')
-                    if (todayExpenses.isEmpty)
+                    if (weeklyExpenses.isEmpty)
                       const Text(
                         'No expenses for week!',
                       )
@@ -265,7 +319,7 @@ class _AnalyzeExpensePageState extends State<AnalyzeExpensePage> {
                         showEditBottomSheet: _showEditBottomSheet,
                       ),
                   if (_selectedAnalysis == 'This Month')
-                    if (todayExpenses.isEmpty)
+                    if (monhlyExpenses.isEmpty)
                       const Text(
                         'No expenses for month!',
                       )
@@ -275,51 +329,6 @@ class _AnalyzeExpensePageState extends State<AnalyzeExpensePage> {
                         showDeleteDialog: _showDeleteDialog,
                         showEditBottomSheet: _showEditBottomSheet,
                       ),
-                  if (_selectedAnalysis == 'Custom')
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Category wise"),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: Constants.expenseCategory
-                                .map(
-                                  (e) => Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          _selectedCategory = e;
-                                        });
-                                        print(_selectedCategory);
-                                      },
-                                      child: Chip(
-                                        label: Text(
-                                          e,
-                                          style: TextStyle(
-                                            color: _selectedCategory == e
-                                                ? AppPallete.whiteColor
-                                                : AppPallete.blackColor,
-                                          ),
-                                        ),
-                                        side: _selectedCategory == e
-                                            ? null
-                                            : const BorderSide(
-                                                color: AppPallete.borderColor,
-                                              ),
-                                        backgroundColor: _selectedCategory == e
-                                            ? AppPallete.buttonColor
-                                            : null,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        ),
-                      ],
-                    ),
                 ],
               ),
             ));

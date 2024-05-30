@@ -53,6 +53,8 @@ class CalculationFunctions {
         return 'assets/images/wellness.png';
       case 'Grocery':
         return 'assets/images/grocery.png';
+      case 'All':
+        return 'assets/images/all.png';
       default:
         return 'assets/images/bills.png';
     }
