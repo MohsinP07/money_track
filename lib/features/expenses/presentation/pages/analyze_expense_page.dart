@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
-import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/common/widgets/loader.dart';
 import 'package:money_track/core/constants/constants.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
-import 'package:money_track/core/utils/format_date.dart';
 import 'package:money_track/core/utils/utils.dart';
 import 'package:money_track/features/expenses/domain/entity/expense.dart';
 import 'package:money_track/features/expenses/presentation/bloc/expenses_bloc.dart';
-import 'package:money_track/features/expenses/presentation/widgets/calculation_functions.dart';
 import 'package:money_track/features/expenses/presentation/widgets/custom_analysis_display.dart';
 import 'package:money_track/features/expenses/presentation/widgets/expense_analysis_displays.dart';
 import 'package:money_track/features/expenses/presentation/widgets/edit_bottom_sheet.dart';
+
+enum AnalysisType { timeWise, custom }
 
 class AnalyzeExpensePage extends StatefulWidget {
   const AnalyzeExpensePage({super.key});
@@ -26,6 +25,7 @@ class _AnalyzeExpensePageState extends State<AnalyzeExpensePage> {
   String _selectedAnalysis = 'Today';
   String _selectedCategory = 'All';
   bool _showCustomExpenses = false;
+  var _analysisType = AnalysisType.timeWise;
 
   List<Expense> _filterTodayExpenses(List<Expense> expenses) {
     final today = DateTime.now();
@@ -228,107 +228,144 @@ class _AnalyzeExpensePageState extends State<AnalyzeExpensePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppPallete.boxColor),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: TextButton(
-                              onPressed: () {},
-                              child: const Text(
-                                "Time wise",
-                                style: TextStyle(
-                                  color: AppPallete.boxColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ))),
-                      Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: AppPallete.boxColor),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: TextButton(
-                            onPressed: () {},
-                            child: const Text(
-                              'Custom',
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: ChoiceChip(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          label: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Time Wise",
                               style: TextStyle(
-                                color: AppPallete.boxColor,
                                 fontWeight: FontWeight.bold,
-                              ),
-                            )),
-                      )
-                    ],
-                  ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: Constants.expenseAnalyzer
-                          .map(
-                            (e) => Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _selectedAnalysis = e;
-                                  });
-                                  print(_selectedAnalysis);
-                                },
-                                child: Chip(
-                                  label: Text(
-                                    e,
-                                    style: TextStyle(
-                                      color: _selectedAnalysis == e
-                                          ? AppPallete.whiteColor
-                                          : AppPallete.blackColor,
-                                    ),
-                                  ),
-                                  side: _selectedAnalysis == e
-                                      ? null
-                                      : const BorderSide(
-                                          color: AppPallete.borderColor,
-                                        ),
-                                  backgroundColor: _selectedAnalysis == e
-                                      ? AppPallete.buttonColor
-                                      : null,
-                                ),
+                                color: _analysisType == AnalysisType.timeWise
+                                    ? AppPallete.whiteColor
+                                    : AppPallete.boxColor,
                               ),
                             ),
-                          )
-                          .toList(),
-                    ),
+                          ),
+                          selected: _analysisType == AnalysisType.timeWise,
+                          onSelected: (_) {
+                            setState(() {
+                              _analysisType = AnalysisType.timeWise;
+                            });
+                          },
+                          backgroundColor: AppPallete.whiteColor,
+                          selectedColor: AppPallete.buttonColor,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: ChoiceChip(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          label: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Custom",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: _analysisType == AnalysisType.custom
+                                    ? AppPallete.whiteColor
+                                    : AppPallete.boxColor,
+                              ),
+                            ),
+                          ),
+                          selected: _analysisType == AnalysisType.custom,
+                          onSelected: (_) {
+                            setState(() {
+                              _analysisType = AnalysisType.custom;
+                            });
+                          },
+                          backgroundColor: AppPallete.whiteColor,
+                          selectedColor: AppPallete.buttonColor,
+                        ),
+                      ),
+                    ],
                   ),
-                  if (_selectedAnalysis == 'Today')
-                    if (todayExpenses.isEmpty)
-                      const Text(
-                        'No expenses today!',
-                      )
-                    else
-                      ExpensesAnalysisDisplays(
-                        todayExpenses: todayExpenses,
-                        showDeleteDialog: _showDeleteDialog,
-                        showEditBottomSheet: _showEditBottomSheet,
+                  if (_analysisType == AnalysisType.timeWise)
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: Constants.expenseAnalyzer
+                            .map(
+                              (e) => Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedAnalysis = e;
+                                    });
+                                    print(_selectedAnalysis);
+                                  },
+                                  child: Chip(
+                                    label: Text(
+                                      e,
+                                      style: TextStyle(
+                                        color: _selectedAnalysis == e
+                                            ? AppPallete.whiteColor
+                                            : AppPallete.blackColor,
+                                      ),
+                                    ),
+                                    side: _selectedAnalysis == e
+                                        ? null
+                                        : const BorderSide(
+                                            color: AppPallete.borderColor,
+                                          ),
+                                    backgroundColor: _selectedAnalysis == e
+                                        ? AppPallete.buttonColor
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
                       ),
-                  if (_selectedAnalysis == 'This week')
-                    if (weeklyExpenses.isEmpty)
-                      const Text(
-                        'No expenses for week!',
-                      )
-                    else
-                      ExpensesAnalysisDisplays(
-                        todayExpenses: weeklyExpenses,
-                        showDeleteDialog: _showDeleteDialog,
-                        showEditBottomSheet: _showEditBottomSheet,
-                      ),
-                  if (_selectedAnalysis == 'This Month')
-                    if (monhlyExpenses.isEmpty)
-                      const Text(
-                        'No expenses for month!',
-                      )
-                    else
-                      ExpensesAnalysisDisplays(
-                        todayExpenses: monhlyExpenses,
-                        showDeleteDialog: _showDeleteDialog,
-                        showEditBottomSheet: _showEditBottomSheet,
-                      ),
+                    ),
+                  if (_analysisType == AnalysisType.timeWise)
+                    if (_selectedAnalysis == 'Today')
+                      if (todayExpenses.isEmpty)
+                        const Text(
+                          'No expenses today!',
+                        )
+                      else
+                        ExpensesAnalysisDisplays(
+                          todayExpenses: todayExpenses,
+                          showDeleteDialog: _showDeleteDialog,
+                          showEditBottomSheet: _showEditBottomSheet,
+                        ),
+                  if (_analysisType == AnalysisType.timeWise)
+                    if (_selectedAnalysis == 'This week')
+                      if (weeklyExpenses.isEmpty)
+                        const Text(
+                          'No expenses for week!',
+                        )
+                      else
+                        ExpensesAnalysisDisplays(
+                          todayExpenses: weeklyExpenses,
+                          showDeleteDialog: _showDeleteDialog,
+                          showEditBottomSheet: _showEditBottomSheet,
+                        ),
+                  if (_analysisType == AnalysisType.timeWise)
+                    if (_selectedAnalysis == 'This Month')
+                      if (monhlyExpenses.isEmpty)
+                        const Text(
+                          'No expenses for month!',
+                        )
+                      else
+                        ExpensesAnalysisDisplays(
+                          todayExpenses: monhlyExpenses,
+                          showDeleteDialog: _showDeleteDialog,
+                          showEditBottomSheet: _showEditBottomSheet,
+                        ),
+                  if (_analysisType == AnalysisType.custom)
+                    CustomAnalysisDisplay(
+                      expense: state.expenses,
+                    )
                 ],
               ),
             ));
