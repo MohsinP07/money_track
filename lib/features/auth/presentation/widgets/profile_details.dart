@@ -30,12 +30,16 @@ class ProfileDetails extends StatelessWidget {
         if (state is AppUserLoggedIn) {
           final user = state.user;
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextButton(
                   onPressed: () {
                     _showEditBottomSheet(context, user);
                   },
-                  child: const Text("Edit Profile")),
+                  child: const Text(
+                    "Edit Profile",
+                    style: TextStyle(color: AppPallete.boxColor),
+                  )),
               ListTile(
                 leading: CircleAvatar(
                   backgroundColor: AppPallete.boxColor,

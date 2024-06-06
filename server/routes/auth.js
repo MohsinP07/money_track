@@ -79,16 +79,16 @@ authRouter.put('/auth/updateProfile', auth, async (req, res) => {
         const userId = req.user; // Get the user ID from the authenticated user
         const { name, phone } = req.body; // Get the updated information
 
-        // Update the user's information in the database
+        
         await User.findByIdAndUpdate(userId, { name, phone });
 
-        // Retrieve the updated user information
+        
         const updatedUser = await User.findById(userId);
 
-        // Send the updated user information in the response
+       
         res.json(updatedUser);
         
-        // Log the response body
+       
         console.log(updatedUser);
     } catch (e) {
         res.status(500).json({ error: e.message });
