@@ -14,6 +14,11 @@ abstract class AuthRepository {
     required String password,
   });
 
+  Future<Either<Failure, User>> editProfile({
+    required String name,
+    required String phone,
+  });
+
   Future<Either<Failure, User>> currentUser();
 
   void logoutUser({required BuildContext context});

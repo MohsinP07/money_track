@@ -4,32 +4,36 @@ import 'package:money_track/core/entity/user.dart';
 
 class UserModel extends User {
   UserModel({
-    required super.id,
-    required super.name,
-    required super.email,
-  });
+    required String id,
+    required String name,
+    required String email,
+    String phone = '',
+  }) : super(id: id, name: name, email: email, phone: phone);
 
   factory UserModel.fromJson(Map<String, dynamic> map) {
     return UserModel(
-      id: map['_id'] ?? '',
-      name: map['name'] ?? '',
-      email: map['email'] ?? '',
+      id: map['_id'] as String? ?? '',
+      name: map['name'] as String? ?? '',
+      email: map['email'] as String? ?? '',
+      phone: map['phone'] as String? ?? '',
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
+      '_id': id,
       'name': name,
       'email': email,
+      'phone': phone,
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      id: map['_id'] as String,
-      name: map['name'] as String,
-      email: map['email'] as String,
+      id: map['_id'] as String? ?? '',
+      name: map['name'] as String? ?? '',
+      email: map['email'] as String? ?? '',
+      phone: map['phone'] as String? ?? '',
     );
   }
 
@@ -39,11 +43,13 @@ class UserModel extends User {
     String? id,
     String? name,
     String? email,
+    String? phone,
   }) {
     return UserModel(
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
+      phone: phone ?? this.phone,
     );
   }
 }

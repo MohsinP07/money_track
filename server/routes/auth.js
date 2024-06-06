@@ -74,20 +74,27 @@ authRouter.post('/auth/signin', async (req, res) => {
 
 });
 
-// Add a new route for updating user information
 authRouter.put('/auth/updateProfile', auth, async (req, res) => {
     try {
         const userId = req.user; // Get the user ID from the authenticated user
-        const { name, address, phone } = req.body; // Get the updated information
+        const { name, phone } = req.body; // Get the updated information
 
         // Update the user's information in the database
-        await User.findByIdAndUpdate(userId, { name, address, phone });
+        await User.findByIdAndUpdate(userId, { name, phone });
 
-        res.json({ msg: "User information updated successfully" });
+        // Retrieve the updated user information
+        const updatedUser = await User.findById(userId);
+
+        // Send the updated user information in the response
+        res.json(updatedUser);
+        
+        // Log the response body
+        console.log(updatedUser);
     } catch (e) {
         res.status(500).json({ error: e.message });
     }
 });
+
 
 
 //Checken token validity

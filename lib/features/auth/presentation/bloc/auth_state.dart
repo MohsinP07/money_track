@@ -14,6 +14,8 @@ class AuthSuccess extends AuthState {
   );
 }
 
+class AuthProfileEditing extends AuthState {}
+
 class AuthFailure extends AuthState {
   final String message;
   AuthFailure(this.message);

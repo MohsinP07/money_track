@@ -3,6 +3,7 @@ import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:money_track/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:money_track/features/auth/data/repositories/auth_repository_implement.dart';
 import 'package:money_track/features/auth/domain/usecases/current_user.dart';
+import 'package:money_track/features/auth/domain/usecases/edit_profile.dart';
 import 'package:money_track/features/auth/domain/usecases/log_out_user.dart';
 import 'package:money_track/features/auth/domain/usecases/user_log_in.dart';
 import 'package:money_track/features/auth/domain/usecases/user_sign_up.dart';
@@ -45,6 +46,9 @@ void _initAuth() {
     ..registerFactory(() => UserLogin(
           serviceLocator(),
         ))
+    ..registerFactory(() => EditProfile(
+          serviceLocator(),
+        ))
     ..registerFactory(() => CurrentUser(
           serviceLocator(),
         ))
@@ -56,6 +60,7 @@ void _initAuth() {
     ..registerLazySingleton(() => AuthBloc(
           userSignUp: serviceLocator(),
           userLogin: serviceLocator(),
+          editProfile: serviceLocator(),
           currentUser: serviceLocator(),
           appUserCubit: serviceLocator(),
           userLogout: serviceLocator(),

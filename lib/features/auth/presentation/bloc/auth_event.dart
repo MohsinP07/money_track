@@ -23,6 +23,16 @@ class AuthLogin extends AuthEvent {
   });
 }
 
+class AuthEditProfile extends AuthEvent {
+  final String name;
+  final String phone;
+
+  AuthEditProfile({
+    required this.name,
+    required this.phone,
+  });
+}
+
 class AuthIsUserLoggedIn extends AuthEvent {}
 
 class AuthLogout extends AuthEvent {

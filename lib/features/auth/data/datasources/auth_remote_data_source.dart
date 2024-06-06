@@ -20,6 +20,11 @@ abstract class AuthRemoteDataSource {
     required String password,
   });
 
+  Future<UserModel> editProfile({
+    required String name,
+    required String phone,
+  });
+
   Future<UserModel?> getCurrentUserData();
 
   void logOutUser(BuildContext context);
@@ -171,4 +176,45 @@ class AuthRemoteDataSourceImplement implements AuthRemoteDataSource {
       throw ServerException('Error during logout: $e');
     }
   }
+
+  Future<UserModel> editProfile({required String name, required String phone}) async {
+  try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString("x-auth-token");
+
+    if (token == null || token.isEmpty) {
+      throw ServerException("User is not authenticated");
+    }
+    if (name.isEmpty || phone.isEmpty) {
+      throw ServerException("Name and phone cannot be empty");
+    }
+
+    final response = await http.put(
+      Uri.parse('$uri/auth/updateProfile'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': token,
+      },
+      body: json.encode({
+        'name': name,
+        'phone': phone,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      throw ServerException(
+          'Failed to edit profile. Status code: ${response.statusCode}');
+    }
+
+    final Map<String, dynamic> responseBody = json.decode(response.body);
+
+    print('Response Body: $responseBody'); // Log the response body
+
+    return UserModel.fromMap(responseBody);
+  } catch (e) {
+    print(e);
+    throw ServerException(e.toString());
+  }
+}
+
 }

@@ -68,4 +68,26 @@ class AuthRepositoryImplement implements AuthRepository {
       throw Failure(e.message);
     }
   }
+
+  @override
+  Future<Either<Failure, User>> editProfile({
+    required String name,
+    required String phone,
+  }) async {
+    try {
+      // Check if name and phone are not null or empty
+      if (name.isEmpty || phone.isEmpty) {
+        return left(Failure("Name and phone cannot be empty"));
+      }
+
+      final editProfile = await remoteDataSource.editProfile(
+        name: name,
+        phone: phone,
+      );
+      return right(editProfile);
+    } on ServerException catch (e) {
+      print(e);
+      throw Failure(e.message);
+    }
+  }
 }

@@ -15,6 +15,15 @@ class AppUserCubit extends Cubit<AppUserState> {
     }
   }
 
+
+  void refreshUser(User? user){
+     if (user == null) {
+      emit(AppUserInitial()); // logged off state
+    } else {
+      emit(AppUserLoggedIn(user));
+    }
+  }
+
   void clearUser() {
     emit(AppUserInitial()); // Clear user state
   }
