@@ -1,13 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_track/core/common/widgets/custom_button.dart';
+import 'package:money_track/core/common/widgets/custom_dialog.dart';
+import 'package:money_track/core/common/widgets/reports_generator.dart';
 import 'package:money_track/core/constants/constants.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
+import 'package:money_track/core/utils/utils.dart';
 import 'package:money_track/features/expenses/domain/entity/expense.dart';
 import 'package:money_track/features/expenses/presentation/widgets/expense_tile.dart';
 import 'package:money_track/features/expenses/presentation/widgets/calculation_functions.dart';
 import 'package:money_track/core/utils/format_date.dart';
+import 'package:open_file_safe/open_file_safe.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' as excel;
 
 enum ExportType { pdf, excel, viewHere }
 
@@ -24,6 +34,7 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
   var _selectedStartDate = DateTime.now();
   var _selectedEndDate = DateTime.now();
   var _exportType = ExportType.viewHere;
+  final reportGenerator = ReportGenerator();
 
   void _presentDatePicker(DateTime date, String type) {
     showDatePicker(
@@ -154,6 +165,19 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+
+  void _showCustomDialog(BuildContext context, VoidCallback onView) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomDialog(
+          title: 'Reports ready',
+          content: 'Your reports are ready to view.',
+          onView: onView,
         );
       },
     );
@@ -352,9 +376,36 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
           const Divider(),
           CustomButton(
             text: "Submit",
-            onTap: () {
+            onTap: () async {
               if (_exportType == ExportType.viewHere) {
                 _showFilteredExpenses();
+              } else if (_exportType == ExportType.pdf &&
+                  _filterExpenses().isNotEmpty) {
+                _showCustomDialog(context, () async {
+                  final pdf = await reportGenerator.createPDF(
+                      _filterExpenses(),
+                      'Custom Reports',
+                      _selectedStartDate.toString(),
+                      _selectedEndDate.toString(),
+                      _selectedCategory,
+                      '');
+                  final filePath = await reportGenerator.savePDF(pdf);
+                  OpenFile.open(filePath);
+                });
+              } else if (_exportType == ExportType.excel &&
+                  _filterExpenses().isNotEmpty) {
+                _showCustomDialog(context, () async {
+                  await reportGenerator.createAndSaveExcel(
+                    _filterExpenses(),
+                    'Custom Reports',
+                    _selectedStartDate.toString(),
+                    _selectedEndDate.toString(),
+                    _selectedCategory,
+                    '',
+                  );
+                });
+              } else {
+                showSnackBar(context, 'No Expenses!!');
               }
             },
           ),

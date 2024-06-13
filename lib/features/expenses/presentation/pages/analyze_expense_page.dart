@@ -334,9 +334,10 @@ class _AnalyzeExpensePageState extends State<AnalyzeExpensePage> {
                         )
                       else
                         ExpensesAnalysisDisplays(
-                          todayExpenses: todayExpenses,
+                          allExpenses: todayExpenses,
                           showDeleteDialog: _showDeleteDialog,
                           showEditBottomSheet: _showEditBottomSheet,
+                          timeWise: 'Today',
                         ),
                   if (_analysisType == AnalysisType.timeWise)
                     if (_selectedAnalysis == 'This week')
@@ -346,9 +347,10 @@ class _AnalyzeExpensePageState extends State<AnalyzeExpensePage> {
                         )
                       else
                         ExpensesAnalysisDisplays(
-                          todayExpenses: weeklyExpenses,
+                          allExpenses: weeklyExpenses,
                           showDeleteDialog: _showDeleteDialog,
                           showEditBottomSheet: _showEditBottomSheet,
+                          timeWise: 'Week',
                         ),
                   if (_analysisType == AnalysisType.timeWise)
                     if (_selectedAnalysis == 'This Month')
@@ -358,9 +360,10 @@ class _AnalyzeExpensePageState extends State<AnalyzeExpensePage> {
                         )
                       else
                         ExpensesAnalysisDisplays(
-                          todayExpenses: monhlyExpenses,
+                          allExpenses: monhlyExpenses,
                           showDeleteDialog: _showDeleteDialog,
                           showEditBottomSheet: _showEditBottomSheet,
+                          timeWise: 'Month',
                         ),
                   if (_analysisType == AnalysisType.custom)
                     CustomAnalysisDisplay(
