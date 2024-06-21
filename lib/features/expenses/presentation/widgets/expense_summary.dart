@@ -17,8 +17,52 @@ class ExpenseSummaryContainer extends StatelessWidget {
     required this.monthlyExpense,
   }) : super(key: key);
 
+  void showAnalysisDialog(
+      BuildContext context, String title, String analysisText) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(analysisText),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final weekday = now.weekday;
+    final daysInMonth = DateTime(now.year, now.month + 1, 0).day;
+    final dayOfMonth = now.day;
+
+    String weeklyAnalysisText;
+    String monthlyAnalysisText;
+    if (weekday == 7) {
+      weeklyAnalysisText =
+          'This week\'s total expense is $weeklyExpense ₹. The new week starts tomorrow!';
+    } else {
+      final daysRemainingInWeek = 7 - weekday;
+      weeklyAnalysisText =
+          'In the last ${7 - daysRemainingInWeek} days, you have spent $weeklyExpense ₹. You have $daysRemainingInWeek days left in this week.';
+    }
+
+    if (dayOfMonth == daysInMonth) {
+      monthlyAnalysisText =
+          'This month\'s total expense is $monthlyExpense ₹. A new month starts tomorrow!';
+    } else {
+      final daysRemainingInMonth = daysInMonth - dayOfMonth;
+      monthlyAnalysisText =
+          'So far this month, you have spent $monthlyExpense ₹. You have $daysRemainingInMonth days left in this month.';
+    }
+
     return Container(
       height: height,
       width: width,
@@ -30,7 +74,7 @@ class ExpenseSummaryContainer extends StatelessWidget {
       child: Align(
         alignment: Alignment.topLeft,
         child: RichText(
-          maxLines: 6,
+          maxLines: 10,
           text: TextSpan(
             children: [
               const TextSpan(
@@ -58,16 +102,28 @@ class ExpenseSummaryContainer extends StatelessWidget {
                   fontFamily: 'Poppins',
                 ),
               ),
-              const WidgetSpan(
-                child: SizedBox(height: 8),
-              ),
-              TextSpan(
-                text: '${weeklyExpense.toString()} ₹\n',
-                style: const TextStyle(
-                  color: AppPallete.whiteColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Poppins',
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: InkWell(
+                  onTap: () {
+                    showAnalysisDialog(context, 'Weekly Expenses Analysis',
+                        weeklyAnalysisText);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${weeklyExpense.toString()} ₹',
+                        style: const TextStyle(
+                          color: AppPallete.whiteColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                      Icon(Icons.info_outline, color: Colors.white, size: 20),
+                    ],
+                  ),
                 ),
               ),
               const TextSpan(
@@ -78,16 +134,28 @@ class ExpenseSummaryContainer extends StatelessWidget {
                   fontFamily: 'Poppins',
                 ),
               ),
-              const WidgetSpan(
-                child: SizedBox(height: 8),
-              ),
-              TextSpan(
-                text: '${monthlyExpense.toString()} ₹',
-                style: const TextStyle(
-                  color: AppPallete.whiteColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Poppins',
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: InkWell(
+                  onTap: () {
+                    showAnalysisDialog(context, 'Monthly Expenses Analysis',
+                        monthlyAnalysisText);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${monthlyExpense.toString()} ₹',
+                        style: const TextStyle(
+                          color: AppPallete.whiteColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                      Icon(Icons.info_outline, color: Colors.white, size: 20),
+                    ],
+                  ),
                 ),
               ),
             ],
