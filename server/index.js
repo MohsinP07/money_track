@@ -1,27 +1,31 @@
-const express = require('express'); //importing same like flutter
-const mongoose = require('mongoose');
+const express = require("express"); //importing same like flutter
+const mongoose = require("mongoose");
 
 //IMPORTS FROM OTHER FILES
-const authRouter = require('./routes/auth');
-const userRouter = require('./routes/user');
- 
+const authRouter = require("./routes/auth");
+const userRouter = require("./routes/user");
+
 //INIT
 const PORT = 3000;
-const DB = "mongodb+srv://globalmohsinpatel786:80kuEChp527sQ6DT@cluster0.2xjhclh.mongodb.net/";
-const app = express(); 
+const DB =
+  "mongodb+srv://globalmohsinpatel786:80kuEChp527sQ6DT@cluster0.2xjhclh.mongodb.net/";
+const app = express();
 
 //MIDDLEWARE
-app.use(express.json());//it passes incoming requests with json payloads
+app.use(express.json()); //it passes incoming requests with json payloads
 app.use(authRouter);
 app.use(userRouter);
 
 //Connections
-mongoose.connect(DB).then(() => {
+mongoose
+  .connect(DB)
+  .then(() => {
     console.log("Connection Successful");
-}).catch((e) => {
+  })
+  .catch((e) => {
     console.log(e);
-});
+  });
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Connected at port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Connected at port ${PORT}`);
 });
