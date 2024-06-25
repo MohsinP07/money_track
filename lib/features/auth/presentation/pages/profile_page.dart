@@ -5,6 +5,7 @@ import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:money_track/features/auth/presentation/pages/login_page.dart';
+import 'package:money_track/features/auth/presentation/widgets/ai_assistance_tile.dart';
 import 'package:money_track/features/auth/presentation/widgets/profile_details.dart';
 
 import '../../../../core/common/cubits/app_user/app_user_cubit.dart';
@@ -145,28 +146,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   elevation: 10,
                   child: SizedBox(
-                    width: deviceSize(context).width * 0.9,
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: AppPallete.boxColor,
-                        radius: deviceSize(context).width * 0.06,
-                        child: const Center(
-                          child: Icon(
-                            FontAwesomeIcons.robot,
-                            color: AppPallete.whiteColor,
-                          ),
-                        ),
-                      ),
-                      title: const Text(
-                        "Artificial Intelligence",
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      subtitle: const Text(
-                        'Get suggestions with the help of AI for better savings',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ),
-                  ),
+                      width: deviceSize(context).width * 0.9,
+                      child: AiAssistance()),
                 ),
               ],
             ),

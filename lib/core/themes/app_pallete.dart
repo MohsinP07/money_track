@@ -12,4 +12,5 @@ class AppPallete {
   static const Color transparentColor = Colors.transparent;
   static const Color boxColor = Color(0xFF42224A);
   static const Color buttonColor = Color(0xFF8F659A);
+  static const Color botBgColor = Color.fromARGB(255, 213, 197, 217);
 }
