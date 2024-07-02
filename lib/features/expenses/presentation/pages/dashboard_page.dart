@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/common/widgets/loader.dart';
-import 'package:money_track/core/constants/constants.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/core/utils/format_date.dart';
 import 'package:money_track/core/utils/utils.dart';
-import 'package:money_track/features/expenses/data/models/expense_model.dart';
 import 'package:money_track/features/expenses/domain/entity/expense.dart';
 import 'package:money_track/features/expenses/presentation/bloc/expenses_bloc.dart';
 import 'package:money_track/features/expenses/presentation/widgets/bottom_bar.dart';
 import 'package:money_track/features/expenses/presentation/widgets/calculation_functions.dart';
+import 'package:money_track/features/expenses/presentation/widgets/clock.dart';
 import 'package:money_track/features/expenses/presentation/widgets/edit_bottom_sheet.dart';
 import 'package:money_track/features/expenses/presentation/widgets/expense_summary.dart';
 import 'package:money_track/features/expenses/presentation/widgets/expense_tile.dart';
-import 'package:money_track/features/expenses/presentation/widgets/sheet_textfield.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -32,6 +29,11 @@ class DashboardPageState extends State<DashboardPage> {
   void _goToAddExpensePage() {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => const BottomBar(initialPage: 1)));
+  }
+
+  void _goToProfilePage() {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const BottomBar(initialPage: 3)));
   }
 
   @override
@@ -137,49 +139,56 @@ class DashboardPageState extends State<DashboardPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RichText(
-                          maxLines: 2,
-                          text: TextSpan(
-                            children: [
-                              const TextSpan(
-                                text: "Hello\n",
-                                style: TextStyle(
-                                  color: AppPallete.blackColor,
-                                  fontSize: 30,
-                                  fontFamily: 'Poppins',
+                    GestureDetector(
+                      onTap: _goToProfilePage,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RichText(
+                            maxLines: 2,
+                            text: TextSpan(
+                              children: [
+                                const TextSpan(
+                                  text: "Hello\n",
+                                  style: TextStyle(
+                                    color: AppPallete.blackColor,
+                                    fontSize: 30,
+                                    fontFamily: 'Poppins',
+                                  ),
                                 ),
-                              ),
-                              TextSpan(
-                                text: userName,
-                                style: const TextStyle(
-                                  color: AppPallete.blackColor,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Poppins',
+                                TextSpan(
+                                  text: userName,
+                                  style: const TextStyle(
+                                    color: AppPallete.blackColor,
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Poppins',
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        CircleAvatar(
-                          backgroundColor: AppPallete.boxColor,
-                          radius: deviceSize(context).width * 0.08,
-                          child: Text(
-                            userName.toString().substring(0, 1),
-                            style: const TextStyle(
-                              color: AppPallete.whiteColor,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
+                              ],
                             ),
                           ),
-                        ),
-                      ],
+                          CircleAvatar(
+                            backgroundColor: AppPallete.boxColor,
+                            radius: deviceSize(context).width * 0.08,
+                            child: Text(
+                              userName.toString().substring(0, 1),
+                              style: const TextStyle(
+                                color: AppPallete.whiteColor,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(
-                      height: deviceSize(context).width * 0.08,
+                      height: deviceSize(context).width * 0.01,
+                    ),
+                    Clock(),
+                    SizedBox(
+                      height: deviceSize(context).width * 0.02,
                     ),
                     ExpenseSummaryContainer(
                       height: deviceSize(context).height * 0.26,
