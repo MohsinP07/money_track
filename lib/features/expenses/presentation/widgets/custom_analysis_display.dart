@@ -175,6 +175,8 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
       context: context,
       builder: (BuildContext context) {
         return CustomDialog(
+          icon: Icons.check,
+          submitName: "View",
           title: 'Reports ready',
           content: 'Your reports are ready to view.',
           onView: onView,

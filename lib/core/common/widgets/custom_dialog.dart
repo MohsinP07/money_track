@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 
 class CustomDialog extends StatelessWidget {
+  final IconData icon;
   final String title;
+  final String submitName;
   final String content;
   final VoidCallback onView;
 
   CustomDialog({
+    required this.icon,
     required this.title,
+    required this.submitName,
     required this.content,
     required this.onView,
   });
@@ -85,9 +89,9 @@ class CustomDialog extends StatelessWidget {
                         Navigator.of(context).pop();
                         onView();
                       },
-                      child: const Text(
-                        'View',
-                        style: TextStyle(
+                      child: Text(
+                        submitName,
+                        style: const TextStyle(
                           fontSize: 16,
                           color: AppPallete.buttonColor,
                           fontWeight: FontWeight.bold,
@@ -100,14 +104,14 @@ class CustomDialog extends StatelessWidget {
             ],
           ),
         ),
-        const Positioned(
+        Positioned(
           left: 8,
           right: 8,
           child: CircleAvatar(
             backgroundColor: AppPallete.borderColor,
             radius: 50.0,
             child: Icon(
-              Icons.check,
+              icon,
               size: 60.0,
               color: Colors.white,
             ),

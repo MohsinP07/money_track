@@ -31,7 +31,9 @@ class ExpensesAnalysisDisplays extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return CustomDialog(
+            icon: Icons.check,
             title: 'Reports ready',
+            submitName: "View",
             content: 'Your reports are ready to view.',
             onView: onView,
           );

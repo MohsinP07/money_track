@@ -81,22 +81,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               icon: const Icon(
                                 Icons.settings,
                               )),
-                          IconButton(
-                            onPressed: () {
-                              context
-                                  .read<AuthBloc>()
-                                  .add(AuthLogout(context: context));
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginPage()),
-                                (route) => false,
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.logout,
-                            ),
-                          ),
                         ],
                       ),
                     ],
