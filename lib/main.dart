@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:money_track/core/themes/theme.dart';
+import 'package:money_track/core/utils/locale_strings.dart';
 import 'package:money_track/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:money_track/features/auth/presentation/pages/login_page.dart';
 import 'package:money_track/features/expenses/presentation/bloc/expenses_bloc.dart';
@@ -45,10 +47,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Money Track App',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.themeMode,
+      locale: Locale("en", "US"),
+      translations: LocaleString(),
       home: BlocSelector<AppUserCubit, AppUserState, bool>(
         selector: (state) {
           return state is AppUserLoggedIn;

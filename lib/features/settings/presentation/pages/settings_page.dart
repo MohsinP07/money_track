@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/common/widgets/custom_dialog.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:money_track/features/auth/presentation/pages/login_page.dart';
+import 'package:money_track/features/settings/presentation/widgets/currency_dialog.dart';
+import 'package:money_track/features/settings/presentation/widgets/language_dialog.dart';
 import 'package:money_track/features/settings/presentation/widgets/settings_tile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
   static const String routename = '/settings-page';
@@ -17,6 +21,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  SharedPreferences? prefs;
+
   void _showCustomDialog(BuildContext context, VoidCallback onView) {
     showDialog(
       context: context,
@@ -32,8 +38,77 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  void _showPremiumDialog(BuildContext context, VoidCallback onView) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomDialog(
+          icon: Icons.info,
+          submitName: "OK",
+          title: 'Can\'t proceed',
+          content: 'Please switch to premium for "Notifications" feature',
+          onView: () {},
+        );
+      },
+    );
+  }
+
+  void _showLanguageDialog(BuildContext context) async {
+    final selectedLocale = await showDialog<Locale>(
+      context: context,
+      builder: (BuildContext context) {
+        return const LanguageDialog();
+      },
+    );
+    if (selectedLocale != null) {
+      Get.updateLocale(selectedLocale);
+      String languageCode;
+      String countryCode;
+      if (selectedLocale == const Locale("en", "US")) {
+        languageCode = "en";
+        countryCode = "US";
+      } else if (selectedLocale == const Locale("mar", "IN")) {
+        languageCode = "mar";
+        countryCode = "IN";
+      } else if (selectedLocale == const Locale("hin", "IN")) {
+        languageCode = "hin";
+        countryCode = "IN";
+      } else {
+        return; // Unhandled locale
+      }
+      prefs?.setStringList('language', [languageCode, countryCode]);
+      setState(() {}); // Update the state to reflect the language change
+    }
+  }
+
+  Future<void> _showCurrencyDialog(BuildContext context) async {
+    final selectedCurrency = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return const CurrencyDialog();
+      },
+    );
+    if (selectedCurrency != null) {
+      setState(() {}); // Refresh to show the updated currency
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSharedPreferences();
+  }
+
+  Future<void> _loadSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {}); // Update the state to reflect the loaded prefs
+  }
+
   @override
   Widget build(BuildContext context) {
+    String languageCode = prefs?.getStringList('language')?[0] ?? 'en';
+    String countryCode = prefs?.getStringList('language')?[1] ?? 'US';
+    Locale currentLocale = Locale(languageCode, countryCode);
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,30 +148,40 @@ class _SettingsPageState extends State<SettingsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'General',
-                  style: TextStyle(
+                Text(
+                  'general'.tr,
+                  style: const TextStyle(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 SettingsTile(
                     leadingIcon: Icons.translate,
                     title: 'Language',
-                    trailingText: 'English',
+                    trailingText: currentLocale.languageCode == 'mar'
+                        ? "मराठी"
+                        : currentLocale.languageCode == 'hin'
+                            ? "हिन्दी"
+                            : 'English',
                     trailingIcon: Icons.arrow_forward_ios,
-                    onTrailingIconPressed: () {}),
+                    onTrailingIconPressed: () {
+                      _showLanguageDialog(context);
+                    }),
                 SettingsTile(
                     leadingIcon: Icons.notifications,
                     title: 'Notifications',
                     trailingText: '',
                     trailingIcon: Icons.arrow_forward_ios,
-                    onTrailingIconPressed: () {}),
+                    onTrailingIconPressed: () {
+                      _showPremiumDialog(context, () {});
+                    }),
                 SettingsTile(
                     leadingIcon: Icons.money,
                     title: 'Currency',
-                    trailingText: 'Rupee',
+                    trailingText: prefs?.getString('currency') ?? 'Dollar',
                     trailingIcon: Icons.arrow_forward_ios,
-                    onTrailingIconPressed: () {}),
+                    onTrailingIconPressed: () {
+                      _showCurrencyDialog(context);
+                    }),
                 const Divider(),
                 const Text(
                   'Account & Security',

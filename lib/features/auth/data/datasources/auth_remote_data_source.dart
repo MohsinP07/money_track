@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/error/exception.dart';
 import 'package:money_track/features/auth/data/models/usermodel.dart';
@@ -153,6 +155,12 @@ class AuthRemoteDataSourceImplement implements AuthRemoteDataSource {
               'Failed to fetch user data. Status code: ${userRes.statusCode}');
         }
 
+        if (prefs.containsKey('language')) {
+          List<String>? languageList = prefs.getStringList('language');
+          if (languageList != null && languageList.isNotEmpty) {
+            Get.updateLocale(Locale(languageList[0], languageList[1]));
+          }
+        }
         Map<String, dynamic> resBody = json.decode(userRes.body);
         return UserModel.fromJson(resBody);
       }
@@ -177,44 +185,46 @@ class AuthRemoteDataSourceImplement implements AuthRemoteDataSource {
     }
   }
 
-  Future<UserModel> editProfile({required String name, required String phone}) async {
-  try {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString("x-auth-token");
+  Future<UserModel> editProfile({
+    required String name,
+    required String phone,
+  }) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("x-auth-token");
 
-    if (token == null || token.isEmpty) {
-      throw ServerException("User is not authenticated");
+      if (token == null || token.isEmpty) {
+        throw ServerException("User is not authenticated");
+      }
+      if (name.isEmpty || phone.isEmpty) {
+        throw ServerException("Name and phone cannot be empty");
+      }
+
+      final response = await http.put(
+        Uri.parse('$uri/auth/updateProfile'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: json.encode({
+          'name': name,
+          'phone': phone,
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        throw ServerException(
+            'Failed to edit profile. Status code: ${response.statusCode}');
+      }
+
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+
+      print('Response Body: $responseBody'); // Log the response body
+
+      return UserModel.fromMap(responseBody);
+    } catch (e) {
+      print(e);
+      throw ServerException(e.toString());
     }
-    if (name.isEmpty || phone.isEmpty) {
-      throw ServerException("Name and phone cannot be empty");
-    }
-
-    final response = await http.put(
-      Uri.parse('$uri/auth/updateProfile'),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': token,
-      },
-      body: json.encode({
-        'name': name,
-        'phone': phone,
-      }),
-    );
-
-    if (response.statusCode != 200) {
-      throw ServerException(
-          'Failed to edit profile. Status code: ${response.statusCode}');
-    }
-
-    final Map<String, dynamic> responseBody = json.decode(response.body);
-
-    print('Response Body: $responseBody'); // Log the response body
-
-    return UserModel.fromMap(responseBody);
-  } catch (e) {
-    print(e);
-    throw ServerException(e.toString());
   }
-}
-
 }
