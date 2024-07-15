@@ -6,6 +6,7 @@ import 'package:money_track/core/usecases/use_case.dart';
 import 'package:money_track/features/auth/domain/usecases/current_user.dart';
 import 'package:money_track/features/auth/domain/usecases/edit_profile.dart';
 import 'package:money_track/features/auth/domain/usecases/log_out_user.dart';
+import 'package:money_track/features/auth/domain/usecases/reset_password_usecase.dart';
 import 'package:money_track/features/auth/domain/usecases/user_log_in.dart';
 import 'package:money_track/features/auth/domain/usecases/user_sign_up.dart';
 
@@ -18,6 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final EditProfile _editProfile;
   final CurrentUser _currentUser;
   final UserLogout _userLogout;
+  final ResetPassword _resetPassword;
   final AppUserCubit _appUserCubit;
 
   AuthBloc({
@@ -26,12 +28,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required EditProfile editProfile,
     required CurrentUser currentUser,
     required UserLogout userLogout,
+    required ResetPassword resetPassword,
     required AppUserCubit appUserCubit,
   })  : _userSignUp = userSignUp,
         _userLogin = userLogin,
         _editProfile = editProfile,
         _currentUser = currentUser,
         _userLogout = userLogout,
+        _resetPassword = resetPassword,
         _appUserCubit = appUserCubit,
         super(AuthInitial()) {
     on<AuthSignUp>(_onAuthSignUp);
@@ -39,6 +43,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEditProfile>(_onEditProfile);
     on<AuthLogout>(_onAuthLogout);
     on<AuthIsUserLoggedIn>(_isUserLoggedIn);
+    on<AuthResetPassword>(_onAuthResetPassword);
   }
 
   void _isUserLoggedIn(
@@ -119,6 +124,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _appUserCubit.clearUser();
         emit(AuthInitial());
       },
+    );
+  }
+
+  void _onAuthResetPassword(
+    AuthResetPassword event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthPasswordReseting());
+    final result = await _resetPassword.call(ResetPasswordParams(
+      email: event.email,
+      newPassword: event.newPassword,
+    ));
+    result.fold(
+      (failure) => emit(AuthFailure(failure.message)),
+      (_) => emit(AuthPasswordResetSuccess()),
     );
   }
 

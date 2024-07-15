@@ -137,7 +137,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(
                     height: deviceSize(context).height * 0.04,
                   ),
-                  const ProfileDetails(),
+                  const ProfileDetails(fileName: "Profile"),
                   const Divider(),
                   SizedBox(
                     height: deviceSize(context).height * 0.02,

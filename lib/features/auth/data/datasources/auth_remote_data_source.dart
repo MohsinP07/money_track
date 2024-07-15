@@ -27,6 +27,11 @@ abstract class AuthRemoteDataSource {
     required String phone,
   });
 
+  Future<void> resetPassword({
+    required String email,
+    required String newPassword,
+  });
+
   Future<UserModel?> getCurrentUserData();
 
   void logOutUser(BuildContext context);
@@ -225,6 +230,39 @@ class AuthRemoteDataSourceImplement implements AuthRemoteDataSource {
     } catch (e) {
       print(e);
       throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  @override
+  Future<void> resetPassword({
+    required String email,
+    required String newPassword,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$uri/auth/reset-password'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode({
+          'email': email,
+          'newPassword': newPassword,
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        final Map<String, dynamic> errorResponse = json.decode(response.body);
+        final String errorMessage = errorResponse['msg'] ??
+            'Failed to reset password. Status code: ${response.statusCode}';
+        throw ServerException(errorMessage);
+      }
+    } catch (e) {
+      if (e is ServerException) {
+        throw e; // Re-throw the same exception
+      } else {
+        throw ServerException(e.toString());
+      }
     }
   }
 }

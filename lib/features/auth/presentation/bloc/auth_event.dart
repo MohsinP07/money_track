@@ -33,6 +33,16 @@ class AuthEditProfile extends AuthEvent {
   });
 }
 
+class AuthResetPassword extends AuthEvent {
+  final String email;
+  final String newPassword;
+
+  AuthResetPassword({
+    required this.email,
+    required this.newPassword,
+  });
+}
+
 class AuthIsUserLoggedIn extends AuthEvent {}
 
 class AuthLogout extends AuthEvent {

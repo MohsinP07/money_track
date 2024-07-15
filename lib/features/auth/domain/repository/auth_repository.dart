@@ -9,6 +9,7 @@ abstract class AuthRepository {
     required String email,
     required String password,
   });
+
   Future<Either<Failure, User>> loginWithEmailAndPassword({
     required String email,
     required String password,
@@ -22,4 +23,9 @@ abstract class AuthRepository {
   Future<Either<Failure, User>> currentUser();
 
   void logoutUser({required BuildContext context});
+
+  Future<Either<Failure, void>> resetPassword({
+    required String email,
+    required String newPassword,
+  });
 }

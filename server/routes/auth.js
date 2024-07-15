@@ -95,6 +95,26 @@ authRouter.put('/auth/updateProfile', auth, async (req, res) => {
     }
 });
 
+//Reset Password Route
+authRouter.post('/auth/reset-password', async (req, res) => {
+    try {
+        const { email, newPassword } = req.body;
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ msg: "User with this email does not exist!" });
+        }
+
+        const hashedPassword = await bcryptjs.hash(newPassword, 8);
+        user.password = hashedPassword;
+        await user.save();
+
+        res.json({ msg: "Password reset successful!" });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 
 
 //Checken token validity
