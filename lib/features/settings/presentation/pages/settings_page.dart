@@ -8,6 +8,7 @@ import 'package:money_track/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:money_track/features/auth/presentation/pages/login_page.dart';
 import 'package:money_track/features/auth/presentation/widgets/profile_details.dart';
 import 'package:money_track/features/settings/presentation/widgets/currency_dialog.dart';
+import 'package:money_track/features/settings/presentation/widgets/delete_all_data.dart';
 import 'package:money_track/features/settings/presentation/widgets/language_dialog.dart';
 import 'package:money_track/features/settings/presentation/widgets/reset_password.dart';
 import 'package:money_track/features/settings/presentation/widgets/settings_tile.dart';
@@ -94,6 +95,15 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  Future<void> _showDeleteDialog(BuildContext context) async {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return DeleteAllExpensesData();
+      },
+    );
+  }
+
   Future<void> _showAccountDialog(BuildContext context) async {
     final selectedCurrency = await showDialog<String>(
       context: context,
@@ -126,8 +136,6 @@ class _SettingsPageState extends State<SettingsPage> {
     prefs = await SharedPreferences.getInstance();
     setState(() {}); // Update the state to reflect the loaded prefs
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +252,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: 'Data',
                     trailingText: '',
                     trailingIcon: Icons.arrow_forward_ios,
-                    onTrailingIconPressed: () {},
+                    onTrailingIconPressed: () {
+                      _showDeleteDialog(context);
+                    },
                   ),
                   const Divider(),
                   const Text(

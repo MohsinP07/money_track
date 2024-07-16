@@ -20,6 +20,10 @@ class AuthPasswordReseting extends AuthState {}
 
 class AuthPasswordResetSuccess extends AuthState {}
 
+class AuthDeleteAllExpense extends AuthState {}
+
+class AuthDeleteAllExpenseSuccess extends AuthState {}
+
 class AuthFailure extends AuthState {
   final String message;
   AuthFailure(this.message);

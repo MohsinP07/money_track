@@ -9,6 +9,7 @@ import 'package:money_track/features/auth/domain/usecases/log_out_user.dart';
 import 'package:money_track/features/auth/domain/usecases/reset_password_usecase.dart';
 import 'package:money_track/features/auth/domain/usecases/user_log_in.dart';
 import 'package:money_track/features/auth/domain/usecases/user_sign_up.dart';
+import 'package:money_track/features/auth/domain/usecases/delete_all_expenses.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -20,6 +21,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final CurrentUser _currentUser;
   final UserLogout _userLogout;
   final ResetPassword _resetPassword;
+  final DeleteAllExpenses _deleteAllExpenses;
   final AppUserCubit _appUserCubit;
 
   AuthBloc({
@@ -29,6 +31,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required CurrentUser currentUser,
     required UserLogout userLogout,
     required ResetPassword resetPassword,
+    required DeleteAllExpenses deleteAllExpenses,
     required AppUserCubit appUserCubit,
   })  : _userSignUp = userSignUp,
         _userLogin = userLogin,
@@ -36,6 +39,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _currentUser = currentUser,
         _userLogout = userLogout,
         _resetPassword = resetPassword,
+        _deleteAllExpenses = deleteAllExpenses,
         _appUserCubit = appUserCubit,
         super(AuthInitial()) {
     on<AuthSignUp>(_onAuthSignUp);
@@ -44,6 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLogout>(_onAuthLogout);
     on<AuthIsUserLoggedIn>(_isUserLoggedIn);
     on<AuthResetPassword>(_onAuthResetPassword);
+    on<AuthDeleteAllExpenses>(_onAuthDeleteAllExpenses);
   }
 
   void _isUserLoggedIn(
@@ -139,6 +144,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthFailure(failure.message)),
       (_) => emit(AuthPasswordResetSuccess()),
+    );
+  }
+
+  void _onAuthDeleteAllExpenses(
+    AuthDeleteAllExpenses event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoading());
+    final result = await _deleteAllExpenses(DeleteAllExpensesParams(
+      expenserId: event.expenserId,
+    ));
+    result.fold(
+      (failure) => emit(AuthFailure(failure.message)),
+      (_) => emit(AuthDeleteAllExpenseSuccess()),
     );
   }
 

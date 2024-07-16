@@ -105,4 +105,18 @@ class AuthRepositoryImplement implements AuthRepository {
       return Left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteAllUserExpenses({
+    required String expenserId,
+  }) async {
+    try {
+      await remoteDataSource.deleteAllUserExpenses(
+        expenserId: expenserId,
+      );
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
 }

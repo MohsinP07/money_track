@@ -34,6 +34,8 @@ abstract class AuthRemoteDataSource {
 
   Future<UserModel?> getCurrentUserData();
 
+  Future<void> deleteAllUserExpenses({required String expenserId});
+
   void logOutUser(BuildContext context);
 }
 
@@ -234,7 +236,6 @@ class AuthRemoteDataSourceImplement implements AuthRemoteDataSource {
   }
 
   @override
-  @override
   Future<void> resetPassword({
     required String email,
     required String newPassword,
@@ -255,6 +256,42 @@ class AuthRemoteDataSourceImplement implements AuthRemoteDataSource {
         final Map<String, dynamic> errorResponse = json.decode(response.body);
         final String errorMessage = errorResponse['msg'] ??
             'Failed to reset password. Status code: ${response.statusCode}';
+        throw ServerException(errorMessage);
+      }
+    } catch (e) {
+      if (e is ServerException) {
+        throw e; // Re-throw the same exception
+      } else {
+        throw ServerException(e.toString());
+      }
+    }
+  }
+
+  @override
+  Future<void> deleteAllUserExpenses({required String expenserId}) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("x-auth-token");
+
+      if (token == null || token.isEmpty) {
+        throw ServerException("User is not authenticated");
+      }
+
+      final response = await http.delete(
+        Uri.parse('$uri/user/delete-all-expense'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: json.encode({
+          'expenserId': expenserId,
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        final Map<String, dynamic> errorResponse = json.decode(response.body);
+        final String errorMessage = errorResponse['msg'] ??
+            'Failed to delete all expenses. Status code: ${response.statusCode}';
         throw ServerException(errorMessage);
       }
     } catch (e) {

@@ -3,6 +3,7 @@ import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:money_track/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:money_track/features/auth/data/repositories/auth_repository_implement.dart';
 import 'package:money_track/features/auth/domain/usecases/current_user.dart';
+import 'package:money_track/features/auth/domain/usecases/delete_all_expenses.dart';
 import 'package:money_track/features/auth/domain/usecases/edit_profile.dart';
 import 'package:money_track/features/auth/domain/usecases/log_out_user.dart';
 import 'package:money_track/features/auth/domain/usecases/reset_password_usecase.dart';
@@ -59,6 +60,9 @@ void _initAuth() {
     ..registerFactory(() => ResetPassword(
           serviceLocator(),
         ))
+    ..registerFactory(() => DeleteAllExpenses(
+          serviceLocator(),
+        ))
 
     //Bloc
     ..registerLazySingleton(() => AuthBloc(
@@ -69,6 +73,7 @@ void _initAuth() {
           appUserCubit: serviceLocator(),
           userLogout: serviceLocator(),
           resetPassword: serviceLocator(),
+          deleteAllExpenses: serviceLocator(),
         ));
 }
 

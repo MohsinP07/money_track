@@ -74,4 +74,18 @@ userRouter.put('/user/edit-expense', auth, async (req, res) => {
   }
 });
 
+userRouter.delete('/user/delete-all-expense', auth, async (req, res) => {
+  try {
+    const { expenserId } = req.body;
+
+    // Delete all expenses with the given expenserId
+    const result = await Expense.deleteMany({ expenserId });
+
+    res.json({ message: 'All data deleted successfully', deletedCount: result.deletedCount });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+
 module.exports = userRouter;

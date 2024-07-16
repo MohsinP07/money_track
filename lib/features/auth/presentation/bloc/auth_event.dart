@@ -50,3 +50,11 @@ class AuthLogout extends AuthEvent {
 
   AuthLogout({required this.context});
 }
+
+class AuthDeleteAllExpenses extends AuthEvent {
+  final String expenserId;
+
+  AuthDeleteAllExpenses({
+    required this.expenserId,
+  });
+}

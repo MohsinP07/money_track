@@ -22,6 +22,10 @@ abstract class AuthRepository {
 
   Future<Either<Failure, User>> currentUser();
 
+  Future<Either<Failure, void>> deleteAllUserExpenses({
+    required String expenserId,
+  });
+
   void logoutUser({required BuildContext context});
 
   Future<Either<Failure, void>> resetPassword({
