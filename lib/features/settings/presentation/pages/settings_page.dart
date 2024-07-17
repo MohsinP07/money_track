@@ -105,7 +105,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _showAccountDialog(BuildContext context) async {
-    final selectedCurrency = await showDialog<String>(
+    await showDialog<String>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -216,7 +216,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   SettingsTile(
                     leadingIcon: Icons.money,
                     title: 'Currency',
-                    trailingText: prefs?.getString('currency') ?? 'Dollar',
+                    trailingText: prefs?.getString('currency') ?? 'Rupees',
                     trailingIcon: Icons.arrow_forward_ios,
                     onTrailingIconPressed: () {
                       _showCurrencyDialog(context);

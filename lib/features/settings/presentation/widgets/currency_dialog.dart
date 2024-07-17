@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/constants/global_variables.dart';
+import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CurrencyDialog extends StatefulWidget {
@@ -43,7 +44,7 @@ class _CurrencyDialogState extends State<CurrencyDialog> {
       ),
       elevation: 0,
       content: Container(
-        height: deviceSize(context).height * 0.28,
+        height: deviceSize(context).height * 0.3,
         width: deviceSize(context).width * 0.4,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,27 +88,35 @@ class _CurrencyDialogState extends State<CurrencyDialog> {
                 itemCount: currencies.length,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (selectedCurrency != null)
-                  SizedBox(
-                    width: deviceSize(context).width * 0.26,
-                    child: CustomButton(
-                      text: 'Submit',
-                      onTap: () {
-                        prefs?.setString('currency', selectedCurrency!);
-                        Navigator.of(context).pop(selectedCurrency);
-                      },
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (selectedCurrency != null)
+                    SizedBox(
+                      width: deviceSize(context).width * 0.26,
+                      child: CustomButton(
+                        text: 'Submit',
+                        onTap: () {
+                          prefs?.setString('currency', selectedCurrency!);
+                          Navigator.of(context).pop(selectedCurrency);
+                        },
+                      ),
+                    ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(
+                        color: AppPallete.errorColor,
+                      ),
                     ),
                   ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Cancel'),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

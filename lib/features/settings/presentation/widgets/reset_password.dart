@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_track/core/common/widgets/custom_button.dart';
+import 'package:money_track/core/constants/global_variables.dart';
+import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/core/utils/utils.dart';
 import 'package:money_track/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:money_track/features/auth/presentation/pages/login_page.dart';
@@ -106,13 +109,21 @@ class _ResetPasswordBottomSheetState extends State<ResetPasswordBottomSheet> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text("Cancel"),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                        color: AppPallete.errorColor,
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: onResetPressed,
-                  child: const Text("Reset"),
-                ),
+                SizedBox(
+                  width: deviceSize(context).width * 0.34,
+                  child: CustomButton(text: "Reset", onTap: onResetPressed),
+                )
               ],
             ),
           ],

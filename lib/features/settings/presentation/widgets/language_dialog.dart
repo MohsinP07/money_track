@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/constants/global_variables.dart';
+import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageDialog extends StatefulWidget {
@@ -77,7 +78,8 @@ class _LanguageDialogState extends State<LanguageDialog> {
       ),
       elevation: 0,
       content: Container(
-        height: deviceSize(context).height * 0.38,
+        padding: const EdgeInsets.all(8),
+        height: deviceSize(context).height * 0.4,
         width: deviceSize(context).width * 0.4,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,26 +125,34 @@ class _LanguageDialogState extends State<LanguageDialog> {
                 itemCount: locale.length,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (selectedLocale != null)
-                  SizedBox(
-                    width: deviceSize(context).width * 0.26,
-                    child: CustomButton(
-                      text: 'Submit',
-                      onTap: () {
-                        updateLanguage(selectedLocale);
-                      },
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (selectedLocale != null)
+                    SizedBox(
+                      width: deviceSize(context).width * 0.26,
+                      child: CustomButton(
+                        text: 'Submit',
+                        onTap: () {
+                          updateLanguage(selectedLocale);
+                        },
+                      ),
+                    ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(
+                        color: AppPallete.errorColor,
+                      ),
                     ),
                   ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Cancel'),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
