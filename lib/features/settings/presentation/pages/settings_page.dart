@@ -7,11 +7,15 @@ import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:money_track/features/auth/presentation/pages/login_page.dart';
 import 'package:money_track/features/auth/presentation/widgets/profile_details.dart';
+import 'package:money_track/features/settings/presentation/widgets/about_us.dart';
 import 'package:money_track/features/settings/presentation/widgets/currency_dialog.dart';
 import 'package:money_track/features/settings/presentation/widgets/delete_all_data.dart';
 import 'package:money_track/features/settings/presentation/widgets/language_dialog.dart';
+import 'package:money_track/features/settings/presentation/widgets/privacy_policy.dart';
 import 'package:money_track/features/settings/presentation/widgets/reset_password.dart';
 import 'package:money_track/features/settings/presentation/widgets/settings_tile.dart';
+import 'package:money_track/features/settings/presentation/widgets/terms_and_condit.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -24,6 +28,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   SharedPreferences? prefs;
+  String _appVersion = '';
 
   void _showCustomDialog(BuildContext context, VoidCallback onView) {
     showDialog(
@@ -126,15 +131,47 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  _showPrivacyPolicy(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (builder) {
+          return const PrivacyPolicy();
+        });
+  }
+
+  _showTermsandCondiitions(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (builder) {
+          return const TermsAndConditions();
+        });
+  }
+
+  _showAboutUs(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (builder) {
+          return const AboutUs();
+        });
+  }
+
   @override
   void initState() {
     super.initState();
     _loadSharedPreferences();
+    _loadAppVersion();
   }
 
   Future<void> _loadSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {}); // Update the state to reflect the loaded prefs
+  }
+
+  Future<void> _loadAppVersion() async {
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      _appVersion = packageInfo.version;
+    });
   }
 
   @override
@@ -268,27 +305,34 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: 'Privacy Policy',
                     trailingText: '',
                     trailingIcon: Icons.arrow_forward_ios,
-                    onTrailingIconPressed: () {},
+                    onTrailingIconPressed: () {
+                      _showPrivacyPolicy(context);
+                    },
                   ),
                   SettingsTile(
                     leadingIcon: Icons.list_alt,
                     title: 'Terms & Conditions',
                     trailingText: '',
                     trailingIcon: Icons.arrow_forward_ios,
-                    onTrailingIconPressed: () {},
+                    onTrailingIconPressed: () {
+                      _showTermsandCondiitions(context);
+                    },
                   ),
                   SettingsTile(
                     leadingIcon: Icons.group,
                     title: 'About Us',
                     trailingText: '',
                     trailingIcon: Icons.arrow_forward_ios,
-                    onTrailingIconPressed: () {},
+                    onTrailingIconPressed: () {
+                      _showAboutUs(context);
+                    },
                   ),
                   const Divider(),
                   SettingsTile(
                     leadingIcon: Icons.app_registration_sharp,
                     title: 'App Version',
-                    trailingText: '1.0.0',
+                    trailingText:
+                        _appVersion.isNotEmpty ? _appVersion : 'Loading...',
                     trailingIcon: Icons.update,
                     onTrailingIconPressed: () {},
                   ),
