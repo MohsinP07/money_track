@@ -8,6 +8,7 @@ import 'package:money_track/features/auth/presentation/pages/signup_page.dart';
 import 'package:money_track/core/common/widgets/common_field.dart';
 import 'package:money_track/features/auth/presentation/widgets/auth_gradient_button.dart';
 import 'package:money_track/features/expenses/presentation/widgets/bottom_bar.dart';
+import 'package:money_track/features/onboarding/presentation/pages/landing_screen.dart';
 import 'package:money_track/features/onboarding/presentation/pages/onboarding_creen.dart';
 
 class LoginPage extends StatefulWidget {
@@ -125,24 +126,13 @@ class LoginPageState extends State<LoginPage> {
                                         .textTheme
                                         .titleMedium
                                         ?.copyWith(
-                                          color: AppPallete.gradient2,
+                                          color: AppPallete.boxColor,
                                           fontWeight: FontWeight.bold,
                                         ),
                                   )
                                 ]),
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(builder: (context) {
-                                return Onboarding();
-                              }));
-                            },
-                            child: Text('Test Onboarding'))
                       ],
                     ),
                   ),

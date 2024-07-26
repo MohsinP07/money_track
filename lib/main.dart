@@ -8,6 +8,7 @@ import 'package:money_track/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:money_track/features/auth/presentation/pages/login_page.dart';
 import 'package:money_track/features/expenses/presentation/bloc/expenses_bloc.dart';
 import 'package:money_track/features/expenses/presentation/widgets/bottom_bar.dart';
+import 'package:money_track/features/onboarding/presentation/pages/landing_screen.dart';
 import 'package:money_track/init_dependencies.dart';
 import 'package:money_track/router.dart';
 
@@ -63,7 +64,7 @@ class _MyAppState extends State<MyApp> {
               initialPage: 0,
             );
           }
-          return LoginPage();
+          return LandingPage();
         },
       ),
       onGenerateRoute: (settings) => generateRoute(settings),

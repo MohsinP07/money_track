@@ -118,7 +118,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   .textTheme
                                   .titleMedium
                                   ?.copyWith(
-                                    color: AppPallete.gradient2,
+                                    color: AppPallete.boxColor,
                                     fontWeight: FontWeight.bold,
                                   ),
                             ),

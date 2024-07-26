@@ -7,6 +7,7 @@ import 'package:money_track/features/auth/presentation/pages/login_page.dart';
 import 'package:money_track/features/onboarding/presentation/widgets/content_model.dart';
 
 class Onboarding extends StatefulWidget {
+   static const String routename = '/onboarding-page';
   @override
   _OnboardingState createState() => _OnboardingState();
 }
