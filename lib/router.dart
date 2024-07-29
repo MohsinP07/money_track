@@ -3,7 +3,7 @@ import 'package:money_track/features/auth/presentation/pages/login_page.dart';
 import 'package:money_track/features/auth/presentation/pages/profile_page.dart';
 import 'package:money_track/features/auth/presentation/pages/signup_page.dart';
 import 'package:money_track/features/auth/presentation/widgets/money_bot_ai.dart';
-import 'package:money_track/features/onboarding/presentation/pages/onboarding_creen.dart';
+import 'package:money_track/features/onboarding/presentation/pages/onboarding_screen.dart';
 import 'package:money_track/features/settings/presentation/pages/settings_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {

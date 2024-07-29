@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
@@ -7,7 +8,7 @@ import 'package:money_track/features/auth/presentation/pages/login_page.dart';
 import 'package:money_track/features/onboarding/presentation/widgets/content_model.dart';
 
 class Onboarding extends StatefulWidget {
-   static const String routename = '/onboarding-page';
+  static const String routename = '/onboarding-page';
   @override
   _OnboardingState createState() => _OnboardingState();
 }
@@ -91,8 +92,8 @@ class _OnboardingState extends State<Onboarding> {
                   : deviceSize(context).width * 0.4,
               child: CustomButton(
                 text: currentIndex == contents.length - 1
-                    ? "Login and Continue"
-                    : "Next",
+                    ? "login_and_continue".tr
+                    : "next".tr,
                 onTap: () {
                   if (currentIndex == contents.length - 1) {
                     Navigator.pushReplacement(

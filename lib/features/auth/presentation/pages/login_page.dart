@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:money_track/core/common/widgets/loader.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/core/utils/utils.dart';
@@ -8,8 +9,6 @@ import 'package:money_track/features/auth/presentation/pages/signup_page.dart';
 import 'package:money_track/core/common/widgets/common_field.dart';
 import 'package:money_track/features/auth/presentation/widgets/auth_gradient_button.dart';
 import 'package:money_track/features/expenses/presentation/widgets/bottom_bar.dart';
-import 'package:money_track/features/onboarding/presentation/pages/landing_screen.dart';
-import 'package:money_track/features/onboarding/presentation/pages/onboarding_creen.dart';
 
 class LoginPage extends StatefulWidget {
   static const String routename = '/login-page';
@@ -72,9 +71,9 @@ class LoginPageState extends State<LoginPage> {
                         const SizedBox(
                           height: 100,
                         ),
-                        const Text(
-                          "Sign In.",
-                          style: TextStyle(
+                        Text(
+                          "sign_in".tr,
+                          style: const TextStyle(
                             fontSize: 50,
                             fontWeight: FontWeight.bold,
                           ),
@@ -83,7 +82,7 @@ class LoginPageState extends State<LoginPage> {
                           height: 30,
                         ),
                         CommonTextField(
-                          hintText: "Email",
+                          hintText: "email".tr,
                           controller: emailController,
                           leadingIcon: Icons.email_outlined,
                         ),
@@ -91,7 +90,7 @@ class LoginPageState extends State<LoginPage> {
                           height: 15,
                         ),
                         CommonTextField(
-                          hintText: "Password",
+                          hintText: "password".tr,
                           controller: passwordController,
                           isObscureText: true,
                           leadingIcon: Icons.password_outlined,
@@ -100,7 +99,7 @@ class LoginPageState extends State<LoginPage> {
                           height: 15,
                         ),
                         AuthGradientButton(
-                            buttonText: 'Sign In.',
+                            buttonText: 'sign_in'.tr,
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 context.read<AuthBloc>().add(AuthLogin(
@@ -117,11 +116,11 @@ class LoginPageState extends State<LoginPage> {
                           },
                           child: RichText(
                             text: TextSpan(
-                                text: 'Don\'t have account? ',
+                                text: 'dont_have_acc'.tr,
                                 style: Theme.of(context).textTheme.titleMedium,
                                 children: [
                                   TextSpan(
-                                    text: 'Sign Up.',
+                                    text: 'sign_up'.tr,
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleMedium

@@ -11,6 +11,7 @@ import 'package:money_track/features/expenses/presentation/widgets/bottom_bar.da
 import 'package:money_track/features/onboarding/presentation/pages/landing_screen.dart';
 import 'package:money_track/init_dependencies.dart';
 import 'package:money_track/router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,12 +39,25 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
-
   @override
   void initState() {
     super.initState();
+    _checkLoggedInStatus();
+    _setLocaleFromPreferences();
+  }
+
+  Future<void> _checkLoggedInStatus() async {
     context.read<AuthBloc>().add(AuthIsUserLoggedIn());
+  }
+
+  Future<void> _setLocaleFromPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('language')) {
+      List<String>? languageList = prefs.getStringList('language');
+      if (languageList != null && languageList.isNotEmpty) {
+        Get.updateLocale(Locale(languageList[0], languageList[1]));
+      }
+    }
   }
 
   @override

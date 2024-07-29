@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 class UnbordingContent {
   String image;
   String title;
@@ -9,18 +11,15 @@ class UnbordingContent {
 
 List<UnbordingContent> contents = [
   UnbordingContent(
-      title: 'Manage Expenses',
+      title: 'manage_expenses'.tr,
       image: 'assets/svg/expenses.svg',
-      discription:
-          "Keep track of all your expenses effortlessly. Our tool helps you organize your spending and stay on top of your finances."),
+      discription: "manage_expenses_desc".tr),
   UnbordingContent(
-      title: 'Analyze Expenses',
+      title: 'analyze_expenses'.tr,
       image: 'assets/svg/analysis.svg',
-      discription:
-          "Gain insights into your spending patterns. Analyze your expenses to make better financial decisions."),
+      discription: "analyze_expenses_desc".tr),
   UnbordingContent(
-      title: 'AI Assistance',
+      title: 'ai_assistance'.tr,
       image: 'assets/svg/ai.svg',
-      discription:
-          "Leverage AI to get smart recommendations on managing your finances more effectively and efficiently."),
+      discription: "ai_assistance_desc".tr),
 ];

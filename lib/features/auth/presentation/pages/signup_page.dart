@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:money_track/core/common/widgets/loader.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/core/utils/utils.dart';
@@ -50,7 +51,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 (route) => false,
               );
-              showSnackBar(context, "Account created! Please log in.");
+              showSnackBar(context, "acc_created_successfully".tr);
             }
           },
           builder: (context, state) {
@@ -64,34 +65,34 @@ class _SignUpPageState extends State<SignUpPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 80),
-                    const Text(
-                      "Sign Up.",
-                      style: TextStyle(
+                    Text(
+                      "sign_up".tr,
+                      style: const TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 30),
                     CommonTextField(
-                      hintText: "Email",
+                      hintText: "email".tr,
                       controller: emailController,
                       leadingIcon: Icons.email_outlined,
                     ),
                     const SizedBox(height: 15),
                     CommonTextField(
-                      hintText: "Name",
+                      hintText: "name".tr,
                       controller: nameController,
                     ),
                     const SizedBox(height: 15),
                     CommonTextField(
-                      hintText: "Password",
+                      hintText: "password".tr,
                       controller: passwordController,
                       isObscureText: true,
                       leadingIcon: Icons.password_outlined,
                     ),
                     const SizedBox(height: 15),
                     AuthGradientButton(
-                      buttonText: 'Sign Up',
+                      buttonText: 'sign_up'.tr,
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
                           context.read<AuthBloc>().add(AuthSignUp(
@@ -109,11 +110,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                       child: RichText(
                         text: TextSpan(
-                          text: 'Already have account? ',
+                          text: 'already_have_acc'.tr,
                           style: Theme.of(context).textTheme.titleMedium,
                           children: [
                             TextSpan(
-                              text: 'Sign In.',
+                              text: 'sign_in'.tr,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium

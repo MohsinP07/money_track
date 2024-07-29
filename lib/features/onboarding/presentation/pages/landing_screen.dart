@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:money_track/features/auth/presentation/pages/login_page.dart';
-import 'package:money_track/features/onboarding/presentation/pages/onboarding_creen.dart';
+import 'package:money_track/features/onboarding/presentation/pages/onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LandingPage extends StatelessWidget {
@@ -11,7 +12,7 @@ class LandingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.all(16.0), // Added inner padding
+        padding: const EdgeInsets.all(16.0), // Added inner padding
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -33,10 +34,10 @@ class LandingPage extends StatelessWidget {
                     color: Colors.white,
                   )),
               const SizedBox(height: 20),
-              const Text(
-                'Your Personal Expense Tracker',
+               Text(
+                'landing_subtitle'.tr,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 24,
                   color: Colors.white70,
                 ),
@@ -76,7 +77,7 @@ class LandingPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  child: const Text('Get Started'),
+                  child:  Text('get_started'.tr),
                 ),
               ),
             ],
