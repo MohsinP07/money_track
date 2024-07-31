@@ -1,5 +1,8 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/common/widgets/loader.dart';
@@ -57,17 +60,19 @@ class DashboardPageState extends State<DashboardPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Expense'),
-        content: Text('Are you sure you want to delete $expenseName expense?'),
+        title: Text('delete_expense'.tr),
+        content: Text('are_you_sure_delete1'.tr +
+            expenseName.toString() +
+            'are_you_sure_delete2'.tr),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
               context.read<ExpensesBloc>().add(ExpenseGetAllExpenses());
             },
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: AppPallete.boxColor),
+            child: Text(
+              'cancel'.tr,
+              style: const TextStyle(color: AppPallete.boxColor),
             ),
           ),
           TextButton(
@@ -75,9 +80,9 @@ class DashboardPageState extends State<DashboardPage> {
               Navigator.of(context).pop();
               context.read<ExpensesBloc>().add(ExpenseDelete(id: expenseId));
             },
-            child: const Text(
-              'Delete',
-              style: TextStyle(color: AppPallete.errorColor),
+            child: Text(
+              'delete'.tr,
+              style: const TextStyle(color: AppPallete.errorColor),
             ),
           ),
         ],
@@ -112,11 +117,11 @@ class DashboardPageState extends State<DashboardPage> {
             showSnackBar(context, state.error);
           }
           if (state is DeleteExpensesSuccess) {
-            showSnackBar(context, 'Deleted expense successfully!!');
+            showSnackBar(context, 'deleted_expense_success'.tr);
             context.read<ExpensesBloc>().add(ExpenseGetAllExpenses());
           }
           if (state is EditExpensesSuccess) {
-            showSnackBar(context, 'Edited expense successfully!!');
+            showSnackBar(context, 'edited_expense_success'.tr);
             context.read<ExpensesBloc>().add(ExpenseGetAllExpenses());
           }
         },
@@ -148,9 +153,9 @@ class DashboardPageState extends State<DashboardPage> {
                             maxLines: 2,
                             text: TextSpan(
                               children: [
-                                const TextSpan(
-                                  text: "Hello\n",
-                                  style: TextStyle(
+                                TextSpan(
+                                  text: "hello".tr,
+                                  style: const TextStyle(
                                     color: AppPallete.blackColor,
                                     fontSize: 30,
                                     fontFamily: 'Poppins',
@@ -205,18 +210,19 @@ class DashboardPageState extends State<DashboardPage> {
                       child: SizedBox(
                           width: deviceSize(context).width * 0.4,
                           child: CustomButton(
-                              text: 'Add Expense', onTap: _goToAddExpensePage)),
+                              text: 'add_expense'.tr,
+                              onTap: _goToAddExpensePage)),
                     ),
                     SizedBox(
                       height: deviceSize(context).height * 0.02,
                     ),
                     if (todayExpenses.isEmpty)
-                      const Text(
-                        'No expenses today!',
+                      Text(
+                        'no_expenses_today'.tr,
                       ),
                     if (todayExpenses.isNotEmpty)
-                      const Text(
-                        'Today',
+                      Text(
+                        'today'.tr,
                       ),
                     SizedBox(
                       height: deviceSize(context).height * 0.01,

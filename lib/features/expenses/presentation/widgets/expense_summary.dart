@@ -1,4 +1,7 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 
 class ExpenseSummaryContainer extends StatelessWidget {
@@ -29,7 +32,7 @@ class ExpenseSummaryContainer extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('Close'),
+            child: Text('close'.tr),
           ),
         ],
       ),
@@ -46,21 +49,27 @@ class ExpenseSummaryContainer extends StatelessWidget {
     String weeklyAnalysisText;
     String monthlyAnalysisText;
     if (weekday == 7) {
-      weeklyAnalysisText =
-          'This week\'s total expense is $weeklyExpense ₹. The new week starts tomorrow!';
+      weeklyAnalysisText = 'the_weeks_total1'.tr +
+          weeklyExpense.toString() +
+          'the_weeks_total2'.tr;
     } else {
       final daysRemainingInWeek = 7 - weekday;
-      weeklyAnalysisText =
-          'In the last ${7 - daysRemainingInWeek} days, you have spent $weeklyExpense ₹. You have $daysRemainingInWeek days left in this week.';
+      weeklyAnalysisText = 'in_the_last1'.tr +
+          (7 - daysRemainingInWeek).toString() +
+          'in_the_last2'.tr +
+          weeklyExpense.toString() +
+          'in_the_last3'.tr +
+          daysRemainingInWeek.toString() +
+          'in_the_last4'.tr;
     }
 
     if (dayOfMonth == daysInMonth) {
       monthlyAnalysisText =
-          'This month\'s total expense is $monthlyExpense ₹. A new month starts tomorrow!';
+          'in_this_month1'.tr + monthlyExpense.toString() + 'in_this_month2'.tr;
     } else {
       final daysRemainingInMonth = daysInMonth - dayOfMonth;
       monthlyAnalysisText =
-          'So far this month, you have spent $monthlyExpense ₹. You have $daysRemainingInMonth days left in this month.';
+          'in_this_month_faar1'.tr + monthlyExpense.toString() + 'in_this_month_faar2'.tr + daysRemainingInMonth.toString() + 'in_this_month_faar3'.tr;
     }
 
     return Container(
@@ -77,9 +86,9 @@ class ExpenseSummaryContainer extends StatelessWidget {
           maxLines: 10,
           text: TextSpan(
             children: [
-              const TextSpan(
-                text: "Today's Expenses\n",
-                style: TextStyle(
+               TextSpan(
+                text: "todays_expenses".tr,
+                style:const TextStyle(
                   color: AppPallete.whiteColor,
                   fontSize: 16,
                   fontFamily: 'Poppins',
@@ -94,9 +103,9 @@ class ExpenseSummaryContainer extends StatelessWidget {
                   fontFamily: 'Poppins',
                 ),
               ),
-              const TextSpan(
-                text: "Weekly Expenses\n",
-                style: TextStyle(
+               TextSpan(
+                text: "weekly_expenses".tr,
+                style:const TextStyle(
                   color: AppPallete.whiteColor,
                   fontSize: 16,
                   fontFamily: 'Poppins',
@@ -106,7 +115,7 @@ class ExpenseSummaryContainer extends StatelessWidget {
                 alignment: PlaceholderAlignment.middle,
                 child: InkWell(
                   onTap: () {
-                    showAnalysisDialog(context, 'Weekly Expenses Analysis',
+                    showAnalysisDialog(context, 'weekly_expenses_analysis'.tr,
                         weeklyAnalysisText);
                   },
                   child: Row(
@@ -126,9 +135,9 @@ class ExpenseSummaryContainer extends StatelessWidget {
                   ),
                 ),
               ),
-              const TextSpan(
-                text: "Monthly Expenses\n",
-                style: TextStyle(
+               TextSpan(
+                text: "monthly_expenses".tr,
+                style:const TextStyle(
                   color: AppPallete.whiteColor,
                   fontSize: 16,
                   fontFamily: 'Poppins',
@@ -138,7 +147,7 @@ class ExpenseSummaryContainer extends StatelessWidget {
                 alignment: PlaceholderAlignment.middle,
                 child: InkWell(
                   onTap: () {
-                    showAnalysisDialog(context, 'Monthly Expenses Analysis',
+                    showAnalysisDialog(context, 'monthly_expenses_analysis'.tr,
                         monthlyAnalysisText);
                   },
                   child: Row(
