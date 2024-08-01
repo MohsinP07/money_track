@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/constants/constants.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
@@ -82,9 +83,9 @@ class _EditExpenseBottomSheetState extends State<EditExpenseBottomSheet> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Edit Expense',
-                        style: TextStyle(
+                      Text(
+                        'edit_expense'.tr,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                         ),
@@ -97,11 +98,11 @@ class _EditExpenseBottomSheetState extends State<EditExpenseBottomSheet> {
                             width: 24,
                           ),
                           if (widget.expense.isEdited)
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.only(left: 8.0),
                               child: Text(
-                                "Edited",
-                                style: TextStyle(
+                                "edited".tr,
+                                style: const TextStyle(
                                   color: Colors.red,
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
@@ -113,13 +114,14 @@ class _EditExpenseBottomSheetState extends State<EditExpenseBottomSheet> {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  SheetTextField(controller: _nameController, label: 'Name'),
+                  SheetTextField(controller: _nameController, label: 'name'.tr),
                   const SizedBox(height: 8),
                   SheetTextField(
-                      controller: _amountController, label: 'Amount'),
+                      controller: _amountController, label: 'amount'.tr),
                   const SizedBox(height: 8),
                   SheetTextField(
-                      controller: _descriptionController, label: 'Description'),
+                      controller: _descriptionController,
+                      label: 'desc'.removeAllWhitespace),
                   const SizedBox(height: 8),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -166,9 +168,9 @@ class _EditExpenseBottomSheetState extends State<EditExpenseBottomSheet> {
                     children: [
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(),
-                        child: const Text(
-                          'Cancel',
-                          style: TextStyle(
+                        child: Text(
+                          'cancel'.tr,
+                          style: const TextStyle(
                             color: AppPallete.boxColor,
                           ),
                         ),
@@ -194,7 +196,7 @@ class _EditExpenseBottomSheetState extends State<EditExpenseBottomSheet> {
                                   Navigator.of(context).pop();
                                 }
                               },
-                              text: 'Save',
+                              text: 'save'.tr,
                             )),
                       ),
                     ],

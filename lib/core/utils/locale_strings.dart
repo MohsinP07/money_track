@@ -16,6 +16,17 @@ class LocaleString extends Translations {
           "delete": "Delete",
           "deleted_expense_success": "Deleted expense successfully!!",
           "edited_expense_success": "Edited expense successfully!!",
+          "this_week": "This week",
+          "this_month": "This month",
+
+          // Categories
+          "all": "All",
+          "household": "Household",
+          "food": "Food",
+          "entertainment": "Entertainment",
+          "welness": "Welness",
+          "grocery": "Grocery",
+          "bills": "Bills",
 
           // Landing Screen
           "landing_subtitle": "Your Personal Expense Tracker",
@@ -25,11 +36,14 @@ class LocaleString extends Translations {
           "login_and_continue": "Login and Continue",
           "next": "Next",
           "manage_expenses": "Manage Expenses",
-          "manage_expenses_desc": "Keep track of all your expenses effortlessly. Our tool helps you organize your spending and stay on top of your finances.",
+          "manage_expenses_desc":
+              "Keep track of all your expenses effortlessly. Our tool helps you organize your spending and stay on top of your finances.",
           "analyze_expenses": "Analyze Expenses",
-          "analyze_expenses_desc": "Gain insights into your spending patterns. Analyze your expenses to make better financial decisions.",
+          "analyze_expenses_desc":
+              "Gain insights into your spending patterns. Analyze your expenses to make better financial decisions.",
           "ai_assistance": "AI Assistance",
-          "ai_assistance_desc": "Leverage AI to get smart recommendations on managing your finances more effectively and efficiently.",
+          "ai_assistance_desc":
+              "Leverage AI to get smart recommendations on managing your finances more effectively and efficiently.",
 
           // Auth Screen
           "sign_in": "Sign In",
@@ -37,9 +51,9 @@ class LocaleString extends Translations {
           "email": "Email",
           "name": "Name",
           "password": "Password",
-          "dont_have_acc": "Don't have account?",  
-          "already_have_acc": "Already have account?",  
-          "acc_created_successfully": "Account created! Please log in.",  
+          "dont_have_acc": "Don't have account?",
+          "already_have_acc": "Already have account?",
+          "acc_created_successfully": "Account created! Please log in.",
 
           // Dashboard Screen
           "hello": "Hello\n",
@@ -60,6 +74,50 @@ class LocaleString extends Translations {
           "monthly_expenses": "Monthly Expenses\n",
           "monthly_expenses_analysis": "Monthly Expenses Analysis",
           "no_expenses_today": "No expenses today!",
+
+          // Add Expesne Screen
+          "add": "Add ",
+          "expenses": "Expenses",
+          "expense_name": "Expense Name",
+          "expense_amount": "Expense Amount",
+          "expense_desc": "Expense Description",
+          "date": "Date",
+          "select_date": "Select Date",
+          "select_category": "Select category",
+          "added_success": "Added expense succcessfully!!",
+
+          // Analyze Expesne Screen
+          "analyze": "Analyze ",
+          "expensesa": "Expenses",
+          "good_day": "Good day, ",
+          "track_your_expenses": "Track your expenses, spend your day right",
+          "time_wise": "Time Wise",
+          "custom": "Custom",
+          "no_expenses_week": "No expenses for week!",
+          "week": "Week",
+          "no_expenses_month": "No expenses for month!",
+          "month": "Month",
+          "no_date_choosen": "No Date Choosen",
+          "choose_date": "Choose date",
+          "filtered_expenses": "Filtered expenses",
+          "no_expenses_criteria":
+              "No expenses found for the selected criteria.",
+          "view": "View",
+          "reports_ready": "Reports ready",
+          "ready_to_view": "Your reports are ready to view.",
+          "custom_filtered": "Custom Filtered Analysis",
+          "select_s_and_e_date": "Select start and end date",
+          "select_export": "Select export type",
+          "view_here": "View Here",
+          "pdf": "PDF",
+          "excel": "Excel",
+          "submit": "Submit",
+          "no_expense": "No Expenses!!",
+          "edit_expense": "Edit Expense",
+          "edited": "Edited",
+          "amount": "Amount",
+          "desc": "Description",
+          "save": "Save",
         },
         "mar_IN": {
           // Common
@@ -74,6 +132,17 @@ class LocaleString extends Translations {
           "delete": "हटवा",
           "deleted_expense_success": "खर्च यशस्वीरित्या हटवला!!",
           "edited_expense_success": "खर्च यशस्वीरित्या संपादित केला!!",
+          "this_week": "या आठवड्यात",
+          "this_month": "या महिन्यात",
+
+          // Categories
+          "all": "सर्व",
+          "household": "घरगुती",
+          "food": "अन्न",
+          "entertainment": "मनोरंजन",
+          "welness": "कल्याण",
+          "grocery": "किराणा",
+          "bills": "बिले",
 
           // Landing Screen
           "landing_subtitle": "तुमचा वैयक्तिक खर्च ट्रॅकर",
@@ -83,11 +152,14 @@ class LocaleString extends Translations {
           "login_and_continue": "लॉगिन करा आणि पुढे चालू ठेवा",
           "next": "पुढे",
           "manage_expenses": "खर्च व्यवस्थापित करा",
-          "manage_expenses_desc": "तुमच्या सर्व खर्चांचे सहजपणे ट्रॅक ठेवा. आमचे साधन तुम्हाला तुमच्या खर्चाचे आयोजन करण्यास आणि तुमच्या वित्तीय स्थितीवर नियंत्रण ठेवण्यास मदत करते.",
+          "manage_expenses_desc":
+              "तुमच्या सर्व खर्चांचे सहजपणे ट्रॅक ठेवा. आमचे साधन तुम्हाला तुमच्या खर्चाचे आयोजन करण्यास आणि तुमच्या वित्तीय स्थितीवर नियंत्रण ठेवण्यास मदत करते.",
           "analyze_expenses": "खर्च विश्लेषण करा",
-          "analyze_expenses_desc": "तुमच्या खर्चाच्या नमुन्यांची अंतर्दृष्टी मिळवा. चांगले आर्थिक निर्णय घेण्यासाठी तुमच्या खर्चाचे विश्लेषण करा.",
+          "analyze_expenses_desc":
+              "तुमच्या खर्चाच्या नमुन्यांची अंतर्दृष्टी मिळवा. चांगले आर्थिक निर्णय घेण्यासाठी तुमच्या खर्चाचे विश्लेषण करा.",
           "ai_assistance": "AI सहाय्य",
-          "ai_assistance_desc": "तुमच्या वित्तीय व्यवस्थापनासाठी अधिक प्रभावी आणि कार्यक्षम शिफारसी मिळवण्यासाठी AI चा वापर करा.",
+          "ai_assistance_desc":
+              "तुमच्या वित्तीय व्यवस्थापनासाठी अधिक प्रभावी आणि कार्यक्षम शिफारसी मिळवण्यासाठी AI चा वापर करा.",
 
           // Auth Screen
           "sign_in": "साइन इन",
@@ -95,9 +167,9 @@ class LocaleString extends Translations {
           "email": "ईमेल",
           "name": "नाव",
           "password": "पासवर्ड",
-          "dont_have_acc": "खाते नाहीये?",  
-          "already_have_acc": "खाते आहे?",  
-          "acc_created_successfully": "खाते तयार झाले! कृपया लॉगिन करा.",  
+          "dont_have_acc": "खाते नाहीये?",
+          "already_have_acc": "खाते आहे?",
+          "acc_created_successfully": "खाते तयार झाले! कृपया लॉगिन करा.",
 
           // Dashboard Screen
           "hello": "नमस्कार\n",
@@ -118,6 +190,51 @@ class LocaleString extends Translations {
           "monthly_expenses": "मासिक खर्च\n",
           "monthly_expenses_analysis": "मासिक खर्च विश्लेषण",
           "no_expenses_today": "आज खर्च नाही!",
+
+          // Add Expense Screen
+          "add": "खर्च ",
+          "expenses": "जोडा",
+          "expense_name": "खर्चाचे नाव",
+          "expense_amount": "खर्च रक्कम",
+          "expense_desc": "खर्चाचे वर्णन",
+          "date": "तारीख",
+          "select_date": "तारीख निवडा",
+          "select_category": "श्रेणी निवडा",
+          "added_success": "खर्च यशस्वीरित्या जोडला!!",
+
+          // Analyze Expesne Screen
+          "analyze": "खर्च ",
+          "expensesa": "विश्लेषण ",
+          "good_day": "शुभ दिवस, ",
+          "track_your_expenses":
+              "तुमच्या खर्चांचा मागोवा घ्या, तुमचा दिवस योग्य रीतीने घालवा",
+          "time_wise": "वेळेनुसार",
+          "custom": "सानुकूल",
+          "no_expenses_week": "आठवड्यासाठी कोणतेही खर्च नाहीत!",
+          "week": "आठवडा",
+          "no_expenses_month": "महिन्यासाठी कोणतेही खर्च नाहीत!",
+          "month": "महिना",
+          "no_date_choosen": "कोणतीही तारीख निवडली नाही",
+          "choose_date": "तारीख निवडा",
+          "filtered_expenses": "फिल्टर केलेले खर्च",
+          "no_expenses_criteria":
+              "निवडलेल्या निकषांसाठी कोणतेही खर्च सापडले नाहीत.",
+          "view": "पहा",
+          "reports_ready": "अहवाल तयार आहेत",
+          "ready_to_view": "तुमचे अहवाल पाहण्यासाठी तयार आहेत.",
+          "custom_filtered": "सानुकूल गाळलेले विश्लेषण",
+          "select_s_and_e_date": "सुरूवातीची आणि समाप्तीची तारीख निवडा",
+          "select_export": "निर्यात प्रकार निवडा",
+          "view_here": "येथे पहा",
+          "pdf": "PDF",
+          "excel": "Excel",
+          "submit": "सबमिट",
+          "no_expense": "कोणतेही खर्च नाही!!",
+          "edit_expense": "खर्च संपादित करा",
+          "edited": "संपादित केले",
+          "amount": "रक्कम",
+          "desc": "वर्णन",
+          "save": "जतन करा",
         },
         "hin_IN": {
           // Common
@@ -132,6 +249,17 @@ class LocaleString extends Translations {
           "delete": "हटाएं",
           "deleted_expense_success": "खर्च सफलतापूर्वक हटाया गया!!",
           "edited_expense_success": "खर्च सफलतापूर्वक संपादित किया गया!!",
+          "this_week": "इस हफ्ते",
+          "this_month": "इस महीने",
+
+          //Category
+          "all": "सभी",
+          "household": "गृहस्थी",
+          "food": "भोजन",
+          "entertainment": "मनोरंजन",
+          "welness": "कल्याण",
+          "grocery": "किराना",
+          "bills": "बिल",
 
           // Landing Screen
           "landing_subtitle": "आपका व्यक्तिगत खर्च ट्रैकर",
@@ -141,11 +269,14 @@ class LocaleString extends Translations {
           "login_and_continue": "लॉगिन करें और जारी रखें",
           "next": "अगला",
           "manage_expenses": "खर्च प्रबंधित करें",
-          "manage_expenses_desc": "अपने सभी खर्चों को आसानी से ट्रैक करें। हमारा टूल आपको अपने खर्च को व्यवस्थित करने और अपने वित्तीय स्थिति पर नियंत्रण रखने में मदद करता है।",
+          "manage_expenses_desc":
+              "अपने सभी खर्चों को आसानी से ट्रैक करें। हमारा टूल आपको अपने खर्च को व्यवस्थित करने और अपने वित्तीय स्थिति पर नियंत्रण रखने में मदद करता है।",
           "analyze_expenses": "खर्चों का विश्लेषण करें",
-          "analyze_expenses_desc": "अपने खर्च पैटर्न की अंतर्दृष्टि प्राप्त करें। बेहतर वित्तीय निर्णय लेने के लिए अपने खर्चों का विश्लेषण करें।",
+          "analyze_expenses_desc":
+              "अपने खर्च पैटर्न की अंतर्दृष्टि प्राप्त करें। बेहतर वित्तीय निर्णय लेने के लिए अपने खर्चों का विश्लेषण करें।",
           "ai_assistance": "AI सहायता",
-          "ai_assistance_desc": "अधिक प्रभावी और कुशलता से अपने वित्तीय प्रबंधन के लिए स्मार्ट सिफारिशें प्राप्त करने के लिए AI का लाभ उठाएं।",
+          "ai_assistance_desc":
+              "अधिक प्रभावी और कुशलता से अपने वित्तीय प्रबंधन के लिए स्मार्ट सिफारिशें प्राप्त करने के लिए AI का लाभ उठाएं।",
 
           // Auth Screen
           "sign_in": "साइन इन",
@@ -153,9 +284,9 @@ class LocaleString extends Translations {
           "email": "ईमेल",
           "name": "नाम",
           "password": "पासवर्ड",
-          "dont_have_acc": "खाता नहीं है?",  
-          "already_have_acc": "खाता है?",  
-          "acc_created_successfully": "खाता बनाया गया! कृपया लॉगिन करें।",  
+          "dont_have_acc": "खाता नहीं है?",
+          "already_have_acc": "खाता है?",
+          "acc_created_successfully": "खाता बनाया गया! कृपया लॉगिन करें।",
 
           // Dashboard Screen
           "hello": "नमस्ते\n",
@@ -176,6 +307,50 @@ class LocaleString extends Translations {
           "monthly_expenses": "मासिक खर्च\n",
           "monthly_expenses_analysis": "मासिक खर्च विश्लेषण",
           "no_expenses_today": "आज कोई खर्च नहीं!",
+
+          // Add Expense Screen
+          "add": "खर्च ",
+          "expenses": "जोड़ें",
+          "expense_name": "खर्च का नाम",
+          "expense_amount": "खर्च राशि",
+          "expense_desc": "खर्च का विवरण",
+          "date": "तारीख",
+          "select_date": "तारीख चुनें",
+          "select_category": "श्रेणी चुनें",
+          "added_success": "खर्च सफलतापूर्वक जोड़ा गया!!",
+
+          // Analyze Expesne Screen
+          "analyze": "खर्च ",
+          "expensesa": "विश्लेषण ",
+          "good_day": "अच्छा दिन, ",
+          "track_your_expenses":
+              "अपने खर्चों का ट्रैक करें, अपना दिन सही से बिताएं",
+          "time_wise": "समय के अनुसार",
+          "custom": "कस्टम",
+          "no_expenses_week": "सप्ताह के लिए कोई खर्च नहीं!",
+          "week": "सप्ताह",
+          "no_expenses_month": "महीने के लिए कोई खर्च नहीं!",
+          "month": "महीना",
+          "no_date_choosen": "कोई तारीख नहीं चुनी गई",
+          "choose_date": "तारीख चुनें",
+          "filtered_expenses": "फिल्टर किए गए खर्च",
+          "no_expenses_criteria": "चयनित मापदंडों के लिए कोई खर्च नहीं मिला।",
+          "view": "देखें",
+          "reports_ready": "रिपोर्ट तैयार हैं",
+          "ready_to_view": "आपकी रिपोर्ट देखने के लिए तैयार हैं।",
+          "custom_filtered": "कस्टम फ़िल्टर किया गया विश्लेषण",
+          "select_s_and_e_date": "प्रारंभ और समाप्ति की तारीख चुनें",
+          "select_export": "निर्यात प्रकार चुनें",
+          "view_here": "यहाँ देखें",
+          "pdf": "PDF",
+          "excel": "Excel",
+          "submit": "सबमिट",
+          "no_expense": "कोई खर्च नहीं!!",
+          "edit_expense": "खर्च संपादित करें",
+          "edited": "संपादित किया",
+          "amount": "राशि",
+          "desc": "विवरण",
+          "save": "सहेजें",
         }
       };
 }

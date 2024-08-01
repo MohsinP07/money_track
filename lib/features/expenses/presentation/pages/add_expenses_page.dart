@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:money_track/core/common/widgets/common_field.dart';
@@ -93,7 +94,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
             print(state.error);
           }
           if (state is AddExpensesSuccess) {
-            showSnackBar(context, 'Added expense succcessfully!!');
+            showSnackBar(context, 'added_success'.tr);
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
@@ -116,19 +117,19 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   children: [
                     RichText(
                       maxLines: 2,
-                      text: const TextSpan(
+                      text: TextSpan(
                         children: [
                           TextSpan(
-                            text: "Add ",
-                            style: TextStyle(
+                            text: "add".tr,
+                            style: const TextStyle(
                               color: AppPallete.blackColor,
                               fontSize: 30,
                               fontFamily: 'Poppins',
                             ),
                           ),
                           TextSpan(
-                            text: "Expenses",
-                            style: TextStyle(
+                            text: "expenses".tr,
+                            style: const TextStyle(
                               color: AppPallete.blackColor,
                               fontSize: 34,
                               fontWeight: FontWeight.w600,
@@ -142,7 +143,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       height: deviceSize(context).height * 0.02,
                     ),
                     CommonTextField(
-                      hintText: 'Expense Name',
+                      hintText: 'expense_name'.tr,
                       controller: _expenseNameController,
                       leadingIcon: FontAwesomeIcons.moneyBill1,
                     ),
@@ -150,7 +151,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       height: deviceSize(context).height * 0.02,
                     ),
                     CommonTextField(
-                      hintText: 'Expense Amount',
+                      hintText: 'expense_amount'.tr,
                       controller: _expenseAmountController,
                       leadingIcon: FontAwesomeIcons.indianRupeeSign,
                     ),
@@ -158,7 +159,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       height: deviceSize(context).height * 0.02,
                     ),
                     CommonTextField(
-                      hintText: 'Expense Description',
+                      hintText: 'expense_desc'.tr,
                       controller: _expenseDescriptionController,
                       leadingIcon: Icons.info_outline,
                     ),
@@ -169,7 +170,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       children: [
                         Expanded(
                           child: CommonTextField(
-                            hintText: 'Date',
+                            hintText: 'date'.tr,
                             isEnable: false,
                             controller: _expenseDateController,
                             leadingIcon: FontAwesomeIcons.calendar,
@@ -182,9 +183,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
                             Icons.date_range_outlined,
                             color: AppPallete.boxColor,
                           ),
-                          label: const Text(
-                            'Select Date',
-                            style: TextStyle(
+                          label: Text(
+                            'select_date'.tr,
+                            style: const TextStyle(
                               color: AppPallete.boxColor,
                             ),
                           ),
@@ -194,7 +195,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     SizedBox(
                       height: deviceSize(context).height * 0.02,
                     ),
-                    const Text('Select category'),
+                    Text('select_category'.tr),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -237,7 +238,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       height: deviceSize(context).height * 0.02,
                     ),
                     CustomButton(
-                      text: 'Add Expense',
+                      text: 'add_expense'.tr,
                       onTap: () {
                         addExpense();
                       },

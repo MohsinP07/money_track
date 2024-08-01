@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/common/widgets/custom_dialog.dart';
@@ -14,10 +15,6 @@ import 'package:money_track/features/expenses/presentation/widgets/expense_tile.
 import 'package:money_track/features/expenses/presentation/widgets/calculation_functions.dart';
 import 'package:money_track/core/utils/format_date.dart';
 import 'package:open_file_safe/open_file_safe.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:syncfusion_flutter_xlsio/xlsio.dart' as excel;
 
 enum ExportType { pdf, excel, viewHere }
 
@@ -30,7 +27,7 @@ class CustomAnalysisDisplay extends StatefulWidget {
 }
 
 class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
-  String _selectedCategory = 'All';
+  String _selectedCategory = 'all'.tr;
   var _selectedStartDate = DateTime.now();
   var _selectedEndDate = DateTime.now();
   var _exportType = ExportType.viewHere;
@@ -69,7 +66,7 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
           Flexible(
             child: Text(
               date == null
-                  ? 'No Date Choosen'
+                  ? 'no_date_choosen'.tr
                   : DateFormat.yMMMd().format(date),
               style: const TextStyle(
                 fontSize: 14,
@@ -79,8 +76,8 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
           ),
           TextButton(
               onPressed: () => _presentDatePicker(date, type),
-              child: const Text('Choose date',
-                  style: TextStyle(
+              child: Text('choose_date'.tr,
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: AppPallete.boxColor,
@@ -92,8 +89,8 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
 
   List<Expense> _filterExpenses() {
     final filteredExpenses = widget.expense.where((expense) {
-      final isWithinCategory =
-          _selectedCategory == 'All' || expense.category == _selectedCategory;
+      final isWithinCategory = _selectedCategory == 'all'.tr ||
+          expense.category == _selectedCategory;
       final isWithinDateRange = expense.date.isAfter(_selectedStartDate) &&
           expense.date.isBefore(_selectedEndDate.add(Duration(days: 1)));
 
@@ -127,9 +124,9 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Filtered expenses',
-                      style: TextStyle(
+                    Text(
+                      'filtered_expenses'.tr,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -145,7 +142,7 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
                 ),
                 const SizedBox(height: 10),
                 filteredExpenses.isEmpty
-                    ? const Text('No expenses found for the selected criteria.')
+                    ? Text('no_expenses_criteria'.tr)
                     : Expanded(
                         child: ListView.builder(
                           itemCount: filteredExpenses.length,
@@ -176,9 +173,9 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
       builder: (BuildContext context) {
         return CustomDialog(
           icon: Icons.check,
-          submitName: "View",
-          title: 'Reports ready',
-          content: 'Your reports are ready to view.',
+          submitName: "view".tr,
+          title: 'reports_ready'.tr,
+          content: 'ready_to_view'.tr,
           onView: onView,
         );
       },
@@ -192,14 +189,14 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Custom Filtered Analysis"),
+          Text("custom_filtered".tr),
           SizedBox(
             height: deviceSize(context).height * 0.01,
           ),
           const Divider(),
-          const Text(
-            "Select Category",
-            style: TextStyle(
+          Text(
+            "select_category".tr,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -248,9 +245,9 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
           SizedBox(
             height: deviceSize(context).height * 0.01,
           ),
-          const Text(
-            "Select start and end date",
-            style: TextStyle(
+          Text(
+            "select_s_and_e_date".tr,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -271,9 +268,9 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
           SizedBox(
             height: deviceSize(context).height * 0.01,
           ),
-          const Text(
-            "Select export type",
-            style: TextStyle(
+          Text(
+            "select_export".tr,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -293,7 +290,7 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
                   label: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "View Here",
+                      "view_here".tr,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: _exportType == ExportType.viewHere
@@ -322,7 +319,7 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
                   label: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "PDF",
+                      "pdf".tr,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: _exportType == ExportType.pdf
@@ -351,7 +348,7 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
                   label: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Excel",
+                      "excel".tr,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: _exportType == ExportType.excel
@@ -377,7 +374,7 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
           ),
           const Divider(),
           CustomButton(
-            text: "Submit",
+            text: "submit".tr,
             onTap: () async {
               if (_exportType == ExportType.viewHere) {
                 _showFilteredExpenses();
@@ -407,7 +404,7 @@ class _CustomAnalysisDisplayState extends State<CustomAnalysisDisplay> {
                   );
                 });
               } else {
-                showSnackBar(context, 'No Expenses!!');
+                showSnackBar(context, 'no_expense'.tr);
               }
             },
           ),

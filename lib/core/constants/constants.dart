@@ -1,26 +1,28 @@
+import 'package:get/get.dart';
+
 class Constants {
-  static const List<String> expenseCategory = [
-    'Household',
-    'Food',
-    'Entertainment',
-    'Welness',
-    'Grocery',
-    'Bills',
+  static List<String> expenseCategory = [
+    'household'.tr,
+    'food'.tr,
+    'entertainment'.tr,
+    'welness'.tr,
+    'grocery'.tr,
+    'bills'.tr,
   ];
 
-  static const List<String> analysisExpenseCategory = [
-    'All',
-    'Household',
-    'Food',
-    'Entertainment',
-    'Welness',
-    'Grocery',
-    'Bills',
+  static List<String> analysisExpenseCategory = [
+    'all'.tr,
+    'household'.tr,
+    'food'.tr,
+    'entertainment'.tr,
+    'welness'.tr,
+    'grocery'.tr,
+    'bills'.tr,
   ];
 
-  static const List<String> expenseAnalyzer = [
-    'Today',
-    'This week',
-    'This Month',
+  static List<String> expenseAnalyzer = [
+    'today'.tr,
+    'this_week'.tr,
+    'this_month'.tr,
   ];
 }
