@@ -16,8 +16,8 @@ class _CurrencyDialogState extends State<CurrencyDialog> {
   SharedPreferences? prefs;
 
   final List<String> currencies = [
-    'Dollar',
-    'Rupees',
+    'dollor'.tr,
+    'rupees'.tr,
   ];
 
   String? selectedCurrency;
@@ -50,11 +50,11 @@ class _CurrencyDialogState extends State<CurrencyDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                'Select Currency',
-                style: TextStyle(
+                'select_currency'.tr,
+                style: const TextStyle(
                   fontSize: 16,
                 ),
               ),
@@ -97,7 +97,7 @@ class _CurrencyDialogState extends State<CurrencyDialog> {
                     SizedBox(
                       width: deviceSize(context).width * 0.26,
                       child: CustomButton(
-                        text: 'Submit',
+                        text: 'submit'.tr,
                         onTap: () {
                           prefs?.setString('currency', selectedCurrency!);
                           Navigator.of(context).pop(selectedCurrency);
@@ -108,9 +108,9 @@ class _CurrencyDialogState extends State<CurrencyDialog> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text(
-                      'Cancel',
-                      style: TextStyle(
+                    child: Text(
+                      'cancel'.tr,
+                      style: const TextStyle(
                         color: AppPallete.errorColor,
                       ),
                     ),

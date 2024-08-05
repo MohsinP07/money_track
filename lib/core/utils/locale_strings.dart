@@ -18,6 +18,7 @@ class LocaleString extends Translations {
           "edited_expense_success": "Edited expense successfully!!",
           "this_week": "This week",
           "this_month": "This month",
+          "is_missing": " is missing!",
 
           // Categories
           "all": "All",
@@ -118,6 +119,55 @@ class LocaleString extends Translations {
           "amount": "Amount",
           "desc": "Description",
           "save": "Save",
+
+          // Profile Screen
+          "transactions": "Transactions",
+          "transactions_this_month": "Your transactions this month",
+          "edit_profile": "Edit Profile",
+          "phone": "Phone",
+          "moneybot_ai": "MoneyBot AI",
+          "get_suggestions":
+              "Get suggestions with the help of AI for better savings",
+
+          //Settings Screen
+          "settings": "Settings",
+          "language": "Language",
+          "notifications": "Notifications",
+          "currency": "Currency",
+          "rupees": "Rupees",
+          "acc_security": "Account & Security",
+          "acc_info": "Account Information",
+          "reset_pass": "Reset Password",
+          "data": "Data",
+          "other": "Other",
+          "privacy_policy": "Privacy Policy",
+          "terms": "Terms & Conditions",
+          "about": "About Us",
+          "version": "App Version",
+          "loading": "Loading...",
+          "logout": "Log Out",
+          "are_you_sure": "Are you sure you want to logout?",
+          "ok": "OK",
+          "cant_proceed": "Can\'t proceed",
+          "upgrade_premium":
+              "Please switch to premium for 'Notifications' feature",
+          "acc_details": "Account Details",
+          "select_lang": "Select Language",
+          "dollor": "Dollar",
+          "select_currency": "Select Currency",
+          "clear_data": "Clear Data",
+          "all_deleted": "All expenses deleted successfully",
+          "sure_all_delete":
+              "Are you sure you want to delete All Expenses data?",
+          "about_me": "About Me",
+          "ab1":
+              "As a seasoned full-stack developer with a specialization in Android, I bring three years of hands-on experience in crafting innovative and efficient Android applications. My expertise extends beyond mere app development, encompassing the creation of robust websites from scratch. I also have good work experience in developing apps with clean code architecture. I am dedicated to delivering solutions tailored to your unique requirements, ensuring that your apps not only meet but exceed expectations. With a passion for staying at the forefront of technology, I am committed to providing cutting-edge and scalable solutions for a seamless user experience. Let\'s collaborate to turn your ideas into reality.",
+          "yoe": "Years of Experience",
+          "yoe2": "Years of Experience: 3",
+          "contact_details": "Contact Details",
+          "social": "Social Media",
+          "link_copired": "Link copied successfully",
+          "profile_link": "Copy Profile Link ",
         },
         "mar_IN": {
           // Common
@@ -134,6 +184,7 @@ class LocaleString extends Translations {
           "edited_expense_success": "खर्च यशस्वीरित्या संपादित केला!!",
           "this_week": "या आठवड्यात",
           "this_month": "या महिन्यात",
+          "is_missing": " रिक्त असू शकत नाही",
 
           // Categories
           "all": "सर्व",
@@ -235,6 +286,54 @@ class LocaleString extends Translations {
           "amount": "रक्कम",
           "desc": "वर्णन",
           "save": "जतन करा",
+
+          // Profile Screen
+          "transactions": "व्यवहार",
+          "transactions_this_month": "या महिन्यातील तुमचे व्यवहार",
+          "edit_profile": "प्रोफाइल संपादित करा",
+          "phone": "फोन",
+          "moneybot_ai": "मनीबॉट AI",
+          "get_suggestions": "बेहतर बचतीसाठी AI च्या मदतीने सूचना मिळवा",
+
+          // Settings Screen
+          "settings": "सेटिंग्ज",
+          "language": "भाषा",
+          "notifications": "सूचना",
+          "currency": "चलन",
+          "rupees": "रुपये",
+          "acc_security": "खाते व सुरक्षा",
+          "acc_info": "खाते माहिती",
+          "reset_pass": "पासवर्ड रीसेट करा",
+          "data": "डेटा",
+          "other": "इतर",
+          "privacy_policy": "गोपनीयता धोरण",
+          "terms": "अटी व शर्ती",
+          "about": "आमच्याबद्दल",
+          "version": "अॅप संस्करण",
+          "loading": "लोड करत आहे...",
+          "logout": "लॉग आउट",
+          "are_you_sure": "आपल्याला खात्री आहे का की आपण लॉगआउट करू इच्छिता?",
+          "ok": "ठीक आहे",
+          "cant_proceed": "सुरू ठेवू शकत नाही",
+          "upgrade_premium":
+              "सूचना वैशिष्ट्यासाठी कृपया प्रीमियममध्ये अपग्रेड करा",
+          "acc_details": "खाते तपशील",
+          "select_lang": "भाषा निवडा",
+          "dollar": "डॉलर",
+          "select_currency": "चलन निवडा",
+          "clear_data": "डेटा साफ करा",
+          "all_deleted": "सर्व खर्च यशस्वीरित्या हटविले",
+          "sure_all_delete":
+              "आपल्याला सर्व खर्च डेटा हटवायचा आहे याची खात्री आहे का?",
+          "about_me": "माझ्याबद्दल",
+          "ab1":
+              "Android मध्ये विशेष निपुणतेसह अनुभवी फुल-स्टॅक विकसक म्हणून, मी नवोन्मेषक आणि कार्यक्षम Android अनुप्रयोग तयार करण्याचे तीन वर्षांचे प्रत्यक्ष अनुभव आणतो. माझ्या कौशल्ये केवळ अनुप्रयोग विकासापर्यंत मर्यादित नसून, मी प्रारंभापासून मजबूत वेबसाइट तयार करण्यापर्यंत विस्तारतो. क्लीन कोड आर्किटेक्चरसह अॅप्स विकसित करण्याचा मला चांगला कार्य अनुभव आहे. मी तुमच्या अद्वितीय आवश्यकतांना पुरवण्यासाठी समाधान देण्यास समर्पित आहे, हे सुनिश्चित करून तुमचे अॅप्स केवळ अपेक्षा पूर्ण करत नाहीत तर त्याहून अधिक असतात. तंत्रज्ञानाच्या अग्रभागी राहण्याच्या आवडीतून, मी अखंड वापरकर्ता अनुभवासाठी कटिंग-एज आणि स्केलेबल समाधान प्रदान करण्यासाठी वचनबद्ध आहे. तुमच्या कल्पनांना वास्तविकतेत बदलण्यासाठी सहकार्य करूया.",
+          "yoe": "अनुभवाचे वर्षे",
+          "yoe2": "अनुभवाचे वर्षे: ३",
+          "contact_details": "संपर्क तपशील",
+          "social": "सोशल मीडिया",
+          "link_copied": "लिंक यशस्वीरित्या कॉपी केली",
+          "profile_link": "प्रोफाइल लिंक कॉपी करा ",
         },
         "hin_IN": {
           // Common
@@ -251,6 +350,7 @@ class LocaleString extends Translations {
           "edited_expense_success": "खर्च सफलतापूर्वक संपादित किया गया!!",
           "this_week": "इस हफ्ते",
           "this_month": "इस महीने",
+          "is_missing": " खाली नहीं रखा जा सकता",
 
           //Category
           "all": "सभी",
@@ -351,6 +451,53 @@ class LocaleString extends Translations {
           "amount": "राशि",
           "desc": "विवरण",
           "save": "सहेजें",
+
+          // Profile Screen
+          "transactions": "लेन-देन",
+          "transactions_this_month": "इस महीने के आपके लेन-देन",
+          "edit_profile": "प्रोफाइल संपादित करें",
+          "phone": "फोन",
+          "moneybot_ai": "मनीबॉट AI",
+          "get_suggestions": "बेहतर बचत के लिए AI की मदद से सुझाव प्राप्त करें",
+
+          // Settings Screen
+          "settings": "सेटिंग्स",
+          "language": "भाषा",
+          "notifications": "सूचनाएं",
+          "currency": "मुद्रा",
+          "rupees": "रुपये",
+          "acc_security": "खाता और सुरक्षा",
+          "acc_info": "खाता जानकारी",
+          "reset_pass": "पासवर्ड रीसेट करें",
+          "data": "डेटा",
+          "other": "अन्य",
+          "privacy_policy": "गोपनीयता नीति",
+          "terms": "नियम और शर्तें",
+          "about": "हमारे बारे में",
+          "version": "ऐप संस्करण",
+          "loading": "लोड हो रहा है...",
+          "logout": "लॉग आउट",
+          "are_you_sure": "क्या आप लॉगआउट करना चाहते हैं?",
+          "ok": "ठीक है",
+          "cant_proceed": "आगे नहीं बढ़ सकते",
+          "upgrade_premium":
+              "कृपया 'सूचनाएं' सुविधा के लिए प्रीमियम में स्विच करें",
+          "acc_details": "खाता विवरण",
+          "select_lang": "भाषा चुनें",
+          "dollar": "डॉलर",
+          "select_currency": "मुद्रा चुनें",
+          "clear_data": "डेटा साफ करें",
+          "all_deleted": "सभी खर्च सफलतापूर्वक हटाए गए",
+          "sure_all_delete": "क्या आप सभी खर्च डेटा हटाना चाहते हैं?",
+          "about_me": "मेरे बारे में",
+          "ab1":
+              "एक अनुभवी फुल-स्टैक डेवलपर के रूप में जो Android में विशेष ज्ञान रखता है, मैं नवाचारी और कुशल Android अनुप्रयोगों को तैयार करने का तीन वर्षों का अनुभव लाता हूं। मेरी विशेषज्ञता केवल एप्लिकेशन विकास तक ही सीमित नहीं है, इसमें शुरू से मजबूत वेबसाइटों का निर्माण भी शामिल है। मेरे पास क्लीन कोड आर्किटेक्चर के साथ ऐप्स विकसित करने का अच्छा कार्य अनुभव है। मैं आपकी अनूठी आवश्यकताओं के अनुसार समाधान देने के लिए समर्पित हूं, यह सुनिश्चित करते हुए कि आपके ऐप्स न केवल उम्मीदों पर खरे उतरते हैं बल्कि उनसे अधिक होते हैं। प्रौद्योगिकी के अग्रभाग में बने रहने के जुनून के साथ, मैं निर्बाध उपयोगकर्ता अनुभव के लिए अत्याधुनिक और स्केलेबल समाधान प्रदान करने के लिए प्रतिबद्ध हूं। आइए मिलकर आपकी कल्पनाओं को वास्तविकता में बदलें।",
+          "yoe": "अनुभव के वर्ष",
+          "yoe2": "अनुभव के वर्ष: ३",
+          "contact_details": "संपर्क विवरण",
+          "social": "सोशल मीडिया",
+          "link_copied": "लिंक सफलतापूर्वक कॉपी की गई",
+          "profile_link": "प्रोफाइल लिंक कॉपी करें ",
         }
       };
 }

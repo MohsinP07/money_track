@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
-import 'package:money_track/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:money_track/features/auth/presentation/pages/login_page.dart';
 import 'package:money_track/features/auth/presentation/widgets/ai_assistance_tile.dart';
 import 'package:money_track/features/auth/presentation/widgets/profile_details.dart';
 import 'package:money_track/features/settings/presentation/pages/settings_page.dart';
@@ -120,13 +119,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ),
                               ),
-                              title: const Text(
-                                "Transactions",
-                                style: TextStyle(fontSize: 12),
+                              title: Text(
+                                "transactions".tr,
+                                style: const TextStyle(fontSize: 12),
                               ),
-                              subtitle: const Text(
-                                'Your transactions this month',
-                                style: TextStyle(fontSize: 12),
+                              subtitle: Text(
+                                'transactions_this_month'.tr,
+                                style: const TextStyle(fontSize: 12),
                               ),
                             ),
                           ),

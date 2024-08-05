@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/common/widgets/loader.dart';
 import 'package:money_track/core/constants/global_variables.dart';
@@ -30,14 +31,14 @@ class _DeleteAllExpensesDataState extends State<DeleteAllExpensesData> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         elevation: 0,
-        title: const ListTile(
-          leading: Icon(
+        title: ListTile(
+          leading: const Icon(
             Icons.delete,
             color: AppPallete.errorColor,
           ),
           title: Text(
-            'Clear Data',
-            style: TextStyle(
+            'clear_data'.tr,
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -51,7 +52,7 @@ class _DeleteAllExpensesDataState extends State<DeleteAllExpensesData> {
                 const Loader();
               } else if (state is AuthDeleteAllExpenseSuccess) {
                 Navigator.of(context).pop();
-                showSnackBar(context, 'All expenses deleted successfully');
+                showSnackBar(context, 'all_deleted'.tr);
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const BottomBar(initialPage: 0)));
               } else if (state is AuthFailure) {
@@ -63,13 +64,12 @@ class _DeleteAllExpensesDataState extends State<DeleteAllExpensesData> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                    "Are you sure you want to delete All Expenses data?"),
+                Text("sure_all_delete".tr),
                 SizedBox(
                   height: deviceSize(context).height * 0.06,
                 ),
                 CustomButton(
-                  text: 'Delete',
+                  text: 'delete'.tr,
                   onTap: () {
                     context.read<AuthBloc>().add(
                           AuthDeleteAllExpenses(
@@ -85,9 +85,9 @@ class _DeleteAllExpensesDataState extends State<DeleteAllExpensesData> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Text(
-                        "Cancel",
-                        style: TextStyle(
+                      child: Text(
+                        "cancel".tr,
+                        style: const TextStyle(
                           color: AppPallete.errorColor,
                         ),
                       )),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/features/auth/presentation/widgets/money_bot_ai.dart';
@@ -29,13 +30,13 @@ class _AiAssistanceState extends State<AiAssistance> {
             ),
           ),
         ),
-        title: const Text(
-          "MoneyBot AI",
-          style: TextStyle(fontSize: 12),
+        title: Text(
+          "moneybot_ai".tr,
+          style: const TextStyle(fontSize: 12),
         ),
-        subtitle: const Text(
-          'Get suggestions with the help of AI for better savings',
-          style: TextStyle(fontSize: 12),
+        subtitle: Text(
+          'get_suggestions'.tr,
+          style: const TextStyle(fontSize: 12),
         ),
       ),
     );

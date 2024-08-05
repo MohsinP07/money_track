@@ -85,11 +85,11 @@ class _LanguageDialogState extends State<LanguageDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                'Select Language',
-                style: TextStyle(
+                'select_lang'.tr,
+                style: const TextStyle(
                   fontSize: 16,
                 ),
               ),
@@ -134,7 +134,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
                     SizedBox(
                       width: deviceSize(context).width * 0.26,
                       child: CustomButton(
-                        text: 'Submit',
+                        text: 'submit'.tr,
                         onTap: () {
                           updateLanguage(selectedLocale);
                         },
@@ -144,9 +144,9 @@ class _LanguageDialogState extends State<LanguageDialog> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text(
-                      'Cancel',
-                      style: TextStyle(
+                    child: Text(
+                      'cancel'.tr,
+                      style: const TextStyle(
                         color: AppPallete.errorColor,
                       ),
                     ),

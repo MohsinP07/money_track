@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 
@@ -8,8 +9,8 @@ class TermsAndConditions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Terms and Conditions',
-          style: TextStyle(fontWeight: FontWeight.bold)),
+      title:
+          Text('terms'.tr, style: const TextStyle(fontWeight: FontWeight.bold)),
       content: Container(
         width: deviceSize(context).width * 0.8,
         height: deviceSize(context).height * 0.6,

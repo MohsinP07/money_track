@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CommonTextField extends StatelessWidget {
   final String hintText;
@@ -27,7 +28,7 @@ class CommonTextField extends StatelessWidget {
       ),
       validator: (value) {
         if (value!.isEmpty) {
-          return "$hintText is missing!";
+          return hintText + "is_missing".tr;
         }
         return null;
       },

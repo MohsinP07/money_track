@@ -36,9 +36,9 @@ class _SettingsPageState extends State<SettingsPage> {
       builder: (BuildContext context) {
         return CustomDialog(
           icon: Icons.logout,
-          submitName: "Logout",
-          title: 'Logout',
-          content: 'Are you sure you want to logout?',
+          submitName: "logout".tr,
+          title: 'logout'.tr,
+          content: 'are_you_sure'.tr,
           onView: onView,
         );
       },
@@ -51,9 +51,9 @@ class _SettingsPageState extends State<SettingsPage> {
       builder: (BuildContext context) {
         return CustomDialog(
           icon: Icons.info,
-          submitName: "OK",
-          title: 'Can\'t proceed',
-          content: 'Please switch to premium for "Notifications" feature',
+          submitName: "ok".tr,
+          title: 'cant_proceed'.tr,
+          content: 'upgrade_premium'.tr,
           onView: () {},
         );
       },
@@ -114,7 +114,7 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Account Details"),
+          title: Text("acc_details".tr),
           content: Material(
             child: Container(
               padding: const EdgeInsets.all(
@@ -206,9 +206,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     SizedBox(
                       width: deviceSize(context).width * 0.26,
                     ),
-                    const Text(
-                      "Settings",
-                      style: TextStyle(
+                    Text(
+                      "settings".tr,
+                      style: const TextStyle(
                         fontSize: 22,
                         color: AppPallete.whiteColor,
                       ),
@@ -230,7 +230,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile(
                     leadingIcon: Icons.translate,
-                    title: 'Language',
+                    title: 'language'.tr,
                     trailingText: currentLocale.languageCode == 'mar'
                         ? "मराठी"
                         : currentLocale.languageCode == 'hin'
@@ -243,7 +243,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile(
                     leadingIcon: Icons.notifications,
-                    title: 'Notifications',
+                    title: 'notifications'.tr,
                     trailingText: '',
                     trailingIcon: Icons.arrow_forward_ios,
                     onTrailingIconPressed: () {
@@ -252,23 +252,23 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile(
                     leadingIcon: Icons.money,
-                    title: 'Currency',
-                    trailingText: prefs?.getString('currency') ?? 'Rupees',
+                    title: 'currency'.tr,
+                    trailingText: prefs?.getString('currency') ?? 'rupees'.tr,
                     trailingIcon: Icons.arrow_forward_ios,
                     onTrailingIconPressed: () {
                       _showCurrencyDialog(context);
                     },
                   ),
                   const Divider(),
-                  const Text(
-                    'Account & Security',
-                    style: TextStyle(
+                  Text(
+                    'acc_security'.tr,
+                    style: const TextStyle(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   SettingsTile(
                     leadingIcon: Icons.person,
-                    title: 'Account Information',
+                    title: 'acc_info'.tr,
                     trailingText: '',
                     trailingIcon: Icons.arrow_forward_ios,
                     onTrailingIconPressed: () {
@@ -277,7 +277,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile(
                     leadingIcon: Icons.password,
-                    title: 'Reset Password',
+                    title: 'reset_pass'.tr,
                     trailingText: '',
                     trailingIcon: Icons.arrow_forward_ios,
                     onTrailingIconPressed: () {
@@ -286,7 +286,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile(
                     leadingIcon: Icons.data_array,
-                    title: 'Data',
+                    title: 'data'.tr,
                     trailingText: '',
                     trailingIcon: Icons.arrow_forward_ios,
                     onTrailingIconPressed: () {
@@ -294,15 +294,15 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                   const Divider(),
-                  const Text(
-                    'Other',
-                    style: TextStyle(
+                  Text(
+                    'other'.tr,
+                    style: const TextStyle(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   SettingsTile(
                     leadingIcon: Icons.lock,
-                    title: 'Privacy Policy',
+                    title: 'privacy_policy'.tr,
                     trailingText: '',
                     trailingIcon: Icons.arrow_forward_ios,
                     onTrailingIconPressed: () {
@@ -311,7 +311,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile(
                     leadingIcon: Icons.list_alt,
-                    title: 'Terms & Conditions',
+                    title: 'terms'.tr,
                     trailingText: '',
                     trailingIcon: Icons.arrow_forward_ios,
                     onTrailingIconPressed: () {
@@ -320,7 +320,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile(
                     leadingIcon: Icons.group,
-                    title: 'About Us',
+                    title: 'about'.tr,
                     trailingText: '',
                     trailingIcon: Icons.arrow_forward_ios,
                     onTrailingIconPressed: () {
@@ -330,9 +330,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   const Divider(),
                   SettingsTile(
                     leadingIcon: Icons.app_registration_sharp,
-                    title: 'App Version',
+                    title: 'version'.tr,
                     trailingText:
-                        _appVersion.isNotEmpty ? _appVersion : 'Loading...',
+                        _appVersion.isNotEmpty ? _appVersion : 'loading'.tr,
                     trailingIcon: Icons.update,
                     onTrailingIconPressed: () {},
                   ),
@@ -360,10 +360,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           color: AppPallete.errorColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Text(
-                            "Log Out",
-                            style: TextStyle(
+                            "logout".tr,
+                            style: const TextStyle(
                               fontWeight: FontWeight.w800,
                               color: AppPallete.whiteColor,
                             ),

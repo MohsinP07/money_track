@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:money_track/core/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -10,7 +11,7 @@ class AboutUs extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title:
-          const Text('About Us', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('about'.tr, style: const TextStyle(fontWeight: FontWeight.bold)),
       content: Container(
         width: MediaQuery.of(context).size.width * 0.8,
         height: MediaQuery.of(context).size.height * 0.6,
@@ -19,20 +20,19 @@ class AboutUs extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSectionTitle('About Me'),
+              _buildSectionTitle('about_me'.tr),
               const SizedBox(height: 8),
-              _buildSectionContent(
-                  'As a seasoned full-stack developer with a specialization in Android, I bring three years of hands-on experience in crafting innovative and efficient Android applications. My expertise extends beyond mere app development, encompassing the creation of robust websites from scratch. I also have good work experience in developing apps with clean code architecture. I am dedicated to delivering solutions tailored to your unique requirements, ensuring that your apps not only meet but exceed expectations. With a passion for staying at the forefront of technology, I am committed to providing cutting-edge and scalable solutions for a seamless user experience. Let\'s collaborate to turn your ideas into reality.'),
+              _buildSectionContent('ab1'.tr),
               const SizedBox(height: 16),
-              _buildSectionTitle('Years of Experience'),
+              _buildSectionTitle('yoe'.tr),
               const SizedBox(height: 8),
-              _buildSectionContent('Years of Experience: 3'),
+              _buildSectionContent('yoe2'.tr),
               const SizedBox(height: 16),
-              _buildSectionTitle('Contact Details'),
+              _buildSectionTitle('contact_details'.tr),
               const SizedBox(height: 8),
               _buildSectionContent('Email: global.mohsinpatel786@gmail.com'),
               const SizedBox(height: 16),
-              _buildSectionTitle('Social Media'),
+              _buildSectionTitle('social'.tr),
               const SizedBox(height: 8),
               _buildSocialMediaIcons(context),
             ],
@@ -44,9 +44,9 @@ class AboutUs extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text(
-            'Close',
-            style: TextStyle(
+          child: Text(
+            'close'.tr,
+            style: const TextStyle(
               color: Colors.red,
             ),
           ),
@@ -83,8 +83,7 @@ class AboutUs extends StatelessWidget {
             Clipboard.setData(const ClipboardData(
                     text:
                         'https://www.linkedin.com/in/mohsin-patel-1874621a2/'))
-                .then((value) =>
-                    showSnackBar(context, 'Link copied successfully'));
+                .then((value) => showSnackBar(context, 'link_copired'.tr));
           },
           child: Row(
             children: [
@@ -97,9 +96,9 @@ class AboutUs extends StatelessWidget {
                 ),
                 onPressed: () {},
               ),
-              const Text(
-                'Copy Profile Link ',
-                style: TextStyle(
+              Text(
+                'profile_link'.tr,
+                style: const TextStyle(
                   fontSize: 12,
                   color: Colors.blue,
                   decoration: TextDecoration.underline,
@@ -114,8 +113,7 @@ class AboutUs extends StatelessWidget {
           onTap: () {
             Clipboard.setData(
                     const ClipboardData(text: 'https://github.com/MohsinP07'))
-                .then((value) =>
-                    showSnackBar(context, 'Link copied successfully'));
+                .then((value) => showSnackBar(context, 'link_copired'.tr));
           },
           child: Row(
             children: [
@@ -128,9 +126,9 @@ class AboutUs extends StatelessWidget {
                 ),
                 onPressed: () {},
               ),
-              const Text(
-                'Copy Profile Link ',
-                style: TextStyle(
+              Text(
+                'profile_link'.tr,
+                style: const TextStyle(
                   fontSize: 12,
                   color: Colors.blue,
                   decoration: TextDecoration.underline,

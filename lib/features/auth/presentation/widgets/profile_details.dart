@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:money_track/core/common/widgets/custom_button.dart';
@@ -44,9 +45,9 @@ class ProfileDetails extends StatelessWidget {
                     onPressed: () {
                       _showEditBottomSheet(context, user);
                     },
-                    child: const Text(
-                      "Edit Profile",
-                      style: TextStyle(color: AppPallete.boxColor),
+                    child: Text(
+                      "edit_profile".tr,
+                      style: const TextStyle(color: AppPallete.boxColor),
                     )),
               ListTile(
                 leading: CircleAvatar(
@@ -57,9 +58,9 @@ class ProfileDetails extends StatelessWidget {
                     color: AppPallete.whiteColor,
                   ),
                 ),
-                title: const Text(
-                  "Email",
-                  style: TextStyle(fontSize: 12),
+                title: Text(
+                  "email".tr,
+                  style: const TextStyle(fontSize: 12),
                 ),
                 subtitle: Text(user.email),
               ),
@@ -73,9 +74,9 @@ class ProfileDetails extends StatelessWidget {
                       color: AppPallete.whiteColor,
                     ),
                   ),
-                  title: const Text(
-                    "Name",
-                    style: TextStyle(fontSize: 12),
+                  title: Text(
+                    "name".tr,
+                    style: const TextStyle(fontSize: 12),
                   ),
                   subtitle: Text(user.name)),
               const Divider(),
@@ -88,9 +89,9 @@ class ProfileDetails extends StatelessWidget {
                     color: AppPallete.whiteColor,
                   ),
                 ),
-                title: const Text(
-                  "Phone",
-                  style: TextStyle(fontSize: 12),
+                title: Text(
+                  "phone".tr,
+                  style: const TextStyle(fontSize: 12),
                 ),
                 subtitle: Text(user.phone),
               ),
@@ -102,7 +103,7 @@ class ProfileDetails extends StatelessWidget {
                       height: deviceSize(context).height * 0.06,
                       width: double.infinity,
                       child: CustomButton(
-                          text: "Edit Profile",
+                          text: "edit_profile".tr,
                           onTap: () {
                             _showEditBottomSheet(context, user);
                           })),
@@ -113,9 +114,9 @@ class ProfileDetails extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Text(
-                        "Cancel",
-                        style: TextStyle(
+                      child: Text(
+                        "cancel".tr,
+                        style: const TextStyle(
                           color: AppPallete.errorColor,
                         ),
                       )),
