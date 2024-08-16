@@ -53,6 +53,7 @@ dependencies:
   url_launcher: ^6.1.11
   package_info_plus: ^1.4.2
   flutter_svg: ^2.0.5
+  flutter_native_splash: ^2.1.6
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +80,7 @@ flutter:
   assets:
     - assets/images/
     - assets/svg/
+    - assets/images/splashscreen.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -110,3 +112,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  color: "ffffff"
+  image: assets/images/splashscreen.png
+  ios_content_mode: center
+  android_gravity: center
+  android: true
+  ios: true
+  web: false
