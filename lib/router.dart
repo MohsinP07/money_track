@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:money_track/features/auth/presentation/pages/login_page.dart';
 import 'package:money_track/features/auth/presentation/pages/profile_page.dart';
 import 'package:money_track/features/auth/presentation/pages/signup_page.dart';
+import 'package:money_track/features/auth/presentation/widgets/bot_widgets/all_finance_goals.dart';
+import 'package:money_track/features/auth/presentation/widgets/bot_widgets/create_finance_goals.dart';
 import 'package:money_track/features/auth/presentation/widgets/money_bot_ai.dart';
 import 'package:money_track/features/onboarding/presentation/pages/onboarding_screen.dart';
 import 'package:money_track/features/settings/presentation/pages/settings_page.dart';
@@ -26,6 +28,12 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case Onboarding.routename:
       return MaterialPageRoute(
           settings: routeSettings, builder: (_) => Onboarding());
+    case CreateFinanceGoals.routeName:
+      return MaterialPageRoute(
+          settings: routeSettings, builder: (_) => CreateFinanceGoals());
+    case AllFinanceGoals.routeName:
+      return MaterialPageRoute(
+          settings: routeSettings, builder: (_) => AllFinanceGoals());
     default:
       return MaterialPageRoute(
           settings: routeSettings,

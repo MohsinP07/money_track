@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-String uri = 'http://192.168.1.33:3000';
+String uri = 'https://money-track-8gsw.onrender.com';
 
 Size deviceSize(BuildContext context) {
   return MediaQuery.of(context).size;

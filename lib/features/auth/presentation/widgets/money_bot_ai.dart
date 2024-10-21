@@ -5,6 +5,8 @@ import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/features/auth/presentation/widgets/bot_widgets/advice_box.dart';
+import 'package:money_track/features/auth/presentation/widgets/bot_widgets/all_finance_goals.dart';
+import 'package:money_track/features/auth/presentation/widgets/bot_widgets/create_finance_goals.dart';
 import 'package:money_track/features/auth/presentation/widgets/bot_widgets/investment_box.dart';
 import 'package:money_track/features/auth/presentation/widgets/income_info_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -169,12 +171,15 @@ class _MoneyBotAIState extends State<MoneyBotAI> {
                           onTap: () {
                             if (_showDialog) {
                               _showIncomeInfoSheet(context);
+                            } else {
+                              Navigator.of(context)
+                                  .pushNamed(AllFinanceGoals.routeName);
                             }
                           },
                           color: const Color.fromARGB(255, 167, 114, 181),
                           icon: FontAwesomeIcons.moneyBill,
-                          title1: 'Expenses',
-                          title2: 'Advice',
+                          title1: 'Finance',
+                          title2: 'Goals',
                         ),
                       ],
                     ),
