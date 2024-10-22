@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:intl/intl.dart'; // For date formatting and date picker
+import 'package:money_track/core/utils/utils.dart';
 import 'dart:math';
 
 import 'package:money_track/features/auth/presentation/widgets/bot_widgets/goal_box.dart'; // For calculations
@@ -19,6 +21,9 @@ class _CreateFinanceGoalsState extends State<CreateFinanceGoals> {
   TextEditingController dateController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   TextEditingController peopleController = TextEditingController();
+  bool emptyCommonForm = false;
+  bool emptyTravelForm = false;
+  bool emptyWeddingForm = false;
 
   @override
   Widget build(BuildContext context) {
@@ -116,70 +121,84 @@ class _CreateFinanceGoalsState extends State<CreateFinanceGoals> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Set your $goalName Goal',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+        return StatefulBuilder(builder: (context, setState) {
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Set your $goalName Goal',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: amountController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: goalName == "House"
-                          ? 'Target Downpayment Amount'
-                          : 'Target Amount',
-                      border: const OutlineInputBorder(),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: amountController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: goalName == "House"
+                            ? 'Target Downpayment Amount'
+                            : 'Target Amount',
+                        border: const OutlineInputBorder(),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: dateController,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Target Date',
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.calendar_today),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: dateController,
+                      readOnly: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Target Date',
+                        border: OutlineInputBorder(),
+                        suffixIcon: Icon(Icons.calendar_today),
+                      ),
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2100),
+                        );
+                        if (pickedDate != null) {
+                          String formattedDate =
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
+                          setState(() {
+                            dateController.text = formattedDate;
+                          });
+                        }
+                      },
                     ),
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime(2100),
-                      );
-                      if (pickedDate != null) {
-                        String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                        setState(() {
-                          dateController.text = formattedDate;
-                        });
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      _calculateSIP(context);
-                    },
-                    child: const Text('Calculate SIP'),
-                  )
-                ],
+                    const SizedBox(height: 10),
+                    if (emptyCommonForm) const Text("Fields cannot be empty"),
+                    const SizedBox(height: 10),
+                    CustomButton(
+                      onTap: () {
+                        if (amountController.text.isEmpty ||
+                            dateController.text.isEmpty) {
+                          setState(() {
+                            emptyCommonForm = true;
+                          });
+                        } else {
+                          setState(() {
+                            emptyCommonForm = false;
+                          });
+                          _calculateSIP(context);
+                        }
+                      },
+                      text: 'Calculate SIP',
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          );
+        });
       },
     );
   }
@@ -251,10 +270,17 @@ class _CreateFinanceGoalsState extends State<CreateFinanceGoals> {
                       'Long Term Debt (7% annual return)', longTermDebtSIP),
                   const SizedBox(height: 20),
                   ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        Colors.red.shade300,
+                      ),
+                    ),
                     onPressed: () {
                       Navigator.pop(context); // Close the modal
                     },
-                    child: const Text('Close'),
+                    child: const Text(
+                      'Close',
+                    ),
                   ),
                 ],
               ),
@@ -270,76 +296,94 @@ class _CreateFinanceGoalsState extends State<CreateFinanceGoals> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Set your Travel Goal',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+        return StatefulBuilder(builder: (context, setState) {
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Set your Travel Goal',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: locationController,
-                    decoration: const InputDecoration(
-                      labelText: 'Location',
-                      border: OutlineInputBorder(),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: locationController,
+                      decoration: const InputDecoration(
+                        labelText: 'Location',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: peopleController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Number of People',
-                      border: OutlineInputBorder(),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: peopleController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Number of People',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: dateController,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Travel Date',
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.calendar_today),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: dateController,
+                      readOnly: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Travel Date',
+                        border: OutlineInputBorder(),
+                        suffixIcon: Icon(Icons.calendar_today),
+                      ),
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2100),
+                        );
+                        if (pickedDate != null) {
+                          String formattedDate =
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
+                          setState(() {
+                            dateController.text = formattedDate;
+                          });
+                        }
+                      },
                     ),
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime(2100),
-                      );
-                      if (pickedDate != null) {
-                        String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                        setState(() {
-                          dateController.text = formattedDate;
-                        });
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      _calculateTravelGoal(context);
-                    },
-                    child: const Text('Calculate Installments'),
-                  )
-                ],
+                    const SizedBox(height: 10),
+                    if (emptyTravelForm)
+                      const Text(
+                        'Fields cannot be empty',
+                      ),
+                    const SizedBox(height: 10),
+                    CustomButton(
+                      onTap: () {
+                        if (locationController.text.isEmpty ||
+                            dateController.text.isEmpty ||
+                            peopleController.text.isEmpty) {
+                          setState(() {
+                            emptyTravelForm = true;
+                          });
+                        } else {
+                          setState(() {
+                            emptyTravelForm = false;
+                          });
+                          _calculateTravelGoal(context);
+                        }
+                      },
+                      text: 'Calculate Installments',
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          );
+        });
       },
     );
   }
@@ -419,10 +463,17 @@ class _CreateFinanceGoalsState extends State<CreateFinanceGoals> {
                   _buildSIPCard('Monthly Installment', monthlyInstallment),
                   const SizedBox(height: 20),
                   ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        Colors.red.shade300,
+                      ),
+                    ),
                     onPressed: () {
                       Navigator.pop(context); // Close the modal
                     },
-                    child: const Text('Close'),
+                    child: const Text(
+                      'Close',
+                    ),
                   ),
                 ],
               ),
@@ -438,75 +489,92 @@ class _CreateFinanceGoalsState extends State<CreateFinanceGoals> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Set Your Wedding Goal',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+        return StatefulBuilder(builder: (context, setState) {
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Set Your Wedding Goal',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-                  // Amount Input Field
-                  TextField(
-                    controller: amountController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Target Wedding Amount',
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter your wedding budget (₹)',
+                    // Amount Input Field
+                    TextField(
+                      controller: amountController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Target Wedding Amount',
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter your wedding budget (₹)',
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-                  // Date Input Field
-                  TextField(
-                    controller: dateController,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Wedding Date',
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.calendar_today),
+                    // Date Input Field
+                    TextField(
+                      controller: dateController,
+                      readOnly: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Wedding Date',
+                        border: OutlineInputBorder(),
+                        suffixIcon: Icon(Icons.calendar_today),
+                      ),
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2100),
+                        );
+                        if (pickedDate != null) {
+                          String formattedDate =
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
+                          setState(() {
+                            dateController.text = formattedDate;
+                          });
+                        }
+                      },
                     ),
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime(2100),
-                      );
-                      if (pickedDate != null) {
-                        String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                        setState(() {
-                          dateController.text = formattedDate;
-                        });
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 20),
+                    const SizedBox(height: 10),
+                    if (emptyWeddingForm)
+                      const Text(
+                        'Fields cannot be empty',
+                      ),
+                    const SizedBox(height: 10),
 
-                  // Calculate Button
-                  ElevatedButton(
-                    onPressed: () {
-                      _calculateWeddingGoal(context);
-                    },
-                    child: const Text('Calculate Installments'),
-                  ),
-                ],
+                    // Calculate Button
+                    CustomButton(
+                      onTap: () {
+                        if (amountController.text.isEmpty ||
+                            dateController.text.isEmpty) {
+                          setState(() {
+                            emptyWeddingForm = true;
+                          });
+                        } else {
+                          setState(() {
+                            emptyWeddingForm = false;
+                          });
+                          _calculateWeddingGoal(context);
+                        }
+                      },
+                      text: 'Calculate Installments',
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          );
+        });
       },
     );
   }
@@ -579,10 +647,17 @@ class _CreateFinanceGoalsState extends State<CreateFinanceGoals> {
                   _buildSIPCard('Monthly Installment', monthlyInstallment),
                   const SizedBox(height: 20),
                   ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        Colors.red.shade300,
+                      ),
+                    ),
                     onPressed: () {
                       Navigator.pop(context); // Close the modal
                     },
-                    child: const Text('Close'),
+                    child: const Text(
+                      'Close',
+                    ),
                   ),
                 ],
               ),
