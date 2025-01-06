@@ -27,6 +27,11 @@ const userSchema = mongoose.Schema({
     phone:{
         required: false,
         type: String,
+    },
+
+    groups: {
+        required: false,
+        type: []
     }
 
 });
