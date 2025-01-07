@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:money_track/core/constants/global_variables.dart';
+import 'package:money_track/features/expenses/presentation/pages/group_page.dart';
 import 'package:money_track/features/expenses/presentation/pages/add_expenses_page.dart';
 import 'package:money_track/features/expenses/presentation/pages/analyze_expense_page.dart';
 import 'package:money_track/features/expenses/presentation/pages/dashboard_page.dart';
@@ -26,6 +27,7 @@ class _BottomBarState extends State<BottomBar> {
     DashboardPage(),
     AddExpensePage(),
     AnalyzeExpensePage(),
+    GroupPage(),
     ProfilePage(),
   ];
 
@@ -95,7 +97,7 @@ class _BottomBarState extends State<BottomBar> {
                 child: Icon(Icons.receipt_outlined),
               ),
               label: ''),
-          //PROFILE
+          //REPORT
           BottomNavigationBarItem(
               icon: Container(
                 width: bottomBarWidth,
@@ -103,6 +105,20 @@ class _BottomBarState extends State<BottomBar> {
                     border: Border(
                         top: BorderSide(
                             color: _page == 3
+                                ? GlobalVariables.selectedNavBarColor
+                                : GlobalVariables.backgroundColor,
+                            width: bottomBarBorderWidth))),
+                child: Icon(Icons.groups),
+              ),
+              label: ''),
+          //PROFILE
+          BottomNavigationBarItem(
+              icon: Container(
+                width: bottomBarWidth,
+                decoration: BoxDecoration(
+                    border: Border(
+                        top: BorderSide(
+                            color: _page == 4
                                 ? GlobalVariables.selectedNavBarColor
                                 : GlobalVariables.backgroundColor,
                             width: bottomBarBorderWidth))),

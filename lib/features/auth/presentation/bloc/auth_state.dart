@@ -24,6 +24,12 @@ class AuthDeleteAllExpense extends AuthState {}
 
 class AuthDeleteAllExpenseSuccess extends AuthState {}
 
+class AuthGetAllUsersSuccess extends AuthState {
+  final List<User> users;
+
+  AuthGetAllUsersSuccess(this.users);
+}
+
 class AuthFailure extends AuthState {
   final String message;
   AuthFailure(this.message);

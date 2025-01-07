@@ -5,6 +5,7 @@ import 'package:money_track/features/auth/data/repositories/auth_repository_impl
 import 'package:money_track/features/auth/domain/usecases/current_user.dart';
 import 'package:money_track/features/auth/domain/usecases/delete_all_expenses.dart';
 import 'package:money_track/features/auth/domain/usecases/edit_profile.dart';
+import 'package:money_track/features/auth/domain/usecases/get_all_users.dart';
 import 'package:money_track/features/auth/domain/usecases/log_out_user.dart';
 import 'package:money_track/features/auth/domain/usecases/reset_password_usecase.dart';
 import 'package:money_track/features/auth/domain/usecases/user_log_in.dart';
@@ -63,18 +64,21 @@ void _initAuth() {
     ..registerFactory(() => DeleteAllExpenses(
           serviceLocator(),
         ))
+    ..registerFactory(() => GetAllUsers(
+          serviceLocator(),
+        ))
 
     //Bloc
     ..registerLazySingleton(() => AuthBloc(
-          userSignUp: serviceLocator(),
-          userLogin: serviceLocator(),
-          editProfile: serviceLocator(),
-          currentUser: serviceLocator(),
-          appUserCubit: serviceLocator(),
-          userLogout: serviceLocator(),
-          resetPassword: serviceLocator(),
-          deleteAllExpenses: serviceLocator(),
-        ));
+        userSignUp: serviceLocator(),
+        userLogin: serviceLocator(),
+        editProfile: serviceLocator(),
+        currentUser: serviceLocator(),
+        appUserCubit: serviceLocator(),
+        userLogout: serviceLocator(),
+        resetPassword: serviceLocator(),
+        deleteAllExpenses: serviceLocator(),
+        getAllUsers: serviceLocator()));
 }
 
 _initExpense() {

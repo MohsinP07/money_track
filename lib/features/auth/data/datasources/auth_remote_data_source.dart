@@ -34,6 +34,8 @@ abstract class AuthRemoteDataSource {
 
   Future<UserModel?> getCurrentUserData();
 
+  Future<List<UserModel>?> getAllUsers();
+
   Future<void> deleteAllUserExpenses({required String expenserId});
 
   void logOutUser(BuildContext context);
@@ -300,6 +302,40 @@ class AuthRemoteDataSourceImplement implements AuthRemoteDataSource {
       } else {
         throw ServerException(e.toString());
       }
+    }
+  }
+
+  @override
+  Future<List<UserModel>> getAllUsers() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("x-auth-token");
+
+      if (token == null || token.isEmpty) {
+        throw ServerException("User is not authenticated");
+      }
+      final response = await http.get(
+        Uri.parse('$uri/auth/get-all-users'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+      print('$uri/auth/get-all-users');
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        return data
+            .map((user) => UserModel.fromJson(user as Map<String, dynamic>))
+            .toList();
+      } else {
+        final Map<String, dynamic> errorResponse = json.decode(response.body);
+        final String errorMessage = errorResponse['msg'] ??
+            'Failed to fetch all users. Status code: ${response.statusCode}';
+        throw ServerException(errorMessage);
+      }
+    } catch (e) {
+      throw ServerException("An unexpected error occurred: ${e.toString()}");
     }
   }
 }

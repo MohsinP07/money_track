@@ -4,6 +4,7 @@ import 'package:money_track/core/entity/user.dart';
 import 'package:money_track/core/error/exception.dart';
 import 'package:money_track/core/utils/utils.dart';
 import 'package:money_track/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:money_track/features/auth/data/models/usermodel.dart';
 import 'package:money_track/features/auth/domain/repository/auth_repository.dart';
 
 import '../../../../core/error/failures.dart';
@@ -115,6 +116,33 @@ class AuthRepositoryImplement implements AuthRepository {
         expenserId: expenserId,
       );
       return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<User>>> getAllUsers() async {
+    try {
+      // Call the remote data source to fetch users
+      final List<UserModel> userModels =
+          await remoteDataSource.getAllUsers() ?? [];
+
+      if (userModels.isEmpty) {
+        return const Right([]); // Return an empty list if no users are found
+      }
+
+      // Map UserModel list to List<User>
+      final List<User> users = userModels
+          .map((userModel) => User(
+                id: userModel.id,
+                name: userModel.name,
+                email: userModel.email,
+                phone: userModel.phone,
+              ))
+          .toList();
+
+      return Right(users);
     } catch (e) {
       return Left(Failure(e.toString()));
     }

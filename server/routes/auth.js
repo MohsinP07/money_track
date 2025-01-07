@@ -45,7 +45,8 @@ authRouter.post('/auth/signup', async (req, res) => {
 
 //SIGN IN ROUTE FOR USER
 authRouter.post('/auth/signin', async (req, res) => {
-
+    console.log("gggg");
+    
     try {
         const { email, password } = req.body;
 

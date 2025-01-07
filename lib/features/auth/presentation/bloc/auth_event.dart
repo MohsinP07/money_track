@@ -58,3 +58,5 @@ class AuthDeleteAllExpenses extends AuthEvent {
     required this.expenserId,
   });
 }
+
+class AuthGetAllUsers extends AuthEvent {}

@@ -10,6 +10,7 @@ import 'package:money_track/features/auth/domain/usecases/reset_password_usecase
 import 'package:money_track/features/auth/domain/usecases/user_log_in.dart';
 import 'package:money_track/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:money_track/features/auth/domain/usecases/delete_all_expenses.dart';
+import 'package:money_track/features/auth/domain/usecases/get_all_users.dart'; // Add the GetAllUsers use case
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -22,6 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserLogout _userLogout;
   final ResetPassword _resetPassword;
   final DeleteAllExpenses _deleteAllExpenses;
+  final GetAllUsers _getAllUsers; // Add GetAllUsers use case
   final AppUserCubit _appUserCubit;
 
   AuthBloc({
@@ -32,6 +34,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required UserLogout userLogout,
     required ResetPassword resetPassword,
     required DeleteAllExpenses deleteAllExpenses,
+    required GetAllUsers getAllUsers, // Add GetAllUsers
     required AppUserCubit appUserCubit,
   })  : _userSignUp = userSignUp,
         _userLogin = userLogin,
@@ -40,6 +43,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _userLogout = userLogout,
         _resetPassword = resetPassword,
         _deleteAllExpenses = deleteAllExpenses,
+        _getAllUsers = getAllUsers, // Initialize GetAllUsers
         _appUserCubit = appUserCubit,
         super(AuthInitial()) {
     on<AuthSignUp>(_onAuthSignUp);
@@ -49,6 +53,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthIsUserLoggedIn>(_isUserLoggedIn);
     on<AuthResetPassword>(_onAuthResetPassword);
     on<AuthDeleteAllExpenses>(_onAuthDeleteAllExpenses);
+    on<AuthGetAllUsers>(_onAuthGetAllUsers); // Handle the AuthGetAllUsers event
   }
 
   void _isUserLoggedIn(
@@ -58,9 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final res = await _currentUser(NoParams());
 
     res.fold(
-      (failure) => emit(AuthFailure(
-        failure.message,
-      )),
+      (failure) => emit(AuthFailure(failure.message)),
       (user) => _emitAuthSuccess(user, emit),
     );
   }
@@ -93,9 +96,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     ));
     print(res);
     res.fold(
-      (failure) => emit(AuthFailure(
-        failure.message,
-      )),
+      (failure) => emit(AuthFailure(failure.message)),
       (user) => _emitAuthSuccess(user, emit),
     );
   }
@@ -122,9 +123,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final res = await _userLogout.call(event.context);
 
     res.fold(
-      (failure) => emit(AuthFailure(
-        failure.message,
-      )),
+      (failure) => emit(AuthFailure(failure.message)),
       (_) {
         _appUserCubit.clearUser();
         emit(AuthInitial());
@@ -158,6 +157,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthFailure(failure.message)),
       (_) => emit(AuthDeleteAllExpenseSuccess()),
+    );
+  }
+
+  // Handle fetching all users
+  void _onAuthGetAllUsers(
+    AuthGetAllUsers event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoading());
+    final result = await _getAllUsers();
+
+    result.fold(
+      (failure) => emit(AuthFailure(failure.message)),
+      (users) => emit(AuthGetAllUsersSuccess(users)),
     );
   }
 
