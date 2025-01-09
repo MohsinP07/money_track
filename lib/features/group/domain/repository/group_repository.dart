@@ -13,4 +13,11 @@ abstract class GroupRepository {
   });
 
   Future<Either<Failure, List<GroupEntity>>> getAllGroups();
+
+  Future<Either<Failure, GroupEntity>> editGroup({
+    required String id,
+    required String groupName,
+    required String groupDescription,
+    required String budget,
+  });
 }

@@ -21,3 +21,17 @@ class GroupAdd extends GroupEvent {
 }
 
 class GroupsGetAllGroups extends GroupEvent {}
+
+class GroupEdit extends GroupEvent {
+  final String id;
+  final String groupName;
+  final String groupDescription;
+  final String budget;
+
+  GroupEdit({
+    required this.id,
+    required this.groupName,
+    required this.groupDescription,
+    required this.budget,
+  });
+}

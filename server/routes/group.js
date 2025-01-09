@@ -40,5 +40,34 @@ groupRouter.get('/group/get-groups', async (req, res) => {
 
 });
 
+groupRouter.put('/group/edit-group', async (req, res) => {
+  try {
+      const groupId = req.body.id;
+      const { groupName, groupDescription, budget } = req.body; 
+
+      await Group.findByIdAndUpdate(groupId, { groupName, groupDescription, budget});
+
+      res.json({ msg: "Group updated successfully" });
+  } catch (e) {
+      res.status(500).json({ error: e.message });
+  }
+});
+
+groupRouter.post('/group/delete-group', async (req, res) => {
+
+  try {
+      const { id } = req.body;
+
+      let group = await Group.findByIdAndDelete(id);
+
+      res.json(group);
+
+  }
+  catch (e) {
+      res.status(500).json({ error: e.message });
+  }
+
+});
+
 
 module.exports = groupRouter;

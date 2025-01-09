@@ -19,3 +19,9 @@ class GroupsDisplaySuccess extends GroupState {
 
   GroupsDisplaySuccess(this.groups);
 }
+
+class EditGroupSuccess extends GroupState {
+  final GroupEntity editedGroup;
+
+  EditGroupSuccess(this.editedGroup);
+}

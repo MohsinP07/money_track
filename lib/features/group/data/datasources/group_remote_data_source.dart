@@ -9,6 +9,8 @@ import 'package:http/http.dart' as http;
 abstract class GroupRemoteDataSource {
   Future<GroupModel> createGroup(GroupModel group);
   Future<List<GroupModel>> getAllGroups();
+  Future<GroupModel> editExpense(
+      String id, String groupName, String groupDescription, String budget);
 }
 
 class GroupRemoteDataSourceImplement implements GroupRemoteDataSource {
@@ -72,6 +74,45 @@ class GroupRemoteDataSourceImplement implements GroupRemoteDataSource {
       return responseBody
           .map((group) => GroupModel.fromMap(group as Map<String, dynamic>))
           .toList();
+    } catch (e) {
+      print(e);
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<GroupModel> editExpense(String id, String groupName,
+      String groupDescription, String budget) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("x-auth-token");
+
+      if (token == null || token.isEmpty) {
+        throw ServerException("User is not authenticated");
+      }
+
+      final response = await http.put(
+        Uri.parse('$uri/group/edit-group'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: json.encode({
+          'id': id,
+          'groupName': groupName,
+          'groupDescription': groupDescription,
+          'budget': budget,
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        throw ServerException(
+            'Failed to edit expense. Status code: ${response.statusCode}');
+      }
+
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+
+      return GroupModel.fromMap(responseBody);
     } catch (e) {
       print(e);
       throw ServerException(e.toString());

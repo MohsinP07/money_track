@@ -17,20 +17,23 @@ class GroupPage extends StatefulWidget {
 }
 
 class _GroupPageState extends State<GroupPage> {
+  bool _groupsFetched = false;
+
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<GroupBloc>(context).add(GroupsGetAllGroups());
+    if (!_groupsFetched) {
+      BlocProvider.of<GroupBloc>(context).add(GroupsGetAllGroups());
+      _groupsFetched = true;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final userEmail =
         (context.read<AppUserCubit>().state as AppUserLoggedIn).user.email;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Groups"),
-      ),
       body: BlocConsumer<GroupBloc, GroupState>(
         listener: (context, state) {
           if (state is GroupFailure) {
@@ -55,67 +58,101 @@ class _GroupPageState extends State<GroupPage> {
               );
             }
 
-            return ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: userGroups.length,
-              itemBuilder: (context, index) {
-                final group = userGroups[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => GroupChatScreen(group: group),
-                      ),
-                    );
-                  },
-                  child: Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    color: AppPallete.botBgColor,
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+            return SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0).copyWith(top: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                      maxLines: 2,
+                      text: const TextSpan(
                         children: [
-                          Text(
-                            group.groupName,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                          TextSpan(
+                            text: "Your",
+                            style: TextStyle(
+                              color: AppPallete.blackColor,
+                              fontSize: 30,
+                              fontFamily: 'Poppins',
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            group.groupDescription,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
+                          TextSpan(
+                            text: "Groups",
+                            style: TextStyle(
+                              color: AppPallete.blackColor,
+                              fontSize: 34,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Poppins',
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Budget: ${group.budget}",
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: AppPallete.borderColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
                           ),
                         ],
                       ),
                     ),
-                  ),
-                );
-              },
+                    Expanded(
+                      child: ListView.builder(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: userGroups.length,
+                        itemBuilder: (context, index) {
+                          final group = userGroups[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                  GroupChatScreen.routeName,
+                                  arguments: group);
+                            },
+                            child: Card(
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              color: AppPallete.botBgColor,
+                              margin: const EdgeInsets.symmetric(vertical: 8),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      group.groupName,
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      group.groupDescription,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Budget: ${group.budget}",
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: AppPallete.borderColor,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             );
           }
           return Container();

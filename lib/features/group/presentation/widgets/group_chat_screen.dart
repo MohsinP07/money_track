@@ -4,6 +4,7 @@ import 'package:money_track/features/group/domain/entity/group.dart';
 import 'package:money_track/features/group/presentation/widgets/group_info_screen.dart';
 
 class GroupChatScreen extends StatelessWidget {
+  static const String routeName = "group-chat-screen";
   final GroupEntity group;
 
   const GroupChatScreen({Key? key, required this.group}) : super(key: key);

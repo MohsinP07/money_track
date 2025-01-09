@@ -62,10 +62,9 @@ userRouter.post('/user/delete-expense', auth, async (req, res) => {
 
 userRouter.put('/user/edit-expense', auth, async (req, res) => {
   try {
-      const expenseId = req.body.id; // Assuming you sent the expenseId in the request body
-      const { name, description, amount, date, category, isEdited } = req.body; // Get the updated information
+      const expenseId = req.body.id;
+      const { name, description, amount, date, category, isEdited } = req.body; 
 
-      // Update the Expense's information in the database
       await Expense.findByIdAndUpdate(expenseId, { name, description, amount, date, category , isEdited});
 
       res.json({ msg: "Expense information updated successfully" });
@@ -78,7 +77,6 @@ userRouter.delete('/user/delete-all-expense', auth, async (req, res) => {
   try {
     const { expenserId } = req.body;
 
-    // Delete all expenses with the given expenserId
     const result = await Expense.deleteMany({ expenserId });
 
     res.json({ message: 'All data deleted successfully', deletedCount: result.deletedCount });

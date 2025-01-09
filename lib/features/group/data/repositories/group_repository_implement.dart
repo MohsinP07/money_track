@@ -43,4 +43,24 @@ class GroupRepositoryImplement implements GroupRepository {
       return left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, GroupEntity>> editGroup({
+    required String id,
+    required String groupName,
+    required String groupDescription,
+    required String budget,
+  }) async {
+    try {
+      final editedExpense = await groupRemoteDataSource.editExpense(
+        id,
+        groupName,
+        groupDescription,
+        budget,
+      );
+      return right(editedExpense);
+    } on ServerException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 }
