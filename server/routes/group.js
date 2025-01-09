@@ -28,4 +28,17 @@ groupRouter.post("/group/add-group", async (req, res) => {
   }
 });
 
+groupRouter.get('/group/get-groups', async (req, res) => {
+
+  try {
+      const groups = await Group.find({expenserId: req.user }); 
+      res.json(groups);
+  }
+  catch (e) {
+      res.status(500).json({ error: e.message });
+  }
+
+});
+
+
 module.exports = groupRouter;

@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 abstract class GroupRemoteDataSource {
   Future<GroupModel> createGroup(GroupModel group);
+  Future<List<GroupModel>> getAllGroups();
 }
 
 class GroupRemoteDataSourceImplement implements GroupRemoteDataSource {
@@ -37,6 +38,40 @@ class GroupRemoteDataSourceImplement implements GroupRemoteDataSource {
       final Map<String, dynamic> responseBody = json.decode(response.body);
 
       return GroupModel.fromMap(responseBody);
+    } catch (e) {
+      print(e);
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<List<GroupModel>> getAllGroups() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("x-auth-token");
+
+      if (token == null || token.isEmpty) {
+        throw ServerException("User is not authenticated");
+      }
+
+      final response = await http.get(
+        Uri.parse('$uri/group/get-groups'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+
+      if (response.statusCode != 200) {
+        throw ServerException(
+            'Failed to fetch expenses. Status code: ${response.statusCode}');
+      }
+
+      final List<dynamic> responseBody = json.decode(response.body);
+
+      return responseBody
+          .map((group) => GroupModel.fromMap(group as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       print(e);
       throw ServerException(e.toString());

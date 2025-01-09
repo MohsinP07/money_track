@@ -32,4 +32,15 @@ class GroupRepositoryImplement implements GroupRepository {
       return left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<GroupEntity>>> getAllGroups() async {
+    try {
+      final groups = await groupRemoteDataSource.getAllGroups();
+
+      return right(groups);
+    } on ServerException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 }

@@ -13,3 +13,9 @@ class GroupFailure extends GroupState {
 }
 
 class AddGroupSuccess extends GroupState {}
+
+class GroupsDisplaySuccess extends GroupState {
+  final List<GroupEntity> groups;
+
+  GroupsDisplaySuccess(this.groups);
+}

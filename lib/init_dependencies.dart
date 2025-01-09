@@ -23,6 +23,7 @@ import 'package:money_track/features/group/data/datasources/group_remote_data_so
 import 'package:money_track/features/group/data/repositories/group_repository_implement.dart';
 import 'package:money_track/features/group/domain/repository/group_repository.dart';
 import 'package:money_track/features/group/domain/usecases/create_group.dart';
+import 'package:money_track/features/group/domain/usecases/get_all_groups.dart';
 import 'package:money_track/features/group/presentation/bloc/bloc/group_bloc.dart';
 
 import 'features/auth/domain/repository/auth_repository.dart';
@@ -136,9 +137,13 @@ _initGroup() {
     ..registerFactory(() => CreateGroup(
           serviceLocator(),
         ))
+    ..registerFactory(() => GetAllGroups(
+          serviceLocator(),
+        ))
 
     //Bloc
     ..registerLazySingleton<GroupBloc>(() => GroupBloc(
           addExpense: serviceLocator(),
+          getAllGroups: serviceLocator(),
         ));
 }

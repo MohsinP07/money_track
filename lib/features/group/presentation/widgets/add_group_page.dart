@@ -7,6 +7,7 @@ import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/core/utils/utils.dart';
 import 'package:money_track/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:money_track/features/group/presentation/bloc/bloc/group_bloc.dart';
+import 'package:money_track/features/group/presentation/pages/group_page.dart';
 
 class AddGroupPage extends StatefulWidget {
   static const String routeName = "add-group-screen";
@@ -63,7 +64,7 @@ class _AddGroupPageState extends State<AddGroupPage> {
         listener: (context, state) {
           if (state is AddGroupSuccess) {
             showSnackBar(context, "Group created successfully");
-            Navigator.of(context).pop();
+            Navigator.of(context).pushNamed(GroupPage.routeName);
           } else if (state is GroupFailure) {
             showSnackBar(context, state.error);
             print(state.error);

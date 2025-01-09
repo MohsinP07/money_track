@@ -11,4 +11,6 @@ abstract class GroupRepository {
     required String admin,
     required List<dynamic> members,
   });
+
+  Future<Either<Failure, List<GroupEntity>>> getAllGroups();
 }

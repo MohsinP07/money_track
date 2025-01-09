@@ -19,3 +19,5 @@ class GroupAdd extends GroupEvent {
     required this.members,
   });
 }
+
+class GroupsGetAllGroups extends GroupEvent {}
