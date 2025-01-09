@@ -19,6 +19,11 @@ import 'package:money_track/features/expenses/domain/usecases/delete_expense.dar
 import 'package:money_track/features/expenses/domain/usecases/edit_expense.dart';
 import 'package:money_track/features/expenses/domain/usecases/get_all_expenses.dart';
 import 'package:money_track/features/expenses/presentation/bloc/expenses_bloc.dart';
+import 'package:money_track/features/group/data/datasources/group_remote_data_source.dart';
+import 'package:money_track/features/group/data/repositories/group_repository_implement.dart';
+import 'package:money_track/features/group/domain/repository/group_repository.dart';
+import 'package:money_track/features/group/domain/usecases/create_group.dart';
+import 'package:money_track/features/group/presentation/bloc/bloc/group_bloc.dart';
 
 import 'features/auth/domain/repository/auth_repository.dart';
 
@@ -27,6 +32,7 @@ final serviceLocator = GetIt.instance;
 Future<void> initDependencies() async {
   _initAuth();
   _initExpense();
+  _initGroup();
   //Core
   serviceLocator.registerLazySingleton(
     () => AppUserCubit(),
@@ -112,5 +118,27 @@ _initExpense() {
           getAllExpenses: serviceLocator(),
           deleteExpense: serviceLocator(),
           editExpense: serviceLocator(),
+        ));
+}
+
+_initGroup() {
+  //Datasource
+  serviceLocator
+    ..registerFactory<GroupRemoteDataSource>(
+        () => GroupRemoteDataSourceImplement())
+
+    //Repository
+    ..registerFactory<GroupRepository>(() => GroupRepositoryImplement(
+          serviceLocator(),
+        ))
+
+    //Usecases
+    ..registerFactory(() => CreateGroup(
+          serviceLocator(),
+        ))
+
+    //Bloc
+    ..registerLazySingleton<GroupBloc>(() => GroupBloc(
+          addExpense: serviceLocator(),
         ));
 }

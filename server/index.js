@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 //IMPORTS FROM OTHER FILES
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
+const groupRouter = require("./routes/group")
 
 //INIT
 const PORT = 3000;
@@ -15,6 +16,7 @@ const app = express();
 app.use(express.json()); //it passes incoming requests with json payloads
 app.use(authRouter);
 app.use(userRouter);
+app.use(groupRouter);
 
 //Connections
 mongoose

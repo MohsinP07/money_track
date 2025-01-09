@@ -8,6 +8,7 @@ import 'package:money_track/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:money_track/features/auth/presentation/pages/login_page.dart';
 import 'package:money_track/features/expenses/presentation/bloc/expenses_bloc.dart';
 import 'package:money_track/features/expenses/presentation/widgets/bottom_bar.dart';
+import 'package:money_track/features/group/presentation/bloc/bloc/group_bloc.dart';
 import 'package:money_track/features/onboarding/presentation/pages/landing_screen.dart';
 import 'package:money_track/init_dependencies.dart';
 import 'package:money_track/router.dart';
@@ -26,7 +27,10 @@ void main() async {
       ),
       BlocProvider(
         create: (context) => serviceLocator<ExpensesBloc>(),
-      )
+      ),
+      BlocProvider(
+        create: (context) => serviceLocator<GroupBloc>(),
+      ),
     ], child: const MyApp()),
   );
 }

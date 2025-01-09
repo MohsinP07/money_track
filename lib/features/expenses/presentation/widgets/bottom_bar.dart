@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:money_track/core/constants/global_variables.dart';
-import 'package:money_track/features/expenses/presentation/pages/group_page.dart';
 import 'package:money_track/features/expenses/presentation/pages/add_expenses_page.dart';
 import 'package:money_track/features/expenses/presentation/pages/analyze_expense_page.dart';
 import 'package:money_track/features/expenses/presentation/pages/dashboard_page.dart';
 import 'package:money_track/features/auth/presentation/pages/profile_page.dart';
+import 'package:money_track/features/group/presentation/pages/group_page.dart';
 
 class BottomBar extends StatefulWidget {
   static const String routename = '/login-page';

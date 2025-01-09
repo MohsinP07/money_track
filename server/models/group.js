@@ -7,7 +7,7 @@ const groupSchema = mongoose.Schema({
         type: String,
         trim: true
     },
-    groupDesc: {
+    groupDescription: {
         required: true,
         type: String,
         trim: true,

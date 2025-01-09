@@ -24,7 +24,7 @@ class ExpenseRemoteDataSourceImplement implements ExpenseRemoteDataSource {
       if (token == null || token.isEmpty) {
         throw ServerException("User is not authenticated");
       }
-
+      print(expense.toJson());
       final response = await http.post(
         Uri.parse('$uri/user/add-expense'),
         headers: {
