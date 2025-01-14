@@ -11,6 +11,7 @@ abstract class GroupRemoteDataSource {
   Future<List<GroupModel>> getAllGroups();
   Future<GroupModel> editExpense(
       String id, String groupName, String groupDescription, String budget);
+  Future<GroupModel> deleteGroup(String id);
 }
 
 class GroupRemoteDataSourceImplement implements GroupRemoteDataSource {
@@ -108,6 +109,39 @@ class GroupRemoteDataSourceImplement implements GroupRemoteDataSource {
       if (response.statusCode != 200) {
         throw ServerException(
             'Failed to edit expense. Status code: ${response.statusCode}');
+      }
+
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+
+      return GroupModel.fromMap(responseBody);
+    } catch (e) {
+      print(e);
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<GroupModel> deleteGroup(String id) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("x-auth-token");
+
+      if (token == null || token.isEmpty) {
+        throw ServerException("User is not authenticated");
+      }
+
+      final response = await http.post(
+        Uri.parse('$uri/group/delete-group'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: json.encode({'id': id}),
+      );
+
+      if (response.statusCode != 200) {
+        throw ServerException(
+            'Failed to delete expense. Status code: ${response.statusCode}');
       }
 
       final Map<String, dynamic> responseBody = json.decode(response.body);

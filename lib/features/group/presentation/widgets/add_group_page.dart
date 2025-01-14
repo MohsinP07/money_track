@@ -6,6 +6,7 @@ import 'package:money_track/core/entity/user.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/core/utils/utils.dart';
 import 'package:money_track/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:money_track/features/expenses/presentation/widgets/bottom_bar.dart';
 import 'package:money_track/features/group/presentation/bloc/bloc/group_bloc.dart';
 import 'package:money_track/features/group/presentation/pages/group_page.dart';
 
@@ -64,7 +65,8 @@ class _AddGroupPageState extends State<AddGroupPage> {
         listener: (context, state) {
           if (state is AddGroupSuccess) {
             showSnackBar(context, "Group created successfully");
-            Navigator.of(context).pushNamed(GroupPage.routeName);
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const BottomBar(initialPage: 3)));
           } else if (state is GroupFailure) {
             showSnackBar(context, state.error);
             print(state.error);

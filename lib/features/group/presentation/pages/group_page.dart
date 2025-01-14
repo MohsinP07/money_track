@@ -17,27 +17,75 @@ class GroupPage extends StatefulWidget {
 }
 
 class _GroupPageState extends State<GroupPage> {
-  bool _groupsFetched = false;
+  var userEmail = '';
 
   @override
   void initState() {
     super.initState();
-    if (!_groupsFetched) {
-      BlocProvider.of<GroupBloc>(context).add(GroupsGetAllGroups());
-      _groupsFetched = true;
-    }
+    userEmail =
+        (context.read<AppUserCubit>().state as AppUserLoggedIn).user.email;
+    BlocProvider.of<GroupBloc>(context).add(GroupsGetAllGroups());
+  }
+
+  confirmGroupDelete(BuildContext context, Size deviceSize, String groupName,
+      VoidCallback onPressed) {
+    showDialog(
+        context: context,
+        builder: (builder) {
+          return AlertDialog(
+            title: const Text(
+              "Delete Group?",
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            content: Container(
+              padding: const EdgeInsets.all(8),
+              width: deviceSize.width * 0.8,
+              height: deviceSize.height * 0.12,
+              child: Column(
+                children: [
+                  Text("Are you sure you want to delete \n$groupName ?")
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    "Cancel",
+                    style: TextStyle(
+                      color: AppPallete.blackColor,
+                    ),
+                  )),
+              TextButton(
+                  onPressed: onPressed,
+                  child: const Text(
+                    "Delete",
+                    style: TextStyle(
+                      color: AppPallete.errorColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )),
+            ],
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
-    final userEmail =
-        (context.read<AppUserCubit>().state as AppUserLoggedIn).user.email;
-
+    final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       body: BlocConsumer<GroupBloc, GroupState>(
         listener: (context, state) {
           if (state is GroupFailure) {
             showSnackBar(context, state.error);
+          } else if (state is DeleteGroupSuccess) {
+            showSnackBar(context, 'Group Deleted');
+            context.read<GroupBloc>().add(GroupsGetAllGroups());
           }
         },
         builder: (context, state) {
@@ -97,8 +145,9 @@ class _GroupPageState extends State<GroupPage> {
                           return GestureDetector(
                             onTap: () {
                               Navigator.of(context).pushNamed(
-                                  GroupChatScreen.routeName,
-                                  arguments: group);
+                                GroupChatScreen.routeName,
+                                arguments: group,
+                              );
                             },
                             child: Card(
                               elevation: 4,
@@ -109,38 +158,55 @@ class _GroupPageState extends State<GroupPage> {
                               margin: const EdgeInsets.symmetric(vertical: 8),
                               child: Padding(
                                 padding: const EdgeInsets.all(16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      group.groupName,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      group.groupDescription,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Budget: ${group.budget}",
+                                          group.groupName,
                                           style: const TextStyle(
-                                            fontSize: 14,
-                                            color: AppPallete.borderColor,
-                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          group.groupDescription,
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "Budget: ${group.budget}",
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: AppPallete.borderColor,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ],
+                                    ),
+                                    IconButton(
+                                      onPressed: () => confirmGroupDelete(
+                                          context, deviceSize, group.groupName,
+                                          () {
+                                        context
+                                            .read<GroupBloc>()
+                                            .add(GroupDelete(id: group.id!));
+                                      }),
+                                      icon: const Icon(Icons.delete),
                                     ),
                                   ],
                                 ),
@@ -155,6 +221,7 @@ class _GroupPageState extends State<GroupPage> {
               ),
             );
           }
+
           return Container();
         },
       ),

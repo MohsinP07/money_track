@@ -25,3 +25,8 @@ class EditGroupSuccess extends GroupState {
 
   EditGroupSuccess(this.editedGroup);
 }
+
+class DeleteGroupSuccess extends GroupState {
+  final GroupEntity deletedGroup;
+  DeleteGroupSuccess(this.deletedGroup);
+}

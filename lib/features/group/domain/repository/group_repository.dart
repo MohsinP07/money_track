@@ -20,4 +20,8 @@ abstract class GroupRepository {
     required String groupDescription,
     required String budget,
   });
+
+  Future<Either<Failure, GroupEntity>> deleteGroup({
+    required String id,
+  });
 }

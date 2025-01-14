@@ -35,3 +35,11 @@ class GroupEdit extends GroupEvent {
     required this.budget,
   });
 }
+
+class GroupDelete extends GroupEvent {
+  final String id;
+
+  GroupDelete({
+    required this.id,
+  });
+}

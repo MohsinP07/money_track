@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:money_track/core/entity/user.dart';
 import 'package:money_track/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:money_track/features/expenses/presentation/widgets/bottom_bar.dart';
 import 'package:money_track/features/group/domain/entity/group.dart';
 import 'package:money_track/features/group/presentation/bloc/bloc/group_bloc.dart';
+import 'package:money_track/features/group/presentation/pages/group_page.dart';
 import 'package:money_track/features/group/presentation/widgets/edit_group_dialog.dart';
 
 class GroupInfoScreen extends StatefulWidget {
@@ -138,15 +140,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                   const SnackBar(content: Text("Group updated successfully!")),
                 );
 
-                Navigator.pop(
-                    context); 
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => GroupInfoScreen(
-                        group: widget.group), 
-                  ),
-                );
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const BottomBar(initialPage: 3)));
               } else if (state is GroupFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
