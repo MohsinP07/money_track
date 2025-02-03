@@ -25,6 +25,11 @@ const groupSchema = mongoose.Schema({
     members: {
         required: false,
         type: []
+    },
+
+    groupExpenses: {
+        required: false,
+        type: []
     }
 
 });

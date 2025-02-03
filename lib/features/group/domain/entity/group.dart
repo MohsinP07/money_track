@@ -5,6 +5,7 @@ class GroupEntity {
   String budget;
   String admin;
   List<dynamic> members;
+  List<dynamic>? groupExpenses;
 
   GroupEntity({
     this.id,
@@ -13,6 +14,7 @@ class GroupEntity {
     required this.budget,
     required this.admin,
     required this.members,
+    this.groupExpenses
   });
 
   GroupEntity copyWith({
@@ -22,6 +24,7 @@ class GroupEntity {
     String? budget,
     String? admin,
     List<dynamic>? members,
+    List<dynamic>? groupExpenses,
   }) {
     return GroupEntity(
       id: id ?? this.id,
@@ -30,6 +33,7 @@ class GroupEntity {
       budget: budget ?? this.budget,
       admin: admin ?? this.admin,
       members: members ?? this.members,
+      groupExpenses: groupExpenses ?? this.groupExpenses
     );
   }
 }

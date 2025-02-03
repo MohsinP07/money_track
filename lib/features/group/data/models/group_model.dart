@@ -10,14 +10,15 @@ class GroupModel extends GroupEntity {
     required String budget,
     required String admin,
     required List<dynamic> members,
+    List<dynamic>? groupExpenses,
   }) : super(
-          id: id,
-          groupName: groupName,
-          groupDescription: groupDescription,
-          budget: budget,
-          admin: admin,
-          members: members,
-        );
+            id: id,
+            groupName: groupName,
+            groupDescription: groupDescription,
+            budget: budget,
+            admin: admin,
+            members: members,
+            groupExpenses: groupExpenses);
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -27,6 +28,7 @@ class GroupModel extends GroupEntity {
       'budget': budget,
       'admin': admin,
       'members': members,
+      'groupExpenses': groupExpenses
     };
   }
 
@@ -45,6 +47,7 @@ class GroupModel extends GroupEntity {
       budget: map['budget'] as String? ?? '',
       admin: map['admin'] as String? ?? '',
       members: map['members'] as List<dynamic>,
+      groupExpenses: map['groupExpenses'] as List<dynamic>,
     );
   }
 
@@ -60,14 +63,15 @@ class GroupModel extends GroupEntity {
     String? budget,
     String? admin,
     List<dynamic>? members,
+    List<dynamic>? groupExpenses,
   }) {
     return GroupEntity(
-      id: id ?? this.id,
-      groupName: groupName ?? this.groupName,
-      groupDescription: groupDescription ?? this.groupDescription,
-      budget: budget ?? this.budget,
-      admin: admin ?? this.admin,
-      members: members ?? this.members,
-    );
+        id: id ?? this.id,
+        groupName: groupName ?? this.groupName,
+        groupDescription: groupDescription ?? this.groupDescription,
+        budget: budget ?? this.budget,
+        admin: admin ?? this.admin,
+        members: members ?? this.members,
+        groupExpenses: groupExpenses ?? this.groupExpenses);
   }
 }
