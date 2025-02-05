@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_track/core/common/widgets/common_field.dart';
+import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/features/group/domain/entity/group.dart';
 import 'package:money_track/features/group/presentation/widgets/group_info_screen.dart';
@@ -21,6 +23,9 @@ class GroupChatScreen extends StatefulWidget {
 
 class _GroupChatScreenState extends State<GroupChatScreen> {
   final TextEditingController _expenseController = TextEditingController();
+  final TextEditingController _expenseDescriptionController =
+      TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey();
   List<Map<String, dynamic>> _expenses = [];
   String currentUserEmail = "";
   String currentUserName = "";
@@ -48,29 +53,71 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   }
 
   Future<void> _addExpense() async {
-    if (_expenseController.text.isEmpty) return;
+    if (_formKey.currentState!.validate()) {
+      final expense = {
+        "_id": const Uuid().v4(),
+        "expenseAmount": double.tryParse(_expenseController.text) ?? 0,
+        "expenseDescription": _expenseDescriptionController.text.toString(),
+        "spendorName": currentUserName,
+        "spendorEmail": currentUserEmail,
+        "spenderGroup": widget.group.groupName,
+      };
 
-    final expense = {
-      "_id": const Uuid().v4(),
-      "expenseAmount": double.tryParse(_expenseController.text) ?? 0,
-      "spendorName": currentUserName,
-      "spendorEmail": currentUserEmail,
-      "spenderGroup": widget.group.groupName,
-    };
+      setState(() {
+        _expenses.add(expense);
+      });
 
-    setState(() {
-      _expenses.add(expense);
-    });
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString(
+          'group_expenses_${widget.group.groupName}', jsonEncode(_expenses));
+      
+      _expenseController.clear();
+      _expenseDescriptionController.clear();
+      Navigator.of(context).pop();
+    }
+  }
 
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(
-        'group_expenses_${widget.group.groupName}', jsonEncode(_expenses));
-
-    _expenseController.clear();
+  addExpenseBox(BuildContext context, Size deviceSize) {
+    showDialog(
+        context: context,
+        builder: (builder) {
+          return AlertDialog(
+              title: Text("Add Expense in group"),
+              content: Container(
+                width: deviceSize.width * 0.8,
+                height: deviceSize.height * 0.4,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CommonTextField(
+                        hintText: "Expense Amount",
+                        controller: _expenseController,
+                        keyboardType: TextInputType.number,
+                      ),
+                      CommonTextField(
+                        hintText: "Expense Description",
+                        controller: _expenseDescriptionController,
+                        keyboardType: TextInputType.text,
+                      ),
+                      CustomButton(text: 'Add', onTap: _addExpense),
+                      CustomButton(
+                          text: 'Close',
+                          bgColor: AppPallete.errorColor,
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          })
+                    ],
+                  ),
+                ),
+              ));
+        });
   }
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -139,7 +186,15 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                       child: ListTile(
                         title: Text(
                             isSentByUser ? "You" : "${expense['spendorName']}"),
-                        subtitle: Text("₹${expense['expenseAmount']}"),
+                        subtitle: SizedBox(
+                            width: double.infinity,
+                            height: deviceSize.height * 0.08,
+                            child: Column(
+                              children: [
+                                Text("₹${expense['expenseAmount']}"),
+                                Text("${expense['expenseDescription']}"),
+                              ],
+                            )),
                       )),
                 );
               },
@@ -149,35 +204,24 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: _expenseController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      hintText: "Enter expense amount",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                    ),
-                  ),
-                ),
                 const SizedBox(width: 8),
-                CircleAvatar(
-                  backgroundColor: Colors.green,
-                  child: IconButton(
-                    icon: const Icon(Icons.send, color: Colors.white),
-                    onPressed: _addExpense,
-                  ),
-                ),
               ],
             ),
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            addExpenseBox(context, deviceSize);
+          },
+          label: Text("Add ")),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _expenseController.dispose();
+    _expenseDescriptionController.dispose();
   }
 }

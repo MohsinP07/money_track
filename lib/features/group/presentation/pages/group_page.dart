@@ -205,6 +205,7 @@ class _GroupPageState extends State<GroupPage> {
                                         context
                                             .read<GroupBloc>()
                                             .add(GroupDelete(id: group.id!));
+                                        Navigator.of(context).pop();
                                       }),
                                       icon: const Icon(Icons.delete),
                                     ),

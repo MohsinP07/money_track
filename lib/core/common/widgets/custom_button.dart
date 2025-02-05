@@ -7,8 +7,13 @@ class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
   final Color? color;
+  final Color? bgColor;
   const CustomButton(
-      {super.key, required this.text, required this.onTap, this.color});
+      {super.key,
+      required this.text,
+      required this.onTap,
+      this.color,
+      this.bgColor = AppPallete.borderColor});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +24,7 @@ class CustomButton extends StatelessWidget {
         style: TextStyle(color: color == null ? Colors.white : Colors.black),
       ),
       style: ElevatedButton.styleFrom(
-          minimumSize: Size(double.infinity, 50),
-          primary: AppPallete.buttonColor),
+          minimumSize: Size(double.infinity, 50), primary: bgColor),
     );
   }
 }

@@ -7,6 +7,8 @@ class CommonTextField extends StatelessWidget {
   final bool isObscureText;
   final IconData leadingIcon;
   final bool isEnable;
+  final TextInputType? keyboardType;
+
   const CommonTextField({
     super.key,
     required this.hintText,
@@ -14,12 +16,14 @@ class CommonTextField extends StatelessWidget {
     this.isObscureText = false,
     this.leadingIcon = Icons.text_fields_rounded,
     this.isEnable = true,
+    this.keyboardType,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         prefixIcon: Icon(
           leadingIcon,
