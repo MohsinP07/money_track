@@ -9,9 +9,11 @@ import 'package:http/http.dart' as http;
 abstract class GroupRemoteDataSource {
   Future<GroupModel> createGroup(GroupModel group);
   Future<List<GroupModel>> getAllGroups();
-  Future<GroupModel> editExpense(
+  Future<GroupModel> editGroup(
       String id, String groupName, String groupDescription, String budget);
   Future<GroupModel> deleteGroup(String id);
+  Future<GroupModel> addGroupExpenses(
+      String id, Map<String, Object> groupExpenses);
 }
 
 class GroupRemoteDataSourceImplement implements GroupRemoteDataSource {
@@ -82,7 +84,7 @@ class GroupRemoteDataSourceImplement implements GroupRemoteDataSource {
   }
 
   @override
-  Future<GroupModel> editExpense(String id, String groupName,
+  Future<GroupModel> editGroup(String id, String groupName,
       String groupDescription, String budget) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -142,6 +144,43 @@ class GroupRemoteDataSourceImplement implements GroupRemoteDataSource {
       if (response.statusCode != 200) {
         throw ServerException(
             'Failed to delete expense. Status code: ${response.statusCode}');
+      }
+
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+
+      return GroupModel.fromMap(responseBody);
+    } catch (e) {
+      print(e);
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<GroupModel> addGroupExpenses(
+      String id, Map<String, Object> groupExpenses) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("x-auth-token");
+
+      if (token == null || token.isEmpty) {
+        throw ServerException("User is not authenticated");
+      }
+
+      final response = await http.put(
+        Uri.parse('$uri/group/add-group-expense'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: json.encode({
+          'id': id,
+          'groupExpenses': groupExpenses,
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        throw ServerException(
+            'Failed to edit expense. Status code: ${response.statusCode}');
       }
 
       final Map<String, dynamic> responseBody = json.decode(response.body);

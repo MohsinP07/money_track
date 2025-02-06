@@ -5,7 +5,7 @@ class GroupEntity {
   String budget;
   String admin;
   List<dynamic> members;
-  List<dynamic>? groupExpenses;
+  Map<String, Object>? groupExpenses;
 
   GroupEntity({
     this.id,
@@ -24,7 +24,7 @@ class GroupEntity {
     String? budget,
     String? admin,
     List<dynamic>? members,
-    List<dynamic>? groupExpenses,
+    Map<String, Object>? groupExpenses,
   }) {
     return GroupEntity(
       id: id ?? this.id,

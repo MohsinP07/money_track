@@ -66,8 +66,37 @@ groupRouter.post('/group/delete-group', async (req, res) => {
   catch (e) {
       res.status(500).json({ error: e.message });
   }
-
 });
 
+
+groupRouter.put('/group/add-group-expense', async (req, res) => {
+  try {
+    const { id: groupId, groupExpenses } = req.body;
+
+    await Group.findByIdAndUpdate(groupId, {
+      $push: { groupExpenses }
+    });
+
+    res.json({ msg: "Group Expense Added successfully" });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+groupRouter.get('/group/get-group-expenses/:groupId', async (req, res) => {
+  try {
+    const { groupId } = req.params;
+
+    const group = await Group.findById(groupId);
+
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    res.json({ groupExpenses: group.groupExpenses });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 module.exports = groupRouter;

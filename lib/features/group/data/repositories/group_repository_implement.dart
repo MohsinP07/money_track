@@ -37,9 +37,10 @@ class GroupRepositoryImplement implements GroupRepository {
   Future<Either<Failure, List<GroupEntity>>> getAllGroups() async {
     try {
       final groups = await groupRemoteDataSource.getAllGroups();
-
+      
       return right(groups);
     } on ServerException catch (e) {
+      print(e);
       return left(Failure(e.toString()));
     }
   }
@@ -52,7 +53,7 @@ class GroupRepositoryImplement implements GroupRepository {
     required String budget,
   }) async {
     try {
-      final editedExpense = await groupRemoteDataSource.editExpense(
+      final editedExpense = await groupRemoteDataSource.editGroup(
         id,
         groupName,
         groupDescription,
@@ -69,6 +70,20 @@ class GroupRepositoryImplement implements GroupRepository {
     try {
       final deleteGroup = await groupRemoteDataSource.deleteGroup(id);
       return right(deleteGroup);
+    } on ServerException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, GroupEntity>> addGroupExpenses(
+      {required String id, required Map<String, Object> groupExpenses}) async {
+    try {
+      final updatedGroup = await groupRemoteDataSource.addGroupExpenses(
+        id,
+        groupExpenses,
+      );
+      return right(updatedGroup);
     } on ServerException catch (e) {
       return left(Failure(e.toString()));
     }

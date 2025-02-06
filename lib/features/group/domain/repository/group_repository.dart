@@ -24,4 +24,9 @@ abstract class GroupRepository {
   Future<Either<Failure, GroupEntity>> deleteGroup({
     required String id,
   });
+
+  Future<Either<Failure, GroupEntity>> addGroupExpenses({
+    required String id,
+    required Map<String, Object> groupExpenses,
+  });
 }

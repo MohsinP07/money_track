@@ -9,15 +9,16 @@ class GroupAdd extends GroupEvent {
   final String budget;
   final String admin;
   final List<dynamic> members;
+  final Map<String, Object>? groupExpenses;
 
-  GroupAdd({
-    this.id,
-    required this.groupName,
-    required this.groupDescription,
-    required this.budget,
-    required this.admin,
-    required this.members,
-  });
+  GroupAdd(
+      {this.id,
+      required this.groupName,
+      required this.groupDescription,
+      required this.budget,
+      required this.admin,
+      required this.members,
+      this.groupExpenses});
 }
 
 class GroupsGetAllGroups extends GroupEvent {}
@@ -41,5 +42,14 @@ class GroupDelete extends GroupEvent {
 
   GroupDelete({
     required this.id,
+  });
+}
+
+class GroupAddGroupExpenses extends GroupEvent {
+  final String id;
+  final Map<String, Object> groupExpenses;
+  GroupAddGroupExpenses({
+    required this.id,
+    required this.groupExpenses,
   });
 }

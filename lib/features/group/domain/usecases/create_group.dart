@@ -25,6 +25,7 @@ class CreateGroupParams {
   final String budget;
   final String admin;
   final List<dynamic> members;
+  final List<dynamic>? addGroupExpenses;
 
   CreateGroupParams({
     this.id,
@@ -33,5 +34,6 @@ class CreateGroupParams {
     required this.budget,
     required this.admin,
     required this.members,
+    this.addGroupExpenses,
   });
 }

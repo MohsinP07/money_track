@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:money_track/features/group/domain/entity/group.dart';
 
 class GroupModel extends GroupEntity {
@@ -10,15 +9,16 @@ class GroupModel extends GroupEntity {
     required String budget,
     required String admin,
     required List<dynamic> members,
-    List<dynamic>? groupExpenses,
+    Map<String, Object>? groupExpenses,
   }) : super(
-            id: id,
-            groupName: groupName,
-            groupDescription: groupDescription,
-            budget: budget,
-            admin: admin,
-            members: members,
-            groupExpenses: groupExpenses);
+          id: id,
+          groupName: groupName,
+          groupDescription: groupDescription,
+          budget: budget,
+          admin: admin,
+          members: members,
+          groupExpenses: groupExpenses ?? {}, // Default to empty map
+        );
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -28,17 +28,24 @@ class GroupModel extends GroupEntity {
       'budget': budget,
       'admin': admin,
       'members': members,
-      'groupExpenses': groupExpenses
+      'groupExpenses': groupExpenses,
     };
   }
 
   factory GroupModel.fromMap(Map<String, dynamic> map) {
     String? id;
+
     if (map['_id'] is Map) {
-      id = (map['_id'] as Map<String, dynamic>) as String?;
+      id = (map['_id'] as Map<String, dynamic>)['_id'] as String?;
     } else if (map['_id'] is String) {
       id = map['_id'] as String?;
     }
+
+    final groupExpenses = map['groupExpenses'] != null
+        ? Map<String, Object>.from(
+            (map['groupExpenses'] as Map<dynamic, dynamic>),
+          )
+        : null;
 
     return GroupModel(
       id: id,
@@ -47,7 +54,7 @@ class GroupModel extends GroupEntity {
       budget: map['budget'] as String? ?? '',
       admin: map['admin'] as String? ?? '',
       members: map['members'] as List<dynamic>,
-      groupExpenses: map['groupExpenses'] as List<dynamic>,
+      groupExpenses: groupExpenses,
     );
   }
 
@@ -63,15 +70,16 @@ class GroupModel extends GroupEntity {
     String? budget,
     String? admin,
     List<dynamic>? members,
-    List<dynamic>? groupExpenses,
+    Map<String, Object>? groupExpenses,
   }) {
     return GroupEntity(
-        id: id ?? this.id,
-        groupName: groupName ?? this.groupName,
-        groupDescription: groupDescription ?? this.groupDescription,
-        budget: budget ?? this.budget,
-        admin: admin ?? this.admin,
-        members: members ?? this.members,
-        groupExpenses: groupExpenses ?? this.groupExpenses);
+      id: id ?? this.id,
+      groupName: groupName ?? this.groupName,
+      groupDescription: groupDescription ?? this.groupDescription,
+      budget: budget ?? this.budget,
+      admin: admin ?? this.admin,
+      members: members ?? this.members,
+      groupExpenses: groupExpenses ?? this.groupExpenses,
+    );
   }
 }

@@ -29,9 +29,9 @@ const groupSchema = mongoose.Schema({
 
     groupExpenses: {
         required: false,
-        type: []
-    }
-
+        type: Map, 
+        of: Object, 
+    },
 });
 
 const Group = mongoose.model("Group", groupSchema);
