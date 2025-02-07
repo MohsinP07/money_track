@@ -29,4 +29,8 @@ abstract class GroupRepository {
     required String id,
     required Map<String, Object> groupExpenses,
   });
+
+  Future<Either<Failure, GroupEntity>> getGroupExpeses({
+    required String groupId,
+  });
 }

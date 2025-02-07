@@ -28,6 +28,7 @@ class EditGroupSuccess extends GroupState {
 
 class DeleteGroupSuccess extends GroupState {
   final GroupEntity deletedGroup;
+
   DeleteGroupSuccess(this.deletedGroup);
 }
 
@@ -35,4 +36,10 @@ class AddGroupExpensesSuccess extends GroupState {
   final GroupEntity updatedGroup;
 
   AddGroupExpensesSuccess(this.updatedGroup);
+}
+
+class GroupExpensesSuccess extends GroupState {
+  final List<GroupEntity> groupExpenses;
+
+  GroupExpensesSuccess(this.groupExpenses);
 }

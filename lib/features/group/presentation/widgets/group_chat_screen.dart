@@ -31,6 +31,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late String currentUserEmail;
   late String currentUserName;
+  var expenses = [];
+  var newExpense;
 
   @override
   void initState() {
@@ -41,9 +43,9 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
         (context.read<AppUserCubit>().state as AppUserLoggedIn).user.name;
   }
 
-  Future<void> _addExpense(BuildContext context) async {
+  void _addExpense(BuildContext context) async {
     if (_formKey.currentState?.validate() ?? false) {
-      final expense = {
+      newExpense = {
         "_id": const Uuid().v4(),
         "expenseAmount": double.tryParse(_expenseController.text) ?? 0,
         "expenseDescription": _expenseDescriptionController.text,
@@ -52,8 +54,12 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
         "spenderGroup": widget.group.groupName,
       };
 
-      context.read<GroupBloc>().add(
-          GroupAddGroupExpenses(id: widget.group.id!, groupExpenses: expense));
+      setState(() {
+        expenses.insert(0, newExpense); 
+      });
+
+      context.read<GroupBloc>().add(GroupAddGroupExpenses(
+          id: widget.group.id!, groupExpenses: newExpense));
 
       _expenseController.clear();
       _expenseDescriptionController.clear();
@@ -106,7 +112,10 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final expenses = widget.group.groupExpenses;
+
+    expenses = widget.group.groupExpenses?.values.toList() ?? [];
+    expenses.add(newExpense); 
+
     print("Original");
     print(expenses);
 
@@ -158,7 +167,12 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             showSnackBar(context, state.error);
           } else if (state is AddGroupExpensesSuccess) {
             showSnackBar(context, 'Group Expenses added!');
-            context.read<GroupBloc>().add(GroupsGetAllGroups());
+
+            setState(() {
+              context.read<GroupBloc>().add(GroupsGetAllGroups());
+              expenses = widget.group.groupExpenses?.values.toList() ?? [];
+              expenses.add(newExpense); 
+            });
           }
         },
         builder: (context, state) {
@@ -168,50 +182,47 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
           return Column(
             children: [
               Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(12),
-                  itemCount: expenses?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    print("Check");
-                    print(expenses?[index] as Map<String, dynamic>);
-                    final expense = expenses?[index]
-                        as Map<String, dynamic>; // Explicit cast to Map
-                    final bool isSentByUser = expense['spendorName'] ==
-                        currentUserName; // Now safe to access
+                  child: ListView.builder(
+                padding: const EdgeInsets.all(12),
+                itemCount: expenses.length,
+                itemBuilder: (context, index) {
+                  
+                  final expense = expenses[index] as Map<String, dynamic>?;
+                  if (expense == null) {
+                    return Container(); 
+                  }
 
-                    return Align(
-                      alignment: isSentByUser
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 4),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: isSentByUser
-                              ? Colors.greenAccent[100]
-                              : Colors.grey[300],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: ListTile(
-                          title: Text(isSentByUser
-                              ? "You"
-                              : "${expense['spendorName']}"),
-                          subtitle: SizedBox(
-                            width: double.infinity,
-                            height: deviceSize.height * 0.08,
-                            child: Column(
-                              children: [
-                                Text("₹${expense['expenseAmount']}"),
-                                Text("${expense['expenseDescription']}"),
-                              ],
-                            ),
-                          ),
+                  final bool isSentByUser =
+                      expense['spendorName'] == currentUserName;
+
+                  return Align(
+                    alignment: isSentByUser
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 4),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: isSentByUser
+                            ? Colors.greenAccent[100]
+                            : Colors.grey[300],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: ListTile(
+                        title: Text(
+                            isSentByUser ? "You" : "${expense['spendorName']}"),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("₹${expense['expenseAmount']}"),
+                            Text("${expense['expenseDescription']}"),
+                          ],
                         ),
                       ),
-                    );
-                  },
-                ),
-              ),
+                    ),
+                  );
+                },
+              )),
             ],
           );
         },
@@ -223,12 +234,5 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
         label: const Text("Add Expense"),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _expenseController.dispose();
-    _expenseDescriptionController.dispose();
-    super.dispose();
   }
 }

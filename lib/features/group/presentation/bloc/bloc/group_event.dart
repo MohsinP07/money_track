@@ -11,14 +11,15 @@ class GroupAdd extends GroupEvent {
   final List<dynamic> members;
   final Map<String, Object>? groupExpenses;
 
-  GroupAdd(
-      {this.id,
-      required this.groupName,
-      required this.groupDescription,
-      required this.budget,
-      required this.admin,
-      required this.members,
-      this.groupExpenses});
+  GroupAdd({
+    this.id,
+    required this.groupName,
+    required this.groupDescription,
+    required this.budget,
+    required this.admin,
+    required this.members,
+    this.groupExpenses,
+  });
 }
 
 class GroupsGetAllGroups extends GroupEvent {}
@@ -48,8 +49,18 @@ class GroupDelete extends GroupEvent {
 class GroupAddGroupExpenses extends GroupEvent {
   final String id;
   final Map<String, Object> groupExpenses;
+
   GroupAddGroupExpenses({
     required this.id,
     required this.groupExpenses,
+  });
+}
+
+// New event for getting group expenses
+class GetGroupExpensesEvent extends GroupEvent {
+  final String groupId;
+
+  GetGroupExpensesEvent({
+    required this.groupId,
   });
 }

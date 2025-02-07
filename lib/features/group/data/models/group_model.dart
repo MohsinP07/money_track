@@ -63,7 +63,7 @@ class GroupModel extends GroupEntity {
   factory GroupModel.fromJson(String source) =>
       GroupModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  GroupEntity copyWith({
+  GroupModel copyWith({
     String? id,
     String? groupName,
     String? groupDescription,
@@ -72,7 +72,7 @@ class GroupModel extends GroupEntity {
     List<dynamic>? members,
     Map<String, Object>? groupExpenses,
   }) {
-    return GroupEntity(
+    return GroupModel(
       id: id ?? this.id,
       groupName: groupName ?? this.groupName,
       groupDescription: groupDescription ?? this.groupDescription,
@@ -80,6 +80,19 @@ class GroupModel extends GroupEntity {
       admin: admin ?? this.admin,
       members: members ?? this.members,
       groupExpenses: groupExpenses ?? this.groupExpenses,
+    );
+  }
+
+  // toEntity method to convert GroupModel to GroupEntity
+  GroupEntity toEntity() {
+    return GroupEntity(
+      id: this.id,
+      groupName: this.groupName,
+      groupDescription: this.groupDescription,
+      budget: this.budget,
+      admin: this.admin,
+      members: this.members,
+      groupExpenses: this.groupExpenses,
     );
   }
 }

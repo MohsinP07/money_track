@@ -27,6 +27,7 @@ import 'package:money_track/features/group/domain/usecases/create_group.dart';
 import 'package:money_track/features/group/domain/usecases/delete_group.dart';
 import 'package:money_track/features/group/domain/usecases/edit_group.dart';
 import 'package:money_track/features/group/domain/usecases/get_all_groups.dart';
+import 'package:money_track/features/group/domain/usecases/get_group_expenses.dart';
 import 'package:money_track/features/group/presentation/bloc/bloc/group_bloc.dart';
 
 import 'features/auth/domain/repository/auth_repository.dart';
@@ -152,6 +153,9 @@ _initGroup() {
     ..registerFactory(() => AddGroupExpenses(
           serviceLocator(),
         ))
+    ..registerFactory(() => GetGroupExpenses(
+          serviceLocator(),
+        ))
 
     //Bloc
     ..registerLazySingleton<GroupBloc>(() => GroupBloc(
@@ -160,5 +164,6 @@ _initGroup() {
           editGroup: serviceLocator(),
           deleteGroup: serviceLocator(),
           addGroupExpenses: serviceLocator(),
+          getGroupExpenses: serviceLocator(),
         ));
 }

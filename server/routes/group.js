@@ -83,7 +83,7 @@ groupRouter.put('/group/add-group-expense', async (req, res) => {
   }
 });
 
-groupRouter.get('/group/get-group-expenses/:groupId', async (req, res) => {
+groupRouter.get("/group/get-group-expenses/:groupId", async (req, res) => {
   try {
     const { groupId } = req.params;
 
@@ -98,5 +98,6 @@ groupRouter.get('/group/get-group-expenses/:groupId', async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
+
 
 module.exports = groupRouter;

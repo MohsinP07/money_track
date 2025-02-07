@@ -14,6 +14,7 @@ abstract class GroupRemoteDataSource {
   Future<GroupModel> deleteGroup(String id);
   Future<GroupModel> addGroupExpenses(
       String id, Map<String, Object> groupExpenses);
+  Future<List<GroupModel>> getGroupExpeses(String groupId);
 }
 
 class GroupRemoteDataSourceImplement implements GroupRemoteDataSource {
@@ -186,6 +187,41 @@ class GroupRemoteDataSourceImplement implements GroupRemoteDataSource {
       final Map<String, dynamic> responseBody = json.decode(response.body);
 
       return GroupModel.fromMap(responseBody);
+    } catch (e) {
+      print(e);
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<List<GroupModel>> getGroupExpeses(String groupId) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("x-auth-token");
+
+      if (token == null || token.isEmpty) {
+        throw ServerException("User is not authenticated");
+      }
+
+      final response = await http.get(
+        Uri.parse('$uri/group/get-group-expenses/$groupId'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+
+      if (response.statusCode != 200) {
+        throw ServerException(
+            'Failed to fetch group expenses. Status code: ${response.statusCode}');
+      }
+
+      final List<dynamic> responseBody = json.decode(response.body);
+
+      return responseBody
+          .map((groupExpense) =>
+              GroupModel.fromMap(groupExpense as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       print(e);
       throw ServerException(e.toString());
