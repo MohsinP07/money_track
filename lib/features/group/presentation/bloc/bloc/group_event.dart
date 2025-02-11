@@ -56,11 +56,24 @@ class GroupAddGroupExpenses extends GroupEvent {
   });
 }
 
-// New event for getting group expenses
-class GetGroupExpensesEvent extends GroupEvent {
+class GroupEditGroupExpense extends GroupEvent {
   final String groupId;
+  final String expenseId;
+  final Map<String, Object> updatedExpense;
 
-  GetGroupExpensesEvent({
+  GroupEditGroupExpense({
     required this.groupId,
+    required this.expenseId,
+    required this.updatedExpense,
+  });
+}
+
+class GroupDeleteGroupExpense extends GroupEvent {
+  final String groupId;
+  final String expenseId;
+
+  GroupDeleteGroupExpense({
+    required this.groupId,
+    required this.expenseId,
   });
 }

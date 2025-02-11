@@ -41,6 +41,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
         (context.read<AppUserCubit>().state as AppUserLoggedIn).user.email;
     currentUserName =
         (context.read<AppUserCubit>().state as AppUserLoggedIn).user.name;
+    expenses = List.from(widget.group.groupExpenses ?? []);
   }
 
   void _addExpense(BuildContext context) async {
@@ -55,7 +56,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
       };
 
       setState(() {
-        expenses.insert(0, newExpense); 
+        expenses.insert(0, newExpense);
       });
 
       context.read<GroupBloc>().add(GroupAddGroupExpenses(
@@ -65,6 +66,110 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
       _expenseDescriptionController.clear();
       Navigator.of(context).pop();
     }
+  }
+
+  void _editDeleteExpense(
+      BuildContext context, Map<String, dynamic> expense, Size deviceSize) {
+    _expenseController.text = expense['expenseAmount'].toString();
+    _expenseDescriptionController.text = expense['expenseDescription'];
+
+    showDialog(
+      context: context,
+      builder: (builder) {
+        return AlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("Edit Expense"),
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(
+                    Icons.close,
+                    color: AppPallete.errorColor,
+                  ))
+            ],
+          ),
+          content: Container(
+            width: deviceSize.width * 0.7,
+            height: deviceSize.height * 0.4,
+            padding: const EdgeInsets.all(2),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  CommonTextField(
+                    hintText: "Expense Amount",
+                    controller: _expenseController,
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(
+                    height: deviceSize.height * 0.02,
+                  ),
+                  CommonTextField(
+                    hintText: "Expense Description",
+                    controller: _expenseDescriptionController,
+                    keyboardType: TextInputType.text,
+                  ),
+                  SizedBox(
+                    height: deviceSize.height * 0.02,
+                  ),
+                  CustomButton(
+                    text: 'Save Changes',
+                    onTap: () {
+                      final updatedExpense = {
+                        ...expense,
+                        'expenseAmount':
+                            double.tryParse(_expenseController.text) ?? 0,
+                        'expenseDescription': _expenseDescriptionController.text
+                      };
+
+                      setState(() {
+                        expenses[expenses.indexOf(expense)] = updatedExpense;
+                      });
+                      print("Check gere");
+                      print(expense['_id']);
+                      context.read<GroupBloc>().add(GroupEditGroupExpense(
+                          groupId: widget.group.id!,
+                          expenseId: expense['_id'],
+                          updatedExpense:
+                              updatedExpense as Map<String, Object>));
+                      _expenseController.clear();
+                      _expenseDescriptionController.clear();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  SizedBox(
+                    height: deviceSize.height * 0.02,
+                  ),
+                  CustomButton(
+                    text: 'Delete Expense',
+                    bgColor: AppPallete.errorColor,
+                    onTap: () {
+                      context.read<GroupBloc>().add(
+                            GroupDeleteGroupExpense(
+                                groupId: widget.group.id!,
+                                expenseId: expense['_id']),
+                          );
+                      print(expenses);
+                      print(expense);
+                      setState(() {
+                        expenses.removeWhere(
+                            (element) => element['_id'] == expense['_id']);
+                      });
+                      _expenseController.clear();
+                      _expenseDescriptionController.clear();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void addExpenseBox(BuildContext context, Size deviceSize) {
@@ -112,12 +217,6 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-
-    expenses = widget.group.groupExpenses?.values.toList() ?? [];
-    expenses.add(newExpense); 
-
-    print("Original");
-    print(expenses);
 
     return Scaffold(
       appBar: AppBar(
@@ -167,11 +266,33 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             showSnackBar(context, state.error);
           } else if (state is AddGroupExpensesSuccess) {
             showSnackBar(context, 'Group Expenses added!');
-
             setState(() {
-              context.read<GroupBloc>().add(GroupsGetAllGroups());
-              expenses = widget.group.groupExpenses?.values.toList() ?? [];
-              expenses.add(newExpense); 
+              expenses.insert(0, state.updatedGroup.groupExpenses);
+            });
+          } else if (state is EditGroupExpenseSuccess) {
+            showSnackBar(context, 'Group Expenses edited!');
+            setState(() {
+              int index = expenses.indexWhere(
+                (expense) =>
+                    expense['_id'] ==
+                    state.updatedGroup.groupExpenses?.firstWhere(
+                      (e) => e['_id'] == expense['_id'],
+                      orElse: () => {},
+                    )['_id'],
+              );
+
+              if (index != -1 &&
+                  state.updatedGroup.groupExpenses?.isNotEmpty == true) {
+                expenses[index] = state.updatedGroup.groupExpenses!.firstWhere(
+                  (e) => e['_id'] == expenses[index]['_id'],
+                  orElse: () => {},
+                );
+              }
+            });
+          } else if (state is DeleteGroupExpenseSuccess) {
+            showSnackBar(context, 'Group Expenses deleted!');
+            setState(() {
+              expenses = List.from(state.updatedGroup.groupExpenses ?? []);
             });
           }
         },
@@ -182,56 +303,56 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
           return Column(
             children: [
               Expanded(
-                  child: ListView.builder(
-                padding: const EdgeInsets.all(12),
-                itemCount: expenses.length,
-                itemBuilder: (context, index) {
-                  
-                  final expense = expenses[index] as Map<String, dynamic>?;
-                  if (expense == null) {
-                    return Container(); 
-                  }
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(12),
+                  itemCount: expenses.length,
+                  itemBuilder: (context, index) {
+                    final expense = expenses[index];
 
-                  final bool isSentByUser =
-                      expense['spendorName'] == currentUserName;
+                    if (expense is! Map<String, dynamic>) {
+                      // Log a warning or handle invalid data gracefully
+                      print("Invalid expense data: $expense");
+                      return Container(); // Skip rendering for invalid data
+                    }
 
-                  return Align(
-                    alignment: isSentByUser
-                        ? Alignment.centerRight
-                        : Alignment.centerLeft,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 4),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: isSentByUser
-                            ? Colors.greenAccent[100]
-                            : Colors.grey[300],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: ListTile(
-                        title: Text(
-                            isSentByUser ? "You" : "${expense['spendorName']}"),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("₹${expense['expenseAmount']}"),
-                            Text("${expense['expenseDescription']}"),
-                          ],
+                    final bool isSentByUser =
+                        expense['spendorName'] == currentUserName;
+
+                    return Align(
+                      alignment: isSentByUser
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
+                      child: Card(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                        child: ListTile(
+                          title: Text(expense['expenseDescription'] ??
+                              "No description"),
+                          subtitle: Text(
+                              "Amount: ${expense['expenseAmount'] ?? 0.0}"),
+                          trailing: isSentByUser
+                              ? IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () => _editDeleteExpense(context,
+                                      expense, MediaQuery.of(context).size),
+                                )
+                              : null,
                         ),
                       ),
-                    ),
-                  );
-                },
-              )),
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: CustomButton(
+                  text: 'Add Expense',
+                  onTap: () => addExpenseBox(context, deviceSize),
+                ),
+              ),
             ],
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          addExpenseBox(context, deviceSize);
-        },
-        label: const Text("Add Expense"),
       ),
     );
   }

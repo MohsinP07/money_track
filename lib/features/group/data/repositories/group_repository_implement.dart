@@ -90,21 +90,32 @@ class GroupRepositoryImplement implements GroupRepository {
   }
 
   @override
-  Future<Either<Failure, GroupEntity>> getGroupExpeses({
+  Future<Either<Failure, GroupEntity>> editGroupExpense({
     required String groupId,
+    required String expenseId,
+    required Map<String, Object> updatedExpense,
   }) async {
     try {
-      final groupExpenses =
-          await groupRemoteDataSource.getGroupExpeses(groupId);
+      final updatedGroup = await groupRemoteDataSource.editGroupExpense(
+        groupId,
+        expenseId,
+        updatedExpense,
+      );
+      return right(updatedGroup);
+    } on ServerException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 
-      final groupEntity =
-          groupExpenses.isNotEmpty ? groupExpenses.first.toEntity() : null;
-
-      if (groupEntity == null) {
-        return left(Failure("No group found"));
-      }
-
-      return right(groupEntity);
+  @override
+  Future<Either<Failure, GroupEntity>> deleteGroupExpense(
+      {required String groupId, required String expenseId}) async {
+    try {
+      final updatedGroup = await groupRemoteDataSource.deleteGroupExpense(
+        groupId,
+        expenseId,
+      );
+      return right(updatedGroup);
     } on ServerException catch (e) {
       return left(Failure(e.toString()));
     }

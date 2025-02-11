@@ -83,21 +83,75 @@ groupRouter.put('/group/add-group-expense', async (req, res) => {
   }
 });
 
-groupRouter.get("/group/get-group-expenses/:groupId", async (req, res) => {
-  try {
-    const { groupId } = req.params;
 
+groupRouter.put('/group/edit-group-expense', async (req, res) => {
+  try {
+      const { groupId, expenseId, updatedExpense } = req.body;
+
+      console.log(req.body);
+
+      const group = await Group.findById(groupId);
+
+      if (!group) {
+          return res.status(404).json({ error: 'Group not found' });
+      }
+
+      const expenseIndex = group.groupExpenses.findIndex(
+          (expense) => expense._id === expenseId
+      );
+
+      if (expenseIndex === -1) {
+          return res.status(404).json({ error: 'Expense not found' });
+      }
+
+      group.groupExpenses[expenseIndex] = {
+          ...group.groupExpenses[expenseIndex],
+          ...updatedExpense,
+      };
+
+      console.log('Updated Expense:', group.groupExpenses[expenseIndex]);
+
+      await group.save();
+
+      res.json({ msg: 'Expense updated successfully', group });
+  } catch (e) {
+      console.error(e);
+      res.status(500).json({ error: e.message });
+  }
+});
+
+groupRouter.put('/group/delete-group-expense', async (req, res) => {
+  try {
+    const { groupId, expenseId } = req.body;
+
+    // Find the group by ID
     const group = await Group.findById(groupId);
 
     if (!group) {
       return res.status(404).json({ error: "Group not found" });
     }
 
-    res.json({ groupExpenses: group.groupExpenses });
+    // Check if the expense exists in the groupExpenses array
+    const expenseExists = group.groupExpenses.some(
+      (expense) => expense._id === expenseId
+    );
+
+    if (!expenseExists) {
+      return res.status(404).json({ error: "Expense not found" });
+    }
+
+    // Filter out the expense with the given expenseId
+    group.groupExpenses = group.groupExpenses.filter(
+      (expense) => expense._id !== expenseId
+    );
+
+    // Save the updated group
+    await group.save();
+
+    res.json({ msg: "Expense deleted successfully", group });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
-
 
 module.exports = groupRouter;

@@ -5,7 +5,7 @@ class GroupEntity {
   String budget;
   String admin;
   List<dynamic> members;
-  Map<String, Object>? groupExpenses;
+  List<Map<String, dynamic>>? groupExpenses; // Updated type
 
   GroupEntity({
     this.id,
@@ -14,7 +14,7 @@ class GroupEntity {
     required this.budget,
     required this.admin,
     required this.members,
-    this.groupExpenses
+    this.groupExpenses, // Optional
   });
 
   GroupEntity copyWith({
@@ -24,7 +24,7 @@ class GroupEntity {
     String? budget,
     String? admin,
     List<dynamic>? members,
-    Map<String, Object>? groupExpenses,
+    List<Map<String, dynamic>>? groupExpenses, // Consistent type
   }) {
     return GroupEntity(
       id: id ?? this.id,
@@ -33,7 +33,7 @@ class GroupEntity {
       budget: budget ?? this.budget,
       admin: admin ?? this.admin,
       members: members ?? this.members,
-      groupExpenses: groupExpenses ?? this.groupExpenses
+      groupExpenses: groupExpenses ?? this.groupExpenses, // Fixed assignment
     );
   }
 }

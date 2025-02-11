@@ -78,6 +78,7 @@ class _GroupPageState extends State<GroupPage> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    BlocProvider.of<GroupBloc>(context).add(GroupsGetAllGroups());
     return Scaffold(
       body: BlocConsumer<GroupBloc, GroupState>(
         listener: (context, state) {
@@ -142,27 +143,72 @@ class _GroupPageState extends State<GroupPage> {
                         itemCount: userGroups.length,
                         itemBuilder: (context, index) {
                           final group = userGroups[index];
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pushNamed(
-                                GroupChatScreen.routeName,
-                                arguments: group,
+                          return Dismissible(
+                            key: Key(group.id!),
+                            direction: DismissDirection.endToStart,
+                            background: Container(
+                              alignment: Alignment.centerRight,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              color: AppPallete.errorColor,
+                              child:
+                                  const Icon(Icons.delete, color: Colors.white),
+                            ),
+                            confirmDismiss: (direction) async {
+                              bool? result = await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text("Delete Group?"),
+                                    content: Text(
+                                      "Are you sure you want to delete '${group.groupName}'?",
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
+                                        child: const Text("Cancel"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(true),
+                                        child: const Text(
+                                          "Delete",
+                                          style: TextStyle(
+                                              color: AppPallete.errorColor),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
+                              return result ?? false;
                             },
-                            child: Card(
-                              elevation: 4,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              color: AppPallete.botBgColor,
-                              margin: const EdgeInsets.symmetric(vertical: 8),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
+                            onDismissed: (direction) {
+                              context
+                                  .read<GroupBloc>()
+                                  .add(GroupDelete(id: group.id!));
+                            },
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                  GroupChatScreen.routeName,
+                                  arguments: group,
+                                );
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                child: Card(
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  color: AppPallete.botBgColor,
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -182,34 +228,17 @@ class _GroupPageState extends State<GroupPage> {
                                           ),
                                         ),
                                         const SizedBox(height: 8),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "Budget: ${group.budget}",
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                color: AppPallete.borderColor,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ],
+                                        Text(
+                                          "Budget: ${group.budget}",
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: AppPallete.borderColor,
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
                                       ],
                                     ),
-                                    IconButton(
-                                      onPressed: () => confirmGroupDelete(
-                                          context, deviceSize, group.groupName,
-                                          () {
-                                        context
-                                            .read<GroupBloc>()
-                                            .add(GroupDelete(id: group.id!));
-                                        Navigator.of(context).pop();
-                                      }),
-                                      icon: const Icon(Icons.delete),
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),

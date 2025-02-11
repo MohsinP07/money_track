@@ -9,7 +9,7 @@ class GroupModel extends GroupEntity {
     required String budget,
     required String admin,
     required List<dynamic> members,
-    Map<String, Object>? groupExpenses,
+    List<Map<String, dynamic>>? groupExpenses,
   }) : super(
           id: id,
           groupName: groupName,
@@ -17,7 +17,7 @@ class GroupModel extends GroupEntity {
           budget: budget,
           admin: admin,
           members: members,
-          groupExpenses: groupExpenses ?? {}, // Default to empty map
+          groupExpenses: groupExpenses ?? [], // Default to empty list
         );
 
   Map<String, dynamic> toMap() {
@@ -42,8 +42,9 @@ class GroupModel extends GroupEntity {
     }
 
     final groupExpenses = map['groupExpenses'] != null
-        ? Map<String, Object>.from(
-            (map['groupExpenses'] as Map<dynamic, dynamic>),
+        ? List<Map<String, dynamic>>.from(
+            (map['groupExpenses'] as List<dynamic>)
+                .map((expense) => expense as Map<String, dynamic>),
           )
         : null;
 
@@ -70,7 +71,7 @@ class GroupModel extends GroupEntity {
     String? budget,
     String? admin,
     List<dynamic>? members,
-    Map<String, Object>? groupExpenses,
+    List<Map<String, dynamic>>? groupExpenses,
   }) {
     return GroupModel(
       id: id ?? this.id,

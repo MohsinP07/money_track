@@ -5,9 +5,10 @@ import 'package:money_track/features/group/domain/entity/group.dart';
 import 'package:money_track/features/group/domain/usecases/add_group_expenses.dart';
 import 'package:money_track/features/group/domain/usecases/create_group.dart';
 import 'package:money_track/features/group/domain/usecases/delete_group.dart';
+import 'package:money_track/features/group/domain/usecases/delete_group_expense.dart';
 import 'package:money_track/features/group/domain/usecases/edit_group.dart';
 import 'package:money_track/features/group/domain/usecases/get_all_groups.dart';
-import 'package:money_track/features/group/domain/usecases/get_group_expenses.dart'; // Import for the new use case
+import 'package:money_track/features/group/domain/usecases/edit_group_expense.dart';
 
 part 'group_event.dart';
 part 'group_state.dart';
@@ -18,8 +19,8 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
   final EditGroup _editGroup;
   final DeleteGroup _deleteGroup;
   final AddGroupExpenses _addGroupExpenses;
-  final GetGroupExpenses
-      _getGroupExpenses; // New use case for getting group expenses
+  final EditGroupExpense _editGroupExpense;
+  final DeleteGroupExpense _deleteGroupExpense;
 
   GroupBloc({
     required CreateGroup addExpense,
@@ -27,20 +28,23 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
     required EditGroup editGroup,
     required DeleteGroup deleteGroup,
     required AddGroupExpenses addGroupExpenses,
-    required GetGroupExpenses getGroupExpenses, // Inject the new use case
+    required EditGroupExpense editGroupExpense,
+    required DeleteGroupExpense deleteGroupExpense,
   })  : _createGroup = addExpense,
         _getAllGroups = getAllGroups,
         _editGroup = editGroup,
         _deleteGroup = deleteGroup,
         _addGroupExpenses = addGroupExpenses,
-        _getGroupExpenses = getGroupExpenses, // Initialize the new use case
+        _editGroupExpense = editGroupExpense,
+        _deleteGroupExpense = deleteGroupExpense,
         super(GroupInitial()) {
     on<GroupAdd>(_onAddGroup);
     on<GroupsGetAllGroups>(_onFetchAllGroups);
     on<GroupEdit>(_onEditGroup);
     on<GroupDelete>(_onDeleteGroup);
     on<GroupAddGroupExpenses>(_onAddGroupExpenses);
-    on<GetGroupExpensesEvent>(_onGetGroupExpenses); // Add new event handler
+    on<GroupEditGroupExpense>(_onEditGroupExpense);
+    on<GroupDeleteGroupExpense>(_onDeleteGroupExpense);
   }
 
   void _onAddGroup(GroupAdd event, Emitter<GroupState> emit) async {
@@ -60,7 +64,7 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
 
   void _onFetchAllGroups(
       GroupsGetAllGroups event, Emitter<GroupState> emit) async {
-    emit(GroupLoading()); // Emit loading state before processing
+    emit(GroupLoading());
     final res = await _getAllGroups(NoParams());
     res.fold(
       (l) => emit(GroupFailure(l.message)),
@@ -69,7 +73,7 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
   }
 
   Future<void> _onEditGroup(GroupEdit event, Emitter<GroupState> emit) async {
-    emit(GroupLoading()); // Emit loading state before processing
+    emit(GroupLoading());
     final result = await _editGroup(EditGroupParams(
         id: event.id,
         groupName: event.groupName,
@@ -102,15 +106,29 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
     );
   }
 
-  Future<void> _onGetGroupExpenses(
-      GetGroupExpensesEvent event, Emitter<GroupState> emit) async {
-    emit(GroupLoading()); 
-    final result = await _getGroupExpenses(GetGroupExpensesParams(
-        groupId: event.groupId)); 
+  Future<void> _onEditGroupExpense(
+      GroupEditGroupExpense event, Emitter<GroupState> emit) async {
+    emit(GroupLoading());
+    final result = await _editGroupExpense(EditGroupExpensesParam(
+        groupId: event.groupId,
+        expenseId: event.expenseId,
+        updatedExpense: event.updatedExpense));
     result.fold(
       (failure) => emit(GroupFailure(failure.message)),
-      (expenses) => emit(GroupsDisplaySuccess(
-          expenses)), 
+      (updatedGroup) => emit(EditGroupExpenseSuccess(updatedGroup)),
+    );
+  }
+
+  Future<void> _onDeleteGroupExpense(
+      GroupDeleteGroupExpense event, Emitter<GroupState> emit) async {
+    emit(GroupLoading());
+    final result = await _deleteGroupExpense(DeleteGroupExpensesParam(
+      groupId: event.groupId,
+      expenseId: event.expenseId,
+    ));
+    result.fold(
+      (failure) => emit(GroupFailure(failure.message)),
+      (updatedGroup) => emit(DeleteGroupExpenseSuccess(updatedGroup)),
     );
   }
 }

@@ -25,9 +25,10 @@ import 'package:money_track/features/group/domain/repository/group_repository.da
 import 'package:money_track/features/group/domain/usecases/add_group_expenses.dart';
 import 'package:money_track/features/group/domain/usecases/create_group.dart';
 import 'package:money_track/features/group/domain/usecases/delete_group.dart';
+import 'package:money_track/features/group/domain/usecases/delete_group_expense.dart';
 import 'package:money_track/features/group/domain/usecases/edit_group.dart';
+import 'package:money_track/features/group/domain/usecases/edit_group_expense.dart';
 import 'package:money_track/features/group/domain/usecases/get_all_groups.dart';
-import 'package:money_track/features/group/domain/usecases/get_group_expenses.dart';
 import 'package:money_track/features/group/presentation/bloc/bloc/group_bloc.dart';
 
 import 'features/auth/domain/repository/auth_repository.dart';
@@ -153,17 +154,19 @@ _initGroup() {
     ..registerFactory(() => AddGroupExpenses(
           serviceLocator(),
         ))
-    ..registerFactory(() => GetGroupExpenses(
+    ..registerFactory(() => EditGroupExpense(
           serviceLocator(),
         ))
-
-    //Bloc
+    ..registerFactory(() => DeleteGroupExpense(
+          serviceLocator(),
+        ))
     ..registerLazySingleton<GroupBloc>(() => GroupBloc(
           addExpense: serviceLocator(),
           getAllGroups: serviceLocator(),
           editGroup: serviceLocator(),
           deleteGroup: serviceLocator(),
           addGroupExpenses: serviceLocator(),
-          getGroupExpenses: serviceLocator(),
+          editGroupExpense: serviceLocator(),
+          deleteGroupExpense: serviceLocator(),
         ));
 }

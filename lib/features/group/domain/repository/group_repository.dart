@@ -30,7 +30,14 @@ abstract class GroupRepository {
     required Map<String, Object> groupExpenses,
   });
 
-  Future<Either<Failure, GroupEntity>> getGroupExpeses({
+  Future<Either<Failure, GroupEntity>> editGroupExpense({
     required String groupId,
+    required String expenseId,
+    required Map<String, Object> updatedExpense,
+  });
+
+  Future<Either<Failure, GroupEntity>> deleteGroupExpense({
+    required String groupId,
+    required String expenseId,
   });
 }
