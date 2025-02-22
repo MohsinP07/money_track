@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
@@ -17,68 +18,21 @@ class GroupPage extends StatefulWidget {
 }
 
 class _GroupPageState extends State<GroupPage> {
+  late Timer _groupCheckTimer;
   var userEmail = '';
-
+  var userGroups = [];
   @override
   void initState() {
     super.initState();
     userEmail =
         (context.read<AppUserCubit>().state as AppUserLoggedIn).user.email;
-    BlocProvider.of<GroupBloc>(context).add(GroupsGetAllGroups());
-  }
 
-  confirmGroupDelete(BuildContext context, Size deviceSize, String groupName,
-      VoidCallback onPressed) {
-    showDialog(
-        context: context,
-        builder: (builder) {
-          return AlertDialog(
-            title: const Text(
-              "Delete Group?",
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            content: Container(
-              padding: const EdgeInsets.all(8),
-              width: deviceSize.width * 0.8,
-              height: deviceSize.height * 0.12,
-              child: Column(
-                children: [
-                  Text("Are you sure you want to delete \n$groupName ?")
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(
-                    "Cancel",
-                    style: TextStyle(
-                      color: AppPallete.blackColor,
-                    ),
-                  )),
-              TextButton(
-                  onPressed: onPressed,
-                  child: const Text(
-                    "Delete",
-                    style: TextStyle(
-                      color: AppPallete.errorColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  )),
-            ],
-          );
-        });
+    BlocProvider.of<GroupBloc>(context).add(GroupsGetAllGroups());
   }
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    BlocProvider.of<GroupBloc>(context).add(GroupsGetAllGroups());
     return Scaffold(
       body: BlocConsumer<GroupBloc, GroupState>(
         listener: (context, state) {

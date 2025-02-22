@@ -65,6 +65,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
       _expenseController.clear();
       _expenseDescriptionController.clear();
       Navigator.of(context).pop();
+      context.read<GroupBloc>().add(GroupsGetAllGroups());
     }
   }
 
@@ -138,6 +139,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                       _expenseController.clear();
                       _expenseDescriptionController.clear();
                       Navigator.of(context).pop();
+                      context.read<GroupBloc>().add(GroupsGetAllGroups());
                     },
                   ),
                   SizedBox(
@@ -161,6 +163,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                       _expenseController.clear();
                       _expenseDescriptionController.clear();
                       Navigator.of(context).pop();
+                      context.read<GroupBloc>().add(GroupsGetAllGroups());
                     },
                   ),
                 ],
@@ -269,6 +272,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             setState(() {
               expenses.insert(0, state.updatedGroup.groupExpenses);
             });
+            context.read<GroupBloc>().add(GroupsGetAllGroups());
           } else if (state is EditGroupExpenseSuccess) {
             showSnackBar(context, 'Group Expenses edited!');
             setState(() {
@@ -289,12 +293,14 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                 );
               }
             });
+            context.read<GroupBloc>().add(GroupsGetAllGroups());
           } else if (state is DeleteGroupExpenseSuccess) {
             showSnackBar(context, 'Group Expenses deleted!');
             setState(() {
               expenses = List.from(state.updatedGroup.groupExpenses ?? []);
             });
           }
+          context.read<GroupBloc>().add(GroupsGetAllGroups());
         },
         builder: (context, state) {
           if (state is GroupLoading) {
