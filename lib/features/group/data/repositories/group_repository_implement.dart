@@ -1,4 +1,5 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:money_track/core/entity/user.dart';
 import 'package:money_track/core/error/exception.dart';
 import 'package:money_track/core/error/failures.dart';
 import 'package:money_track/features/group/data/datasources/group_remote_data_source.dart';
@@ -115,6 +116,30 @@ class GroupRepositoryImplement implements GroupRepository {
         groupId,
         expenseId,
       );
+      return right(updatedGroup);
+    } on ServerException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, GroupEntity>> removeMember(
+      {required String groupId, required String memberId}) async {
+    try {
+      final updatedGroup =
+          await groupRemoteDataSource.removeMember(groupId, memberId);
+      return right(updatedGroup);
+    } on ServerException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, GroupEntity>> addMembers(
+      {required String groupId, required List<String> members}) async {
+    try {
+      final updatedGroup =
+          await groupRemoteDataSource.addMember(groupId, members);
       return right(updatedGroup);
     } on ServerException catch (e) {
       return left(Failure(e.toString()));

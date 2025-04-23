@@ -47,3 +47,15 @@ class DeleteGroupExpenseSuccess extends GroupState {
   final GroupEntity updatedGroup;
   DeleteGroupExpenseSuccess(this.updatedGroup);
 }
+
+class RemoveMemberSuccess extends GroupState {
+  final GroupEntity updatedGroup;
+
+  RemoveMemberSuccess(this.updatedGroup);
+}
+
+class AddMemberSuccess extends GroupState {
+  final GroupEntity updatedGroup;
+
+  AddMemberSuccess(this.updatedGroup);
+}

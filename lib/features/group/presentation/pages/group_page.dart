@@ -21,12 +21,13 @@ class _GroupPageState extends State<GroupPage> {
   late Timer _groupCheckTimer;
   var userEmail = '';
   var userGroups = [];
+
   @override
   void initState() {
     super.initState();
     userEmail =
         (context.read<AppUserCubit>().state as AppUserLoggedIn).user.email;
-
+    print("going inn after adding exp");
     BlocProvider.of<GroupBloc>(context).add(GroupsGetAllGroups());
   }
 
@@ -51,7 +52,6 @@ class _GroupPageState extends State<GroupPage> {
             final userGroups = state.groups
                 .where((group) => group.members.contains(userEmail))
                 .toList();
-
             if (userGroups.isEmpty) {
               return const Center(
                 child: Text(
@@ -145,10 +145,17 @@ class _GroupPageState extends State<GroupPage> {
                             },
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.of(context).pushNamed(
+                                final groupBloc = context.read<GroupBloc>();
+                                Navigator.of(context)
+                                    .pushNamed(
                                   GroupChatScreen.routeName,
                                   arguments: group,
-                                );
+                                )
+                                    .then((_) {
+                                  if (mounted) {
+                                    groupBloc.add(GroupsGetAllGroups());
+                                  }
+                                });
                               },
                               child: Container(
                                 width: double.infinity,
@@ -206,11 +213,11 @@ class _GroupPageState extends State<GroupPage> {
             );
           }
 
-          return Container();
+          return Container(); // fallback
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.green,
+        backgroundColor: AppPallete.borderColor,
         label: Row(
           children: const [
             Icon(Icons.add),

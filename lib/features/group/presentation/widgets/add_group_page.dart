@@ -201,6 +201,10 @@ class _AddGroupPageState extends State<AddGroupPage> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(AppPallete.borderColor),
+                ),
                 onPressed: () {
                   if (_groupNameController.text.isEmpty ||
                       _groupDescController.text.isEmpty ||
@@ -222,7 +226,9 @@ class _AddGroupPageState extends State<AddGroupPage> {
                 child: BlocBuilder<GroupBloc, GroupState>(
                   builder: (context, state) {
                     if (state is GroupLoading) {
-                      return const CircularProgressIndicator();
+                      return const CircularProgressIndicator(
+                        color: AppPallete.borderColor,
+                      );
                     }
                     return const Text('Create Group');
                   },
@@ -233,5 +239,5 @@ class _AddGroupPageState extends State<AddGroupPage> {
         ),
       ),
     );
-  }
+  } 
 }

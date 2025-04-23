@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:money_track/core/constants/global_variables.dart';
+import 'package:money_track/core/entity/user.dart';
 import 'package:money_track/core/error/exception.dart';
 import 'package:money_track/features/group/data/models/group_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +18,8 @@ abstract class GroupRemoteDataSource {
   Future<GroupModel> editGroupExpense(
       String groupId, String expenseId, Map<String, Object> updatedExpense);
   Future<GroupModel> deleteGroupExpense(String groupId, String expenseId);
+  Future<GroupModel> removeMember(String groupId, String memberId);
+  Future<GroupModel> addMember(String groupId, List<String> members);
 }
 
 class GroupRemoteDataSourceImplement implements GroupRemoteDataSource {
@@ -275,6 +278,87 @@ class GroupRemoteDataSourceImplement implements GroupRemoteDataSource {
       }
     } catch (e) {
       print(e);
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<GroupModel> removeMember(String groupId, String memberId) async {
+    try {
+      print("fff");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("x-auth-token");
+
+      if (token == null || token.isEmpty) {
+        throw ServerException("User is not authenticated");
+      }
+
+      final response = await http.put(
+        Uri.parse('$uri/group/remove-member'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: json.encode({
+          'groupId': groupId,
+          'memberId': memberId,
+        }),
+      );
+      print(response.statusCode);
+      if (response.statusCode != 200) {
+        throw ServerException(
+            'Failed to remove member. Status code: ${response.statusCode}');
+      }
+
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+
+      if (responseBody['group'] != null) {
+        return GroupModel.fromMap(responseBody['group']);
+      } else {
+        throw ServerException('Unexpected response format');
+      }
+    } catch (e) {
+      print('Error removing member: $e');
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<GroupModel> addMember(String groupId, List<String> members) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("x-auth-token");
+
+      if (token == null || token.isEmpty) {
+        throw ServerException("User is not authenticated");
+      }
+      print(members);
+      final response = await http.put(
+        Uri.parse('$uri/group/add-members'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: json.encode({
+          'groupId': groupId,
+          'memberEmails': members,
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        throw ServerException(
+            'Failed to add members. Status code: ${response.statusCode}');
+      }
+
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+
+      if (responseBody['group'] != null) {
+        return GroupModel.fromMap(responseBody['group']);
+      } else {
+        throw ServerException('Unexpected response format');
+      }
+    } catch (e) {
+      print('Error adding members: $e');
       throw ServerException(e.toString());
     }
   }

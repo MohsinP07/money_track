@@ -31,6 +31,10 @@ const groupSchema = mongoose.Schema({
                     type: String,
                     required: true,
                 },
+                expenseDate: {
+                    type: String,
+                    required: true,
+                },
                 expenseAmount: {
                     type: Number,
                     required: true,

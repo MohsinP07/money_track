@@ -1,6 +1,7 @@
 const express = require("express");
 const auth = require("../middleware/auth");
 const Group = require("../models/group");
+const User = require("../models/user");
 
 const groupRouter = express.Router();
 
@@ -124,14 +125,12 @@ groupRouter.put('/group/delete-group-expense', async (req, res) => {
   try {
     const { groupId, expenseId } = req.body;
 
-    // Find the group by ID
     const group = await Group.findById(groupId);
 
     if (!group) {
       return res.status(404).json({ error: "Group not found" });
     }
 
-    // Check if the expense exists in the groupExpenses array
     const expenseExists = group.groupExpenses.some(
       (expense) => expense._id === expenseId
     );
@@ -140,12 +139,10 @@ groupRouter.put('/group/delete-group-expense', async (req, res) => {
       return res.status(404).json({ error: "Expense not found" });
     }
 
-    // Filter out the expense with the given expenseId
     group.groupExpenses = group.groupExpenses.filter(
       (expense) => expense._id !== expenseId
     );
 
-    // Save the updated group
     await group.save();
 
     res.json({ msg: "Expense deleted successfully", group });
@@ -153,5 +150,65 @@ groupRouter.put('/group/delete-group-expense', async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
+
+groupRouter.put("/group/remove-member", async (req, res) => {
+  try {
+    const { groupId, memberId } = req.body;
+
+    if (!groupId || !memberId) {
+      return res.status(400).json({ error: "groupId and memberId are required" });
+    }
+
+    const group = await Group.findById(groupId);
+
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    group.members = group.members.filter((member) => member !== memberId);
+
+    await group.save();
+
+    res.json({ msg: "Member removed successfully", group });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+groupRouter.put("/group/add-members", async (req, res) => {
+  try {
+    const { groupId, memberEmails } = req.body;
+    console.log(groupId);
+    console.log(memberEmails);
+    if (!groupId || !Array.isArray(memberEmails) || memberEmails.length === 0) {
+      return res.status(400).json({ error: "groupId and memberEmails array are required" });
+    }
+
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    const users = await User.find({ email: { $in: memberEmails } });
+    if (users.length === 0) {
+      return res.status(404).json({ error: "No users found for provided emails" });
+    }
+
+    const newMemberEmails = memberEmails.filter(email => !group.members.includes(email));
+
+    group.members.push(...newMemberEmails);
+    await group.save();
+
+
+    res.json({
+      msg: `${users.length} member(s) added (duplicates skipped if any)`,
+      addedMembers: users.map(user => user.email),
+      group,
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 
 module.exports = groupRouter;

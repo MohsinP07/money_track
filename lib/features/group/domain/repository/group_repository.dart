@@ -1,4 +1,5 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:money_track/core/entity/user.dart';
 import 'package:money_track/core/error/failures.dart';
 import 'package:money_track/features/group/domain/entity/group.dart';
 
@@ -39,5 +40,15 @@ abstract class GroupRepository {
   Future<Either<Failure, GroupEntity>> deleteGroupExpense({
     required String groupId,
     required String expenseId,
+  });
+
+  Future<Either<Failure, GroupEntity>> removeMember({
+    required String groupId,
+    required String memberId,
+  });
+
+  Future<Either<Failure, GroupEntity>> addMembers({
+    required String groupId,
+    required List<String> members,
   });
 }

@@ -77,3 +77,23 @@ class GroupDeleteGroupExpense extends GroupEvent {
     required this.expenseId,
   });
 }
+
+class GroupRemoveMember extends GroupEvent {
+  final String groupId;
+  final String memberId;
+
+  GroupRemoveMember({
+    required this.groupId,
+    required this.memberId,
+  });
+}
+
+class GroupAddMember extends GroupEvent {
+  final String groupId;
+  final List<String> members;
+
+  GroupAddMember({
+    required this.groupId,
+    required this.members,
+  });
+}

@@ -117,12 +117,10 @@ authRouter.post('/auth/reset-password', async (req, res) => {
 });
 
 authRouter.get('/auth/get-all-users', async (req, res) => {
-    console.log("GET ALL USERS CALLED");
 
     try {
         const allUsers = await User.find({});
         res.json(allUsers);
-        console.log(allUsers);
         
     } catch (e) {
         res.status(500).json({ error: e.message });
