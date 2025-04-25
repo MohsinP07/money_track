@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:money_track/core/common/widgets/common_field.dart';
 import 'package:money_track/core/entity/user.dart';
@@ -142,8 +143,8 @@ class _AddGroupPageState extends State<AddGroupPage> {
                 child: BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
                     if (state is AuthLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
+                      return Center(
+                        child: Lottie.asset('assets/shimmers/mt_loading.json'),
                       );
                     }
                     if (state is AuthGetAllUsersSuccess) {
@@ -226,9 +227,7 @@ class _AddGroupPageState extends State<AddGroupPage> {
                 child: BlocBuilder<GroupBloc, GroupState>(
                   builder: (context, state) {
                     if (state is GroupLoading) {
-                      return const CircularProgressIndicator(
-                        color: AppPallete.borderColor,
-                      );
+                      return Lottie.asset('assets/shimmers/mt_loading.json');
                     }
                     return const Text('Create Group');
                   },
@@ -239,5 +238,5 @@ class _AddGroupPageState extends State<AddGroupPage> {
         ),
       ),
     );
-  } 
+  }
 }

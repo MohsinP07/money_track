@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:money_track/core/common/widgets/loader.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/core/utils/utils.dart';
@@ -22,6 +23,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final nameController = TextEditingController();
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -41,12 +43,11 @@ class _SignUpPageState extends State<SignUpPage> {
             if (state is AuthFailure) {
               showSnackBar(context, state.message);
             } else if (state is AuthSuccess) {
-              // Navigate to
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
                   builder: (context) => LoginPage(
-                    email: state.user.email, // Pass email to login screen
+                    email: state.user.email,
                   ),
                 ),
                 (route) => false,
@@ -91,18 +92,37 @@ class _SignUpPageState extends State<SignUpPage> {
                       leadingIcon: Icons.password_outlined,
                     ),
                     const SizedBox(height: 15),
-                    AuthGradientButton(
-                      buttonText: 'sign_up'.tr,
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          context.read<AuthBloc>().add(AuthSignUp(
-                                email: emailController.text.trim(),
-                                name: nameController.text.trim(),
-                                password: passwordController.text.trim(),
-                              ));
-                        }
-                      },
-                    ),
+                    isLoading
+                        ? Center(
+                            child:
+                                Lottie.asset("assets/shimmers/mt_loading.json"),
+                          )
+                        : AuthGradientButton(
+                            buttonText: 'sign_up'.tr,
+                            onPressed: () {
+                              try {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                if (formKey.currentState!.validate()) {
+                                  context.read<AuthBloc>().add(AuthSignUp(
+                                        email: emailController.text.trim(),
+                                        name: nameController.text.trim(),
+                                        password:
+                                            passwordController.text.trim(),
+                                      ));
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                }
+                              } catch (e) {
+                                showSnackBar(context, e.toString());
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              }
+                            },
+                          ),
                     const SizedBox(height: 20),
                     GestureDetector(
                       onTap: () {

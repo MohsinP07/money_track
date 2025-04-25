@@ -93,57 +93,13 @@ class _GroupPageState extends State<GroupPage> {
                     ),
                     Expanded(
                       child: ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: userGroups.length,
-                        itemBuilder: (context, index) {
-                          final group = userGroups[index];
-                          return Dismissible(
-                            key: Key(group.id!),
-                            direction: DismissDirection.endToStart,
-                            background: Container(
-                              alignment: Alignment.centerRight,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              color: AppPallete.errorColor,
-                              child:
-                                  const Icon(Icons.delete, color: Colors.white),
-                            ),
-                            confirmDismiss: (direction) async {
-                              bool? result = await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text("Delete Group?"),
-                                    content: Text(
-                                      "Are you sure you want to delete '${group.groupName}'?",
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(false),
-                                        child: const Text("Cancel"),
-                                      ),
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(true),
-                                        child: const Text(
-                                          "Delete",
-                                          style: TextStyle(
-                                              color: AppPallete.errorColor),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                              return result ?? false;
-                            },
-                            onDismissed: (direction) {
-                              context
-                                  .read<GroupBloc>()
-                                  .add(GroupDelete(id: group.id!));
-                            },
-                            child: GestureDetector(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: userGroups.length,
+                          itemBuilder: (context, index) {
+                            final group = userGroups[index];
+                            final isAdmin = group.admin == userEmail;
+
+                            final groupCard = GestureDetector(
                               onTap: () {
                                 final groupBloc = context.read<GroupBloc>();
                                 Navigator.of(context)
@@ -202,10 +158,83 @@ class _GroupPageState extends State<GroupPage> {
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
+                            );
+
+                            if (!isAdmin) return groupCard;
+
+                            return Dismissible(
+                              key: Key(group.id!),
+                              direction: DismissDirection.endToStart,
+                              background: Container(
+                                alignment: Alignment.centerRight,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                decoration: BoxDecoration(
+                                    color: AppPallete.errorColor,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "Delete ${group.groupName} ?",
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    const Icon(Icons.delete,
+                                        color: Colors.white),
+                                  ],
+                                ),
+                              ),
+                              confirmDismiss: (direction) async {
+                                bool? result = await showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text("Delete Group?"),
+                                      content: Text(
+                                        "Are you sure you want to delete '${group.groupName}'?",
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(false),
+                                          child: const Text(
+                                            "Cancel",
+                                            style: TextStyle(
+                                              color: AppPallete.borderColor,
+                                            ),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(true),
+                                          child: const Text(
+                                            "Delete",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: AppPallete.errorColor),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                                return result ?? false;
+                              },
+                              onDismissed: (direction) {
+                                context
+                                    .read<GroupBloc>()
+                                    .add(GroupDelete(id: group.id!));
+                              },
+                              child: groupCard,
+                            );
+                          }),
                     ),
                   ],
                 ),

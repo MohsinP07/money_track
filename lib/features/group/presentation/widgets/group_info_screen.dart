@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:money_track/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:money_track/core/common/widgets/custom_button.dart';
 import 'package:money_track/core/entity/user.dart';
@@ -36,6 +37,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
     userName =
         (context.read<AppUserCubit>().state as AppUserLoggedIn).user.name;
     BlocProvider.of<AuthBloc>(context).add(AuthGetAllUsers());
+    print(widget.group.admin);
   }
 
   void _addUser(User user) {
@@ -270,7 +272,9 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           child: BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
               if (state is AuthLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return Center(
+                  child: Lottie.asset('assets/shimmers/mt_loading.json'),
+                );
               }
 
               if (state is AuthGetAllUsersSuccess) {
@@ -314,40 +318,41 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                         );
                       })
                     ]),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        border: Border.all(
-                            color: AppPallete.borderColor.withOpacity(0.4)),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 4),
-                      child: ListTile(
-                        title: const Text(
-                          "Add Members",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
+                    if (widget.group.admin == adminEmail)
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          border: Border.all(
+                              color: AppPallete.borderColor.withOpacity(0.4)),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 4),
+                        child: ListTile(
+                          title: const Text(
+                            "Add Members",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          trailing: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                isExpanded = !isExpanded;
+                              });
+                            },
+                            icon: Icon(
+                              isExpanded
+                                  ? Icons.keyboard_arrow_up_rounded
+                                  : Icons.keyboard_arrow_down_rounded,
+                              size: 32,
+                              color: AppPallete.borderColor,
+                            ),
                           ),
                         ),
-                        trailing: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isExpanded = !isExpanded;
-                            });
-                          },
-                          icon: Icon(
-                            isExpanded
-                                ? Icons.keyboard_arrow_up_rounded
-                                : Icons.keyboard_arrow_down_rounded,
-                            size: 32,
-                            color: AppPallete.borderColor,
-                          ),
-                        ),
                       ),
-                    ),
                     if (isExpanded)
                       Container(
                         child: Column(
@@ -400,8 +405,9 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                               child: BlocBuilder<AuthBloc, AuthState>(
                                 builder: (context, state) {
                                   if (state is AuthLoading) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
+                                    return Center(
+                                      child: Lottie.asset(
+                                          'assets/shimmers/mt_loading.json'),
                                     );
                                   }
                                   if (state is AuthGetAllUsersSuccess) {

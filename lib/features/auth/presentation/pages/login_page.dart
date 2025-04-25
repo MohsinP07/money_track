@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:money_track/core/common/widgets/loader.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/core/utils/utils.dart';
@@ -23,6 +24,7 @@ class LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -98,15 +100,34 @@ class LoginPageState extends State<LoginPage> {
                         const SizedBox(
                           height: 15,
                         ),
-                        AuthGradientButton(
-                            buttonText: 'sign_in'.tr,
-                            onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                context.read<AuthBloc>().add(AuthLogin(
-                                    email: emailController.text.trim(),
-                                    password: passwordController.text.trim()));
-                              }
-                            }),
+                        isLoading
+                            ? Center(
+                                child: Lottie.asset(
+                                    "assets/shimmers/mt_loading.json"),
+                              )
+                            : AuthGradientButton(
+                                buttonText: 'sign_in'.tr,
+                                onPressed: () {
+                                  try {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    if (formKey.currentState!.validate()) {
+                                      context.read<AuthBloc>().add(AuthLogin(
+                                          email: emailController.text.trim(),
+                                          password:
+                                              passwordController.text.trim()));
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                    }
+                                  } catch (e) {
+                                    showSnackBar(context, e.toString());
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  }
+                                }),
                         const SizedBox(
                           height: 20,
                         ),

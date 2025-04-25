@@ -453,13 +453,24 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
+                                "${expense['spendorName'] == currentUserName ? "You" : expense['spendorName']}",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey.shade800,
+                                  fontStyle: expense['spendorEmail'] !=
+                                          currentUserEmail
+                                      ? FontStyle.italic
+                                      : null,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
                                 expense['expenseDescription'] ??
                                     "No description",
                                 style: const TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.black87,
-                                  fontFamily: 'Roboto',
                                 ),
                               ),
                               const SizedBox(height: 8),
@@ -472,51 +483,56 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
-                                    "\₹${expense['expenseAmount'] ?? 0.0}",
+                                    "\₹ ${expense['expenseAmount'] ?? 0.0}",
                                     style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black87,
-                                      fontFamily: 'Roboto',
                                     ),
                                   ),
                                 ],
                               ),
                               const SizedBox(height: 12),
-                              Text(
-                                "Date: ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.parse(expense['expenseDate']))}",
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black45,
-                                  fontFamily: 'Roboto',
-                                ),
-                              ),
-                              if (isSentByUser) ...[
-                                const SizedBox(height: 12),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      borderRadius: BorderRadius.circular(50),
-                                      onTap: () => _editDeleteExpense(
-                                        context,
-                                        expense,
-                                        MediaQuery.of(context).size,
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Icon(
-                                          Icons.edit,
-                                          color: Colors.green[700],
-                                          size: 22,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Date: ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.parse(expense['expenseDate']))}",
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black45,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                  if (isSentByUser) ...[
+                                    const SizedBox(height: 12),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          onTap: () => _editDeleteExpense(
+                                            context,
+                                            expense,
+                                            MediaQuery.of(context).size,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Icon(
+                                              Icons.edit,
+                                              color: Colors.green[700],
+                                              size: 22,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              ]
+                                  ]
+                                ],
+                              ),
                             ],
                           ),
                         ),

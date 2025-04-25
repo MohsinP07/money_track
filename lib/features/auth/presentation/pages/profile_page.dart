@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/features/auth/presentation/widgets/ai_assistance_tile.dart';
@@ -158,9 +159,9 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       );
     } else {
-      return const Scaffold(
+      return Scaffold(
         body: Center(
-          child: CircularProgressIndicator(),
+          child: Lottie.asset('assets/shimmers/mt_loading.json'),
         ),
       );
     }
