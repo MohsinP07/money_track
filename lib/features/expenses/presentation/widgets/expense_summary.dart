@@ -1,7 +1,6 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:neopop/neopop.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 
 class ExpenseSummaryContainer extends StatelessWidget {
@@ -68,109 +67,171 @@ class ExpenseSummaryContainer extends StatelessWidget {
           'in_this_month1'.tr + monthlyExpense.toString() + 'in_this_month2'.tr;
     } else {
       final daysRemainingInMonth = daysInMonth - dayOfMonth;
-      monthlyAnalysisText =
-          'in_this_month_faar1'.tr + monthlyExpense.toString() + 'in_this_month_faar2'.tr + daysRemainingInMonth.toString() + 'in_this_month_faar3'.tr;
+      monthlyAnalysisText = 'in_this_month_faar1'.tr +
+          monthlyExpense.toString() +
+          'in_this_month_faar2'.tr +
+          daysRemainingInMonth.toString() +
+          'in_this_month_faar3'.tr;
     }
 
-    return Container(
-      height: height,
-      width: width,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppPallete.boxColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: RichText(
-          maxLines: 10,
-          text: TextSpan(
-            children: [
-               TextSpan(
-                text: "todays_expenses".tr,
-                style:const TextStyle(
-                  color: AppPallete.whiteColor,
-                  fontSize: 16,
-                  fontFamily: 'Poppins',
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: SizedBox(
+        height: height,
+        width: width,
+        child: NeoPopCard(
+          color: AppPallete.boxColor,
+          depth: 8,
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 28,
+                      height: 18,
+                      decoration: BoxDecoration(
+                        color: Colors.amber.shade200,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    const Spacer(),
+                    const Icon(Icons.credit_card,
+                        color: Colors.white70, size: 24),
+                  ],
                 ),
-              ),
-              TextSpan(
-                text: '${todaysExpense.toString()} ₹\n',
-                style: const TextStyle(
-                  color: AppPallete.whiteColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Poppins',
+                const SizedBox(height: 10),
+                Text(
+                  "****  ****  ****  1234",
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.7),
+                    fontSize: 12,
+                    letterSpacing: 2.0,
+                    fontFamily: 'Poppins',
+                  ),
                 ),
-              ),
-               TextSpan(
-                text: "weekly_expenses".tr,
-                style:const TextStyle(
-                  color: AppPallete.whiteColor,
-                  fontSize: 16,
-                  fontFamily: 'Poppins',
-                ),
-              ),
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: InkWell(
-                  onTap: () {
-                    showAnalysisDialog(context, 'weekly_expenses_analysis'.tr,
-                        weeklyAnalysisText);
-                  },
+                const SizedBox(height: 10),
+                Expanded(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
-                        '${weeklyExpense.toString()} ₹',
-                        style: const TextStyle(
-                          color: AppPallete.whiteColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Poppins',
+                      // Today's Expense
+                      Expanded(
+                        child: _ExpenseItem(
+                          label: "todays_expenses".tr,
+                          value: "${todaysExpense.toStringAsFixed(2)} ₹",
+                          icon: null,
+                          onTap: null,
                         ),
                       ),
-                      Icon(Icons.info_outline, color: Colors.white, size: 20),
+                      // Weekly Expense
+                      Expanded(
+                        child: _ExpenseItem(
+                          label: "weekly_expenses".tr,
+                          value: "${weeklyExpense.toStringAsFixed(2)} ₹",
+                          icon: Icons.info_outline,
+                          onTap: () {
+                            showAnalysisDialog(
+                              context,
+                              'weekly_expenses_analysis'.tr,
+                              weeklyAnalysisText,
+                            );
+                          },
+                        ),
+                      ),
+                      // Monthly Expense
+                      Expanded(
+                        child: _ExpenseItem(
+                          label: "monthly_expenses".tr,
+                          value: "${monthlyExpense.toStringAsFixed(2)} ₹",
+                          icon: Icons.info_outline,
+                          onTap: () {
+                            showAnalysisDialog(
+                              context,
+                              'monthly_expenses_analysis'.tr,
+                              monthlyAnalysisText,
+                            );
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-               TextSpan(
-                text: "monthly_expenses".tr,
-                style:const TextStyle(
-                  color: AppPallete.whiteColor,
-                  fontSize: 16,
-                  fontFamily: 'Poppins',
-                ),
-              ),
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: InkWell(
-                  onTap: () {
-                    showAnalysisDialog(context, 'monthly_expenses_analysis'.tr,
-                        monthlyAnalysisText);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '${monthlyExpense.toString()} ₹',
-                        style: const TextStyle(
-                          color: AppPallete.whiteColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Poppins',
-                        ),
-                      ),
-                      Icon(Icons.info_outline, color: Colors.white, size: 20),
-                    ],
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Text(
+                    "Expense Card",
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.7),
+                      fontSize: 11,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 1.0,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+}
+
+class _ExpenseItem extends StatelessWidget {
+  final String label;
+  final String value;
+  final IconData? icon;
+  final VoidCallback? onTap;
+
+  const _ExpenseItem({
+    required this.label,
+    required this.value,
+    this.icon,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final content = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white70,
+            fontSize: 11,
+            fontFamily: 'Poppins',
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 4),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              value,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Poppins',
+              ),
+            ),
+            if (icon != null) ...[
+              const SizedBox(width: 3),
+              GestureDetector(
+                onTap: onTap,
+                child: Icon(icon, color: Colors.white70, size: 13),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+    return onTap != null ? InkWell(onTap: onTap, child: content) : content;
   }
 }

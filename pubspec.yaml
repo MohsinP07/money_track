@@ -56,6 +56,7 @@ dependencies:
   flutter_native_splash: ^2.1.6
   flutter_dotenv: ^5.2.1
   lottie: ^2.3.2
+  neopop: ^1.0.2
 
 dev_dependencies:
   flutter_test:
