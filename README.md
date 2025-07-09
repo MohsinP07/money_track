@@ -1,24 +1,50 @@
 Money Track - Project Description Overview
 Money Track is a comprehensive expense tracker app designed to empower users to manage their personal finances effectively. Developed using Flutter/Dart for the frontend, and Node.js with MongoDB for the backend, Money Track provides robust functionality for tracking, analyzing, and optimizing expenses. Utilizing the BLoC (Business Logic Component) pattern for state management and adhering to clean code architecture, Money Track ensures maintainability, scalability, and a seamless user experience.
+Money Track - Project Description Overview
+Money Track is a comprehensive expense tracker app designed to empower users to manage their personal finances effectively. Developed using Flutter/Dart for the frontend, and Node.js with MongoDB for the backend, Money Track provides robust functionality for tracking, analyzing, and optimizing expenses. Utilizing the BLoC (Business Logic Component) pattern for state management and adhering to clean code architecture, Money Track ensures maintainability, scalability, and a seamless user experience.
 
 Key Features
 
 Expense Management:
+Add Expenses: Log daily expenses with amount, category, and description.
 
-Add Expenses: Users can log their daily expenses by entering the amount, category, and description.
-Edit Expenses: Modify previously recorded expenses to ensure accurate tracking.
-Delete Expenses: Remove unnecessary or incorrect expense entries.
+Edit Expenses: Update recorded expenses for accuracy
+
+Delete Expenses: Remove unnecessary or incorrect entries.
+
+Group Expense Tracking (Upcoming): Create & Manage Groups: Users will be able to create groups (e.g., friends, roommates, trips) to share and track joint expenses.
+
+Split Bills: (Coming Soon) Easily split bills among group members with automatic calculations.
+
+View Balances: (Coming Soon) Instantly see who owes whom and settle balances within the app.
+
 Detailed Reports:
+Time-Based Reports: View daily, weekly, and monthly expense summaries.
 
-Daily, Weekly, and Monthly Reports: View detailed summaries of expenses for a specific day, week, or month.
-Custom Reports: Generate tailored reports based on selected categories and time ranges.
-Downloadable Reports: Export all reports in PDF and Excel formats for offline access and sharing.
+Custom Reports: Generate tailored reports by category and time range.
+
+Downloadable Reports: Export reports in PDF and Excel formats.
+
 AI Assistance:
 
-Savings and Investment Suggestions: Based on the user's expense data, the app provides personalized advice on saving practices and potential investment opportunities.
-Expense Analysis: Advanced algorithms analyze spending patterns to offer insights and recommendations for better financial management.
-Financial Goal Planning: Users can create their own financial plans and receive suggestions for achieving their goals. By selecting a goal (e.g., Home, Car, Bike, Wedding, or Travel) and specifying the target year for goal completion, the app calculates the required monthly SIP (Systematic Investment Plan) amount and investment duration to achieve the selected goal.
+Savings and Investment Advice: Personalized recommendations based on expense data.
+
+Expense Analysis: Insights into spending patterns for better financial management.
+
+Financial Goal Planning: Set financial goals (e.g., Home, Car, Wedding) and calculate required SIP/month and duration.
+
 Technical Details
+
+Frontend: Developed using Flutter/Dart with a responsive and intuitive UI.
+
+Backend: Powered by Node.js and MongoDB for fast and secure data handling.
+
+State Management: Implemented using the BLoC pattern for optimal performance.
+
+Clean Code Architecture: Ensures readability, reusability, and scalability.
+
+Conclusion
+Money Track simplifies financial management with advanced tools, AI-driven insights, and upcoming group expense features to support collaborative budgeting. Its robust architecture and clean design are built for both current needs and future growth.
 
 Frontend: Developed using Flutter/Dart, Money Track boasts a responsive and intuitive user interface that ensures smooth navigation and an engaging user experience.
 Backend: Powered by Node.js and MongoDB, the backend infrastructure supports fast data processing and secure storage of user information.
