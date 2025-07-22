@@ -5,38 +5,57 @@ import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/features/auth/presentation/widgets/money_bot_ai.dart';
 
-class AiAssistance extends StatefulWidget {
+class AiAssistance extends StatelessWidget {
   const AiAssistance({super.key});
 
   @override
-  State<AiAssistance> createState() => _AiAssistanceState();
-}
-
-class _AiAssistanceState extends State<AiAssistance> {
-  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         Navigator.pushNamed(context, MoneyBotAI.routename);
       },
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: AppPallete.boxColor,
-          radius: deviceSize(context).width * 0.06,
-          child: const Center(
-            child: Icon(
-              FontAwesomeIcons.robot,
-              color: AppPallete.whiteColor,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: AppPallete.boxColor,
+              radius: deviceSize(context).width * 0.06,
+              child: const Icon(
+                FontAwesomeIcons.robot,
+                color: AppPallete.whiteColor,
+                size: 18,
+              ),
             ),
-          ),
-        ),
-        title: Text(
-          "moneybot_ai".tr,
-          style: const TextStyle(fontSize: 12),
-        ),
-        subtitle: Text(
-          'get_suggestions'.tr,
-          style: const TextStyle(fontSize: 12),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "moneybot_ai".tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppPallete.blackColor,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "get_suggestions".tr,
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 14,
+              color: AppPallete.boxColor,
+            )
+          ],
         ),
       ),
     );

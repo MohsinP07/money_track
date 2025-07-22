@@ -131,8 +131,10 @@ class DashboardPageState extends State<DashboardPage> {
           }
           if (state is ExpensesDisplaySuccess) {
             final todayExpenses = _filterTodayExpenses(state.expenses);
+
             double todaysExpense =
                 CalculationFunctions.calculateTodaysExpense(todayExpenses);
+                print(todaysExpense);
             double weeklyExpense =
                 CalculationFunctions.calculateWeeklyExpense(state.expenses);
             double monthlyExpense =

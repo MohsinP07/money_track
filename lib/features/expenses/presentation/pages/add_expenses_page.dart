@@ -79,6 +79,14 @@ class _AddExpensePageState extends State<AddExpensePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _selectedDate = DateTime.now();
+    _expenseDateController.text =
+        DateFormat('dd-MMM-yyyy').format(_selectedDate);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final expenserId =
         (context.read<AppUserCubit>().state as AppUserLoggedIn).user.id;
@@ -154,6 +162,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       hintText: 'expense_amount'.tr,
                       controller: _expenseAmountController,
                       leadingIcon: FontAwesomeIcons.indianRupeeSign,
+                      keyboardType: TextInputType.number,
                     ),
                     SizedBox(
                       height: deviceSize(context).height * 0.02,

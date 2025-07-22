@@ -41,14 +41,31 @@ class ProfileDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (fileName == "Profile")
-                TextButton(
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton.icon(
                     onPressed: () {
                       _showEditBottomSheet(context, user);
                     },
-                    child: Text(
+                    icon: const Icon(
+                      Icons.edit,
+                      size: 18,
+                      color: AppPallete.boxColor,
+                    ),
+                    label: Text(
                       "edit_profile".tr,
-                      style: const TextStyle(color: AppPallete.boxColor),
-                    )),
+                      style: const TextStyle(
+                        color: AppPallete.boxColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      foregroundColor: AppPallete.boxColor,
+                    ),
+                  ),
+                ),
               ListTile(
                 leading: CircleAvatar(
                   backgroundColor: AppPallete.boxColor,

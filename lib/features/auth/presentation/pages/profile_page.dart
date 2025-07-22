@@ -89,49 +89,32 @@ class _ProfilePageState extends State<ProfilePage> {
                     height: deviceSize(context).height * 0.01,
                   ),
                   Center(
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: AppPallete.boxColor,
-                          radius: deviceSize(context).width * 0.16,
-                          child: Text(
-                            userName.substring(0, 1),
-                            style: const TextStyle(
-                              fontSize: 32,
-                              color: AppPallete.whiteColor,
-                            ),
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppPallete.boxColor.withOpacity(0.4),
+                            blurRadius: 12,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: CircleAvatar(
+                        backgroundColor: AppPallete.boxColor,
+                        radius: deviceSize(context).width * 0.16,
+                        child: Text(
+                          userName.isNotEmpty ? userName[0].toUpperCase() : '',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 34,
+                            color: AppPallete.whiteColor,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 1,
                           ),
                         ),
-                        Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          elevation: 10,
-                          child: SizedBox(
-                            width: deviceSize(context).width * 0.8,
-                            child: ListTile(
-                              trailing: CircleAvatar(
-                                backgroundColor: AppPallete.boxColor,
-                                radius: deviceSize(context).width * 0.044,
-                                child: const Text(
-                                  '0',
-                                  style: TextStyle(
-                                    color: AppPallete.whiteColor,
-                                  ),
-                                ),
-                              ),
-                              title: Text(
-                                "transactions".tr,
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                              subtitle: Text(
-                                'transactions_this_month'.tr,
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                   SizedBox(

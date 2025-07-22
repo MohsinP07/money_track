@@ -6,9 +6,10 @@ import 'package:money_track/core/constants/global_variables.dart';
 import 'package:money_track/core/themes/app_pallete.dart';
 import 'package:money_track/features/auth/presentation/widgets/bot_widgets/advice_box.dart';
 import 'package:money_track/features/auth/presentation/widgets/bot_widgets/all_finance_goals.dart';
-import 'package:money_track/features/auth/presentation/widgets/bot_widgets/create_finance_goals.dart';
 import 'package:money_track/features/auth/presentation/widgets/bot_widgets/investment_box.dart';
 import 'package:money_track/features/auth/presentation/widgets/income_info_sheet.dart';
+import 'package:money_track/features/auth/presentation/widgets/investment_advice_screen.dart';
+import 'package:money_track/features/auth/presentation/widgets/savings_advice_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MoneyBotAI extends StatefulWidget {
@@ -76,24 +77,29 @@ class _MoneyBotAIState extends State<MoneyBotAI> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CircleAvatar(
-                    backgroundColor: AppPallete.buttonColor,
-                    radius: deviceSize(context).width * 0.06,
-                    child: const Center(
-                      child: Icon(
-                        Icons.arrow_back_ios_new,
-                        color: AppPallete.whiteColor,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: AppPallete.buttonColor,
+                      radius: deviceSize(context).width * 0.06,
+                      child: const Center(
+                        child: Icon(
+                          Icons.arrow_back_ios_new,
+                          color: AppPallete.whiteColor,
+                        ),
                       ),
                     ),
                   ),
                   CircleAvatar(
                     backgroundColor: AppPallete.buttonColor,
                     radius: deviceSize(context).width * 0.06,
-                    child: const Center(
-                      child: Icon(
-                        FontAwesomeIcons.robot,
-                        color: AppPallete.whiteColor,
-                      ),
+                    child: Icon(
+                      FontAwesomeIcons.robot,
+                      color: AppPallete.whiteColor,
+                      size: deviceSize(context).width *
+                          0.05,
                     ),
                   ),
                 ],
@@ -146,18 +152,16 @@ class _MoneyBotAIState extends State<MoneyBotAI> {
                   children: [
                     InvestmentBox(
                       onTap: () {
-                        if (_showDialog) {
-                          _showIncomeInfoSheet(context);
-                        }
+                        Navigator.of(context)
+                            .pushNamed(InvestmentAdviceScreen.routeName);
                       },
                     ),
                     Column(
                       children: [
                         AdviceBox(
                           onTap: () {
-                            if (_showDialog) {
-                              _showIncomeInfoSheet(context);
-                            }
+                            Navigator.of(context)
+                                .pushNamed(SavingsAdviceScreen.routeName);
                           },
                           color: const Color.fromARGB(255, 128, 97, 136),
                           icon: FontAwesomeIcons.bank,
@@ -193,26 +197,70 @@ class _MoneyBotAIState extends State<MoneyBotAI> {
                 onPressed: () {
                   _showIncomeInfoSheet(context);
                 },
-                child: Text("Edit Income"),
+                child: const Text("Edit Income"),
               ),
-              if (prefs.containsKey('monthlyIncome'))
-                Text(
-                  "${prefs.getString('monthlyIncome')} ₹ / month",
-                  style: const TextStyle(
-                    color: AppPallete.blackColor,
-                    fontSize: 18,
-                    fontFamily: 'Poppins',
+              if (prefs.containsKey('monthlyIncome') ||
+                  prefs.containsKey('annualIncome'))
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 12.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppPallete.whiteColor,
+                      borderRadius: BorderRadius.circular(12),
+                      border:
+                          Border.all(color: AppPallete.borderColor, width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppPallete.borderColor.withOpacity(0.2),
+                          blurRadius: 6,
+                          offset: const Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: const [
+                            Icon(Icons.account_balance_wallet_outlined,
+                                color: AppPallete.borderColor),
+                            SizedBox(width: 8),
+                            Text(
+                              "Your Income",
+                              style: TextStyle(
+                                color: AppPallete.blackColor,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        if (prefs.containsKey('monthlyIncome'))
+                          Text(
+                            "Monthly: ${prefs.getString('monthlyIncome')} ₹",
+                            style: const TextStyle(
+                              color: AppPallete.blackColor,
+                              fontSize: 18,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        if (prefs.containsKey('annualIncome'))
+                          Text(
+                            "Annual: ${prefs.getString('annualIncome')} ₹",
+                            style: const TextStyle(
+                              color: AppPallete.blackColor,
+                              fontSize: 18,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-              if (prefs.containsKey('annualIncome'))
-                Text(
-                  "${prefs.getString('annualIncome')} ₹ / year",
-                  style: const TextStyle(
-                    color: AppPallete.blackColor,
-                    fontSize: 18,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
+                )
             ],
           ),
         ),

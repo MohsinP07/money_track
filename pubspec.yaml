@@ -57,6 +57,8 @@ dependencies:
   flutter_dotenv: ^5.2.1
   lottie: ^2.3.2
   neopop: ^1.0.2
+  flutter_widget_from_html: ^0.14.11
+  markdown: ^7.1.1
 
 dev_dependencies:
   flutter_test:
