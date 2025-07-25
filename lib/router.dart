@@ -3,7 +3,7 @@ import 'package:money_track/features/auth/presentation/pages/login_page.dart';
 import 'package:money_track/features/auth/presentation/pages/profile_page.dart';
 import 'package:money_track/features/auth/presentation/pages/signup_page.dart';
 import 'package:money_track/features/auth/presentation/widgets/bot_widgets/all_finance_goals.dart';
-import 'package:money_track/features/auth/presentation/widgets/bot_widgets/create_finance_goals.dart';
+import 'package:money_track/features/auth/presentation/widgets/bot_widgets/financegoals/create_finance_goals.dart';
 import 'package:money_track/features/auth/presentation/widgets/investment_advice_screen.dart';
 import 'package:money_track/features/auth/presentation/widgets/money_bot_ai.dart';
 import 'package:money_track/features/auth/presentation/widgets/savings_advice_screen.dart';
@@ -34,9 +34,9 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case Onboarding.routename:
       return MaterialPageRoute(
           settings: routeSettings, builder: (_) => Onboarding());
-    case CreateFinanceGoals.routeName:
+    case CreateFinanceGoalsScreen.routeName:
       return MaterialPageRoute(
-          settings: routeSettings, builder: (_) => CreateFinanceGoals());
+          settings: routeSettings, builder: (_) => CreateFinanceGoalsScreen());
     case AllFinanceGoals.routeName:
       return MaterialPageRoute(
           settings: routeSettings, builder: (_) => AllFinanceGoals());
